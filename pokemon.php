@@ -1,6 +1,7 @@
 <?php
 /* Print the contents of $result looping through each row returned in the result */
 
+//test 123
 
 /*
 Plugin Name: Pokemon
