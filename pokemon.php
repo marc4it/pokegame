@@ -44,8 +44,7 @@ function poke_dex($atts, $content=null) {
 	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
 	$path = explode('/', $urlArr['path']);
 	
-	
-	$sql = "SELECT * FROM `pokedex` WHERE `name` LIKE '".$path[2]."' LIMIT 0, 30";
+	$sql = "SELECT * FROM `pokedex` WHERE `pokedex_id` LIKE '".$path[2]."' LIMIT 0, 30";
 //	echo "this is pokedex";
 //	echo $sql;
 	$results = $wpdb->get_row( $sql, ARRAY_A );
@@ -79,22 +78,64 @@ function poke_dex($atts, $content=null) {
 	$basestats = $results['base_stats'];
 	$basestats_decode = json_decode($basestats,true);
 	
+	$height = $results['height'];
+	$height_decode = json_decode($height,true);
 	
+	$weight = $results['weight'];
+	$weight_decode = json_decode($weight,true);
+	
+//specify pokemon types here//
+	
+	$types = $results['types'];	
+	$types_decode = json_decode($types,true);
+	
+	$types_arr = array(
+	0 => "normal",
+	1 => "fight",
+	2 => "flying",
+	3 => "poison",
+	4 => "ground",
+	5 => "rock",
+	6 => "bug",
+	7 => "ghost",
+	8 => "steel",
+	9 => "fire",
+	10 => "water",
+	11 => "grass",
+	12 => "electric",
+	13 => "psychic",
+	14 => "ice",
+	15 => "dragon",
+	16 => "dark",
+	17 => "fairy",
+);
+
+	foreach ($types_decode as $types1){
+//		echo $types1.",";
+		$types1 = '<div class="row">';
+		$types1. = '<div class="small-4 columns">-</div>';
+		}
+
 
 //*decoded arrange div here*
 	$tm_count = count($tm_decode);	
 	$tm_final =	'<div class="row">';
 	$t = 0;
-	foreach ($tm_decode as $tm1){
+		if ($tm_count==$t){
+		$tm_final .= '<div class="small-4 columns">-</div>';
+		}else{
+		foreach ($tm_decode as $tm1){
 //		$tm_final .= '<div class="small-3 columns">'.$tm1.'</div>';
 //		$tm_final = $tm_final.'<div class="small-2 columns">'.$tm1.'</div>';
 		$t++;
 		if ($tm_count == $t) {
-			$tm_final .= '<div class="small-3 columns end">'.$tm1.'</div>';
-		} else {
-			$tm_final .= '<div class="small-3 columns">'.$tm1.'</div>';
+				$tm_final .= '<div class="small-3 columns end">'.$tm1.'</div>';
+			} else {
+				$tm_final .= '<div class="small-3 columns">'.$tm1.'</div>';
+			}
 		}
 	}
+	
 	$tm_final .= '</div>';
 	
 	$learnedmove_count = count($learnedmove_decode);	
@@ -217,19 +258,50 @@ function poke_dex($atts, $content=null) {
 		}
 	
 	$mega_final .= '</div>';
+
+//height and weight here//
+
+	$height_10 = $results['height']/10;
+	$weight_10 = $results['weight']/10;
+
+	$height_final = '<div class="row">';
+	$height0 = '0';
+	$height2 = '-';
+	if ($height_decode==$height0){
+		$height_final .= '<div class="small-4 columns">'.$height2.'</div>';
+		}else{
+		$height_final .= '<div class="small-4 columns">'.$height_10.'m</div>';
+		}
+	
+	$height_final .= '</div>';
+	
+	$weight_final = '<div class="row">';
+	$weight0 = '0';
+	$weight2 = '-';
+	if ($weight_decode==$weight0){
+		$weight_final .= '<div class="small-4 columns">'.$weight2.'</div>';
+		}else{
+		$weight_final .= '<div class="small-4 columns">'.$weight_10.'m</div>';
+		}
+	
+	$weight_final .= '</div>';
 	
 //*Stats here* HP, Attack, Defense, Sp.Attack, Sp.Def, Speed, Total: *//
 
 	$basestats_all = array($basestats_decode[0], $basestats_decode[1], $basestats_decode[2], $basestats_decode[3], $basestats_decode[4],$basestats_decode[5]);
 	$stats_total = array_sum($basestats_all);
 
-	$stats ='<div class="small-6 columns">HP</div>'.'<div class="small-6 columns">'.$basestats_decode[0].'</div>';
+	$stats ='<div class="row">';
+	
+	$stats .='<div class="small-6 columns">HP</div>'.'<div class="small-6 columns">'.$basestats_decode[0].'</div>';
 	$stats .='<div class="small-6 columns">Attack</div>'.'<div class="small-6 columns">'.$basestats_decode[1].'</div>';
 	$stats .='<div class="small-6 columns">Defense</div>'.'<div class="small-6 columns">'.$basestats_decode[2].'</div>';
 	$stats .='<div class="small-6 columns">Sp.Attack</div>'.'<div class="small-6 columns">'.$basestats_decode[3].'</div>';
 	$stats .='<div class="small-6 columns">Sp.Def</div>'.'<div class="small-6 columns">'.$basestats_decode[4].'</div>';
 	$stats .='<div class="small-6 columns">Speed</div>'.'<div class="small-6 columns">'.$basestats_decode[5].'</div>';
 	$stats .='<div class="small-6 columns">Total</div>'.'<div class="small-6 columns">'.$stats_total.'</div>';
+	
+	$stats .= '</div>';
 
 
 	$allfield = array(
@@ -262,68 +334,73 @@ function poke_dex($atts, $content=null) {
 	for($i=0;$i <count($allfield); $i++){
 	
 		$j=$allfield[$i];
-		if (!isset($results[$j]) || $results[$j] =='' || $results[$j] ==' ') {
+		if (!isset($results[$j]) || $results[$j] =='' || $results[$j] ==' ' || $results[$j] =='0') {
 			$results[$j] = '-';
 		}
 	}
 	
+	$image_name = $results['pokedex_id'];
+	
+	echo '<div class="img">
+	<img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/'.$image_name.'.png">
+	</div>';  
 	
 	echo '<div class="row">
+	
+	<div class="small-4 columns">Pokedex ID</div>
+	<div class="small-8 columns">'.$results['pokedex_number'].'</div>
+	<div class="small-4 columns">Name</div>
+	<div class="small-8 columns">'.$results['name'].', '.$results['name_de'].'(DE), </br>'.$results['name_fr'].'(FR), '.$results['name_ja'].'(JP)</div>
+	<div class="small-4 columns">Tier</div>
+	<div class="small-8 columns">'.$results['tier'].'</div>
+	<div class="small-4 columns">Types</div>
+	<div class="small-8 columns">'.$results['types'].'</div>
+	<div class="small-4 columns">Stats</div>
+	<div class="small-8 columns">'.$stats.'</div>
+	<div class="small-4 columns"></br>Abilities</div>
+	<div class="small-8 columns"></br>'.$abilities_final.'</div>
+	<div class="small-4 columns"></br>Learned Moves (Level)</div>
+	<div class="small-8 columns"></br>'.$learnedmove_final.'</div>
+	<div class="small-4 columns"></br>TM</div>
+	<div class="small-8 columns"></br>'.$tm_final.'</div>
+	<div class="small-4 columns"></br>HM</div>
+	<div class="small-8 columns"></br>'.$hm_final.'</div>
+	<div class="small-4 columns">Pre-EVO</div>
+	<div class="small-8 columns">'.$preevo_final.'</div>
+	<div class="small-4 columns">EVO</div>
+	<div class="small-8 columns">'.$evo_final.'</div>
+	<div class="small-4 columns">Mega-Evo</div>
+	<div class="small-8 columns">'.$mega_final.'</div>
+	<div class="small-4 columns">Egg Moves</div>
+	<div class="small-8 columns">'.$eggmoves_final.'</div>
+	<div class="small-4 columns"></br>Genus</div>
+	<div class="small-8 columns"></br>'.$results['genus'].'</div>
+	<div class="small-4 columns">Color</div>
+	<div class="small-8 columns">'.$results['color'].'</div>
+	<div class="small-4 columns">Gender Rate</div>
+	<div class="small-8 columns">'.$results['gender_rate'].'</div>
+	<div class="small-4 columns">Capture Rate</div>
+	<div class="small-8 columns">'.$results['capture_rate'].'</div>
+	<div class="small-4 columns">Base Happiness</div>
+	<div class="small-8 columns">'.$results['base_happiness'].'</div>
+	<div class="small-4 columns">Baby</div>
+	<div class="small-8 columns">'.$results['is_baby'].'</div>
+	<div class="small-4 columns">Hatch Counter</div>
+	<div class="small-8 columns">'.$results['hatch_counter'].'</div>
+	<div class="small-4 columns">Gender Differences</div>
+	<div class="small-8 columns">'.$results['has_gender_differences'].'</div>
+	<div class="small-4 columns">Growth Rate</div>
+	<div class="small-8 columns">'.$results['growth_rate'].'</div>
+	<div class="small-4 columns">Height</div>
+	<div class="small-8 columns">'.$height_final.'</div>
+	<div class="small-4 columns">Weight</div>
+	<div class="small-8 columns">'.$weight_final.'</div>
+	<div class="small-4 columns">Base Experience</div>
+	<div class="small-8 columns">'.$results['base_experience'].'</div>
+	<div class="small-4 columns">Egg Groups</div>
+	<div class="small-8 columns">'.$results['egg_groups'].'</div>  
   
-  <div class="small-4 columns">Pokedex ID</div>
-  <div class="small-8 columns">'.$results['pokedex_number'].'</div>
-  <div class="small-4 columns">Name</div>
-  <div class="small-8 columns">'.$results['name'].', '.$results['name_de'].'(DE), </br>'.$results['name_fr'].'(FR), '.$results['name_ja'].'(JP)</div>
-  <div class="small-4 columns">Tier</div>
-  <div class="small-8 columns">'.$results['tier'].'</div>
-  <div class="small-4 columns">Types</div>
-  <div class="small-8 columns">'.$results['types'].'</div>
-  <div class="small-4 columns">Stats</div>
-  <div class="small-6 columns">'.$stats.'</div>
-  <div class="small-4 columns"></br>Abilities</div>
-  <div class="small-8 columns"></br>'.$abilities_final.'</div>
-  <div class="small-4 columns"></br>Learned Moves (Level)</div>
-  <div class="small-8 columns"></br>'.$learnedmove_final.'</div>
-  <div class="small-4 columns"></br>TM</div>
-  <div class="small-8 columns"></br>'.$tm_final.'</div>
-  <div class="small-4 columns"></br>HM</div>
-  <div class="small-8 columns"></br>'.$hm_final.'</div>
-  <div class="small-4 columns">Pre-EVO</div>
-  <div class="small-8 columns">'.$preevo_final.'</div>
-  <div class="small-4 columns">EVO</div>
-  <div class="small-8 columns">'.$evo_final.'</div>
-  <div class="small-4 columns">Mega-Evo</div>
-  <div class="small-8 columns">'.$mega_final.'</div>
-  <div class="small-4 columns">Egg Moves</div>
-  <div class="small-8 columns">'.$eggmoves_final.'</div>
-  <div class="small-4 columns"></br>Genus</div>
-  <div class="small-8 columns"></br>'.$results['genus'].'</div>
-  <div class="small-4 columns">Color</div>
-  <div class="small-8 columns">'.$results['color'].'</div>
-  <div class="small-4 columns">Gender Rate</div>
-  <div class="small-8 columns">'.$results['gender_rate'].'</div>
-  <div class="small-4 columns">Capture Rate</div>
-  <div class="small-8 columns">'.$results['capture_rate'].'</div>
-  <div class="small-4 columns">Base Happiness</div>
-  <div class="small-8 columns">'.$results['base_happiness'].'</div>
-  <div class="small-4 columns">Baby</div>
-  <div class="small-8 columns">'.$results['is_baby'].'</div>
-  <div class="small-4 columns">Hatch Counter</div>
-  <div class="small-8 columns">'.$results['hatch_counter'].'</div>
-  <div class="small-4 columns">Gender Differences</div>
-  <div class="small-8 columns">'.$results['has_gender_differences'].'</div>
-  <div class="small-4 columns">Growth Rate</div>
-  <div class="small-8 columns">'.$results['growth_rate'].'</div>
-  <div class="small-4 columns">Height</div>
-  <div class="small-8 columns">'.$results['height'].'</div>
-  <div class="small-4 columns">Weight</div>
-  <div class="small-8 columns">'.$results['weight'].'</div>
-  <div class="small-4 columns">Base Experience</div>
-  <div class="small-8 columns">'.$results['base_experience'].'</div>
-  <div class="small-4 columns">Egg Groups</div>
-  <div class="small-8 columns">'.$results['egg_groups'].'</div>  
-  
-</div>';
+	</div>';
 
 //print_r( $results );
 //print_r($path);
