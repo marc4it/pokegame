@@ -90,32 +90,41 @@ function poke_dex($atts, $content=null) {
 	$types_decode = json_decode($types,true);
 	
 	$types_arr = array(
-	0 => "normal",
-	1 => "fight",
-	2 => "flying",
-	3 => "poison",
-	4 => "ground",
-	5 => "rock",
-	6 => "bug",
-	7 => "ghost",
-	8 => "steel",
-	9 => "fire",
-	10 => "water",
-	11 => "grass",
-	12 => "electric",
-	13 => "psychic",
-	14 => "ice",
-	15 => "dragon",
-	16 => "dark",
-	17 => "fairy",
+	0 => "Normal",
+	1 => "Fight",
+	2 => "Flying",
+	3 => "Poison",
+	4 => "Ground",
+	5 => "Rock",
+	6 => "Bug",
+	7 => "Ghost",
+	8 => "Steel",
+	9 => "Fire",
+	10 => "Water",
+	11 => "Grass",
+	12 => "Electric",
+	13 => "Psychic",
+	14 => "Ice",
+	15 => "Dragon",
+	16 => "Dark",
+	17 => "Fairy",
 );
 
-	foreach ($types_decode as $types1){
-//		echo $types1.",";
-		$types1 = '<div class="row">';
-		$types1. = '<div class="small-4 columns">-</div>';
-		}
 
+//	reset($types_decode);
+//	while (list(, $types1) = each($types_decode)){
+//	echo $types1;}
+	
+	
+	$types2 = '<div class="row">';
+
+	foreach ($types_decode as $types1){
+	$types2 .= '<div class="small-6 columns">'.$types_arr[$types1].'</div>';
+	}
+	$types2 .= '</div>';
+	
+
+//	print_r ($types_decode);
 
 //*decoded arrange div here*
 	$tm_count = count($tm_decode);	
@@ -281,7 +290,7 @@ function poke_dex($atts, $content=null) {
 	if ($weight_decode==$weight0){
 		$weight_final .= '<div class="small-4 columns">'.$weight2.'</div>';
 		}else{
-		$weight_final .= '<div class="small-4 columns">'.$weight_10.'m</div>';
+		$weight_final .= '<div class="small-4 columns">'.$weight_10.'kg</div>';
 		}
 	
 	$weight_final .= '</div>';
@@ -354,7 +363,7 @@ function poke_dex($atts, $content=null) {
 	<div class="small-4 columns">Tier</div>
 	<div class="small-8 columns">'.$results['tier'].'</div>
 	<div class="small-4 columns">Types</div>
-	<div class="small-8 columns">'.$results['types'].'</div>
+	<div class="small-8 columns">'.$types2.'</div>
 	<div class="small-4 columns">Stats</div>
 	<div class="small-8 columns">'.$stats.'</div>
 	<div class="small-4 columns"></br>Abilities</div>
