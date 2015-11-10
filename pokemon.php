@@ -3,6 +3,7 @@
 
 //test 123
 //test 246
+//test 789
 
 /*
 Plugin Name: Pokemon
@@ -35,7 +36,7 @@ header('Content-Type: text/html; charset=utf-8');
 
 function poke_dex($atts, $content=null) {
 	global $wpdb;
-	
+
 	$output = '';
 	extract( shortcode_atts( array(
 		'name' => 'None',
@@ -43,57 +44,57 @@ function poke_dex($atts, $content=null) {
 
 	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
 	$path = explode('/', $urlArr['path']);
-	
+
 	$sql = "SELECT * FROM `pokedex` WHERE `pokedex_id` LIKE '".$path[2]."' LIMIT 0, 30";
 	$results = $wpdb->get_row( $sql, ARRAY_A );
-	
+
 	$move = "SELECT * FROM `move`";
 	$movedata = $wpdb->get_row( $move, ARRAY_A );
 
 // all json_decode here*
-	
+
 	$tm = $results['tm'];
 	$tm_decode = json_decode($tm,true);
-	
+
 	$learned_moves = $results['learned_moves'];
 	$learnedmove_decode = json_decode($learned_moves,true);
-	
+
 	$abilities = $results['abilities'];
 	$abilities_decode = json_decode($abilities,true);
-	
+
 	$eggmoves = $results['egg_moves'];
 	$eggmoves_decode = json_decode($eggmoves,true);
-	
+
 	$hm = $results['hm'];
 	$hm_decode = json_decode($hm,true);
-	
+
 	$preevo = $results['pre-evo'];
 	$preevo_decode = json_decode($preevo,true);
-	
+
 	$evo = $results['evo'];
 	$evo_decode = json_decode($evo,true);
-	
+
 	$mega = $results['mega'];
 	$mega_decode = json_decode($mega,true);
-	
+
 	$basestats = $results['base_stats'];
 	$basestats_decode = json_decode($basestats,true);
-	
+
 	$height = $results['height'];
 	$height_decode = json_decode($height,true);
-	
+
 	$weight = $results['weight'];
 	$weight_decode = json_decode($weight,true);
-	
+
 	$egggroup = $results['egg_groups'];
 	$egggroup_decode = json_decode($egggroup,true);
-	
+
 //specify pokemon types here//
-	
-	$types = $results['types'];	
+
+	$types = $results['types'];
 	$types_decode = json_decode($types,true);
 
-//testing function 
+//testing function
 
 	function get_evo($evo_name) {
     $evo_arr = explode(' (',$evo_name);
@@ -155,14 +156,14 @@ function poke_dex($atts, $content=null) {
 	'Dragon' => "Dragon",
 	'Gender unknown' => "Gender Unknown"
 );
-	
+
 	$types2 = '<div class="row">';
 
 	foreach ($types_decode as $types1){
 	$types2 .= '<div class="small-6 columns">'.$types_arr[$types1].'</div>';
 	}
 	$types2 .= '</div>';
-		
+
 //specify egg groups here
 
 	$egggroup2 = '<div class="row">';
@@ -174,9 +175,9 @@ function poke_dex($atts, $content=null) {
 				$egggroup2 .= '<div class="small-6 columns">'.$types_arr[$egggroup1].'</div>';
 				}
 			}
-				
+
 	$egggroup2 .= '</div>';
-	
+
 
 //specify tm/hm name here;
 
@@ -282,7 +283,7 @@ function poke_dex($atts, $content=null) {
 		TM99 => "Dazzling Gleam",
 		TM100 => "Confide"
 		);
-	
+
 	$hm_array = array (
 		HM01 => "Cut",
 		HM02 => "Fly",
@@ -293,7 +294,7 @@ function poke_dex($atts, $content=null) {
 		);
 
 //decoded arrange div here
-	$tm_count = count($tm_decode);	
+	$tm_count = count($tm_decode);
 	$tm_final =	'<div class="row">';
 	$t = 0;
 	if ($tm_count==$t){
@@ -308,9 +309,9 @@ function poke_dex($atts, $content=null) {
 			}
 		}
 	}
-	
+
 	$tm_final .= '</div>';
-	
+
 	$hm_count = count($hm_decode);
 	$hm_final = '<div class="row">';
 	$hm = '0';
@@ -327,10 +328,10 @@ function poke_dex($atts, $content=null) {
 				}
 			}
 		}
-	
+
 	$hm_final .= '</div>';
-	
-	$learnedmove_count = count($learnedmove_decode);	
+
+	$learnedmove_count = count($learnedmove_decode);
 	$learnedmove_final = '<div class="row">';
 	$lm = 0;
 	foreach ($learnedmove_decode as $lm1){
@@ -342,8 +343,8 @@ function poke_dex($atts, $content=null) {
 		}
 	}
 	$learnedmove_final .= '</div>';
-	
-	$abilities_count = count($abilities_decode);	
+
+	$abilities_count = count($abilities_decode);
 	$abilities_final = '<div class="row">';
 	$ab = 0;
 	foreach ($abilities_decode as $ab1){
@@ -355,7 +356,7 @@ function poke_dex($atts, $content=null) {
 		}
 	}
 	$abilities_final .= '</div>';
-	
+
 	$eggmoves_count = count($eggmoves_decode);
 	$eggmoves_final = '<div class="row">';
 	$em = '0';
@@ -372,9 +373,9 @@ function poke_dex($atts, $content=null) {
 				}
 			}
 		}
-	
+
 	$eggmoves_final .= '</div>';
-	
+
 	$preevo_count = count($preevo_decode);
 	$preevo_final = '<div class="row">';
 	$preevo = '0';
@@ -391,9 +392,9 @@ function poke_dex($atts, $content=null) {
 				}
 			}
 		}
-	
+
 	$preevo_final .= '</div>';
-	
+
 	$evo_count = count($evo_decode);
 	$evo_final = '<div class="row">';
 	$evo = '0';
@@ -410,9 +411,9 @@ function poke_dex($atts, $content=null) {
 				}
 			}
 		}
-	
+
 	$evo_final .= '</div>';
-	
+
 	$mega_count = count($mega_decode);
 	$mega_final = '<div class="row">';
 	$mega = '0';
@@ -429,7 +430,7 @@ function poke_dex($atts, $content=null) {
 				}
 			}
 		}
-	
+
 	$mega_final .= '</div>';
 
 //height and weight here//
@@ -445,9 +446,9 @@ function poke_dex($atts, $content=null) {
 		}else{
 		$height_final .= '<div class="small-4 columns">'.$height_10.'m</div>';
 		}
-	
+
 	$height_final .= '</div>';
-	
+
 	$weight_final = '<div class="row">';
 	$weight0 = '0';
 	$weight2 = '-';
@@ -456,16 +457,16 @@ function poke_dex($atts, $content=null) {
 		}else{
 		$weight_final .= '<div class="small-4 columns">'.$weight_10.'kg</div>';
 		}
-	
+
 	$weight_final .= '</div>';
-	
+
 //*Stats here* HP, Attack, Defense, Sp.Attack, Sp.Def, Speed, Total: *//
 
 	$basestats_all = array($basestats_decode[0], $basestats_decode[1], $basestats_decode[2], $basestats_decode[3], $basestats_decode[4],$basestats_decode[5]);
 	$stats_total = array_sum($basestats_all);
 
 	$stats ='<div class="row">';
-	
+
 	$stats .='<div class="small-6 columns">HP</div>'.'<div class="small-6 columns">'.$basestats_decode[0].'</div>';
 	$stats .='<div class="small-6 columns">Attack</div>'.'<div class="small-6 columns">'.$basestats_decode[1].'</div>';
 	$stats .='<div class="small-6 columns">Defense</div>'.'<div class="small-6 columns">'.$basestats_decode[2].'</div>';
@@ -473,7 +474,7 @@ function poke_dex($atts, $content=null) {
 	$stats .='<div class="small-6 columns">Sp.Def</div>'.'<div class="small-6 columns">'.$basestats_decode[4].'</div>';
 	$stats .='<div class="small-6 columns">Speed</div>'.'<div class="small-6 columns">'.$basestats_decode[5].'</div>';
 	$stats .='<div class="small-6 columns">Total</div>'.'<div class="small-6 columns">'.$stats_total.'</div>';
-	
+
 	$stats .= '</div>';
 
 
@@ -503,23 +504,23 @@ function poke_dex($atts, $content=null) {
 	'base_experience',
 	'egg_groups'
 	) ;
-	
+
 	for($i=0;$i <count($allfield); $i++){
-	
+
 		$j=$allfield[$i];
 		if (!isset($results[$j]) || $results[$j] =='' || $results[$j] ==' ' || $results[$j] =='0') {
 			$results[$j] = '-';
 		}
 	}
-	
+
 	$image_name = $results['pokedex_id'];
-		
+
 	echo '<div class="img">
 	<img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/'.$image_name.'.png">
-	</div>';  
-	
+	</div>';
+
 	echo '<div class="row">
-	
+
 	<div class="small-4 columns">Pokedex ID</div>
 	<div class="small-8 columns">'.$results['pokedex_number'].'</div>
 	<div class="small-4 columns">Name</div>
@@ -571,8 +572,8 @@ function poke_dex($atts, $content=null) {
 	<div class="small-4 columns">Base Experience</div>
 	<div class="small-8 columns">'.$results['base_experience'].'</div>
 	<div class="small-4 columns">Egg Groups</div>
-	<div class="small-8 columns">'.$egggroup2.'</div>  
-  
+	<div class="small-8 columns">'.$egggroup2.'</div>
+
 	</div>';
 
 //print_r( $results );
@@ -589,10 +590,10 @@ function ingress_shortcode($atts, $content=null){
 
 	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
 	$path = explode('/', $urlArr['path']);
-	
-	
-	
-	
+
+
+
+
 }
 
 // flush_rules() if our rules are not yet included
