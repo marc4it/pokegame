@@ -45,9 +45,10 @@ function poke_dex($atts, $content=null) {
 	$path = explode('/', $urlArr['path']);
 	
 	$sql = "SELECT * FROM `pokedex` WHERE `pokedex_id` LIKE '".$path[2]."' LIMIT 0, 30";
-//	echo "this is pokedex";
-//	echo $sql;
 	$results = $wpdb->get_row( $sql, ARRAY_A );
+	
+	$move = "SELECT * FROM `move`";
+	$movedata = $wpdb->get_row( $move, ARRAY_A );
 
 // all json_decode here*
 	
@@ -84,10 +85,17 @@ function poke_dex($atts, $content=null) {
 	$weight = $results['weight'];
 	$weight_decode = json_decode($weight,true);
 	
+	$egggroup = $results['egg_groups'];
+	$egggroup_decode = json_decode($egggroup,true);
+	
 //specify pokemon types here//
 	
 	$types = $results['types'];	
 	$types_decode = json_decode($types,true);
+	
+	echo $results['pre-evo'];
+	echo $results['evo'];
+	echo $results['mega'];
 	
 	$types_arr = array(
 	0 => "Normal",
@@ -108,13 +116,23 @@ function poke_dex($atts, $content=null) {
 	15 => "Dragon",
 	16 => "Dark",
 	17 => "Fairy",
+	'Monster' => "Monster",
+	'Water 1' => "Water 1",
+	'Bug'=> "Bug",
+	'Flying'=> "Flying",
+	'Field' => "Field",
+	'Fairy' => "Fairy",
+	'Grass' => "Grass",
+	'Undiscovered' => "Undiscovered",
+	'Human-like' => "Human-Like",
+	'Water 3' => "Water 3",
+	'Mineral' => "Mineral",
+	'Amorphous' => "Amorphous",
+	'Water 2' => "Water 2",
+	'Ditto' => "Ditto",
+	'Dragon' => "Dragon",
+	'Gender unknown' => "Gender Unknown"
 );
-
-
-//	reset($types_decode);
-//	while (list(, $types1) = each($types_decode)){
-//	echo $types1;}
-	
 	
 	$types2 = '<div class="row">';
 
@@ -122,30 +140,173 @@ function poke_dex($atts, $content=null) {
 	$types2 .= '<div class="small-6 columns">'.$types_arr[$types1].'</div>';
 	}
 	$types2 .= '</div>';
+		
+//specify egg groups here
+
+	$egggroup2 = '<div class="row">';
+
+	if ($egggroup_decode == '') {
+		$egggroup2 .= '<div class="small-6 columns">-</div>';
+		} else {
+			foreach ($egggroup_decode as $egggroup1){
+				$egggroup2 .= '<div class="small-6 columns">'.$types_arr[$egggroup1].'</div>';
+				}
+			}
+				
+	$egggroup2 .= '</div>';
 	
 
-//	print_r ($types_decode);
+//specify tm/hm name here;
 
-//*decoded arrange div here*
+	$tm_array = array (
+		TM1 => "Hone Claws",
+		TM2 => "Dragon Claw",
+		TM3 => "Psyshock",
+		TM4 => "Calm Mind",
+		TM5 => "Roar",
+		TM06 => "Toxic",
+		TM7 => "Hail",
+		TM8 => "Bulk Up",
+		TM9 => "Venoshock",
+		TM10 => "Hidden Power",
+		TM11 => "Sunny Day",
+		TM12 => "Taunt",
+		TM13 => "Ice Beam",
+		TM14 => "Blizzard",
+		TM15 => "Hyper Beam",
+		TM16 => "Light Screen",
+		TM17 => "Protect",
+		TM18 => "Rain Dance",
+		TM19 => "Telekinesis",
+		TM20 => "Safeguard",
+		TM21 => "Frustration",
+		TM22 => "Solar Beam",
+		TM23 => "Smack Down",
+		TM24 => "Thunderbolt",
+		TM25 => "Thunder",
+		TM26 => "Earthquake",
+		TM27 => "Return",
+		TM28 => "Dig",
+		TM29 => "Psychic",
+		TM30 => "Shadow Ball",
+		TM31 => "Brick Break",
+		TM32 => "Double Team",
+		TM33 => "Reflect",
+		TM34 => "Sludge Wave",
+		TM35 => "Flamethrower",
+		TM36 => "Sludge Bomb",
+		TM37 => "Sandstorm",
+		TM38 => "Fire Blast",
+		TM39 => "Rock Tomb",
+		TM40 => "Aerial Ace",
+		TM41 => "Torment",
+		TM42 => "Facade",
+		TM43 => "Flame Charge",
+		TM44 => "Rest",
+		TM45 => "Attract",
+		TM46 => "Thief",
+		TM47 => "Low Sweep",
+		TM48 => "Round",
+		TM49 => "Echoed Voice",
+		TM50 => "Overheat",
+		TM51 => "Ally Switch",
+		TM52 => "Focus Blast",
+		TM53 => "Energy Ball",
+		TM54 => "False Swipe",
+		TM55 => "Scald",
+		TM56 => "Fling",
+		TM57 => "Charge Beam",
+		TM58 => "Sky Drop",
+		TM59 => "Incinerate",
+		TM60 => "Quash",
+		TM61 => "Will-O-Wisp",
+		TM62 => "Acrobatics",
+		TM63 => "Embargo",
+		TM64 => "Explosion",
+		TM65 => "Shadow Claw",
+		TM66 => "Payback",
+		TM67 => "Retaliate",
+		TM68 => "Giga Impact",
+		TM69 => "Rock Polish",
+		TM70 => "Flash",
+		TM71 => "Stone Edge",
+		TM72 => "Volt Switch",
+		TM73 => "Thunder Wave",
+		TM74 => "Gyro Ball",
+		TM75 => "Swords Dance",
+		TM76 => "Struggle Bug",
+		TM77 => "Psych Up",
+		TM78 => "Bulldoze",
+		TM79 => "Frost Breath",
+		TM80 => "Rock Slide",
+		TM81 => "X-Scissor",
+		TM82 => "Dragon Tail",
+		TM83 => "Infestation",
+		TM84 => "Poison Jab",
+		TM85 => "Dream Eater",
+		TM86 => "Grass Knot",
+		TM87 => "Swagger",
+		TM88 => "Sleep Talk",
+		TM89 => "U-turn",
+		TM90 => "Substitute",
+		TM91 => "Flash Cannon",
+		TM92 => "Trick Room",
+		TM93 => "Wild Charge",
+		TM94 => "Rock Smash",
+		TM95 => "Snarl",
+		TM96 => "Nature Power",
+		TM97 => "Dark Pulse",
+		TM98 => "Power-Up Punch",
+		TM99 => "Dazzling Gleam",
+		TM100 => "Confide"
+		);
+	
+	$hm_array = array (
+		HM01 => "Cut",
+		HM02 => "Fly",
+		HM04 => "Strength",
+		HM03 => "Surf",
+		HM05 => "Waterfall",
+		HM06 => "Dive"
+		);
+
+//decoded arrange div here
 	$tm_count = count($tm_decode);	
 	$tm_final =	'<div class="row">';
 	$t = 0;
-		if ($tm_count==$t){
+	if ($tm_count==$t){
 		$tm_final .= '<div class="small-4 columns">-</div>';
 		}else{
-		foreach ($tm_decode as $tm1){
-//		$tm_final .= '<div class="small-3 columns">'.$tm1.'</div>';
-//		$tm_final = $tm_final.'<div class="small-2 columns">'.$tm1.'</div>';
-		$t++;
-		if ($tm_count == $t) {
-				$tm_final .= '<div class="small-3 columns end">'.$tm1.'</div>';
-			} else {
-				$tm_final .= '<div class="small-3 columns">'.$tm1.'</div>';
+			foreach ($tm_decode as $tm1){
+				$t++;
+				if ($tm_count == $t) {
+					$tm_final .= '<div class="small-6 columns end">'.$tm_array[$tm1].' ('.$tm1.')</div>';
+				} else {
+					$tm_final .= '<div class="small-6 columns">'.$tm_array[$tm1].' ('.$tm1.')</div>';
 			}
 		}
 	}
 	
 	$tm_final .= '</div>';
+	
+	$hm_count = count($hm_decode);
+	$hm_final = '<div class="row">';
+	$hm = '0';
+	$hm2 = '-';
+	if ($hm_count==$hm){
+		$hm_final .= '<div class="small-4 columns">'.$hm2.'</div>';
+		}else{
+		foreach ($hm_decode as $hm1){
+			$hm++;
+			if ($hm_count == $hm) {
+				$hm_final .= '<div class="small-12 columns end">'.$hm_array[$hm1].' ('.$hm1.')</div>';
+				} else {
+				$hm_final .= '<div class="small-12 columns">'.$hm_array[$hm1].' ('.$hm1.')</div>';
+				}
+			}
+		}
+	
+	$hm_final .= '</div>';
 	
 	$learnedmove_count = count($learnedmove_decode);	
 	$learnedmove_final = '<div class="row">';
@@ -153,9 +314,9 @@ function poke_dex($atts, $content=null) {
 	foreach ($learnedmove_decode as $lm1){
 		$lm++;
 		if ($learnedmove_count == $lm) {
-			$learnedmove_final .= '<div class="small-12 columns end">'.$lm1.'</div>';
+			$learnedmove_final .= '<div class="small-6 columns end">'.$lm1.'</div>';
 		} else {
-			$learnedmove_final .= '<div class="small-12 columns">'.$lm1.'</div>';
+			$learnedmove_final .= '<div class="small-6 columns">'.$lm1.'</div>';
 		}
 	}
 	$learnedmove_final .= '</div>';
@@ -183,33 +344,14 @@ function poke_dex($atts, $content=null) {
 		foreach ($eggmoves_decode as $em1){
 			$em++;
 			if ($eggmoves_count == $em) {
-				$eggmoves_final .= '<div class="small-12 columns end">'.$em1.'</div>';
+				$eggmoves_final .= '<div class="small-6 columns end">'.$em1.'</div>';
 				} else {
-				$eggmoves_final .= '<div class="small-12 columns">'.$em1.'</div>';
+				$eggmoves_final .= '<div class="small-6 columns">'.$em1.'</div>';
 				}
 			}
 		}
 	
 	$eggmoves_final .= '</div>';
-	
-	$hm_count = count($hm_decode);
-	$hm_final = '<div class="row">';
-	$hm = '0';
-	$hm2 = '-';
-	if ($hm_count==$hm){
-		$hm_final .= '<div class="small-4 columns">'.$hm2.'</div>';
-		}else{
-		foreach ($hm_decode as $hm1){
-			$hm++;
-			if ($hm_count == $hm) {
-				$hm_final .= '<div class="small-12 columns end">'.$hm1.'</div>';
-				} else {
-				$hm_final .= '<div class="small-12 columns">'.$hm1.'</div>';
-				}
-			}
-		}
-	
-	$hm_final .= '</div>';
 	
 	$preevo_count = count($preevo_decode);
 	$preevo_final = '<div class="row">';
@@ -221,9 +363,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($preevo_decode as $preevo1){
 			$preevo++;
 			if ($preevo_count == $preevo) {
-				$preevo_final .= '<div class="small-12 columns end">'.$preevo1.'</div>';
+				$preevo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com">'.$preevo1.'</a></div>';
 				} else {
-				$preevo_final .= '<div class="small-12 columns">'.$preevo1.'</div>';
+				$preevo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com">'.$preevo1.'</a></div>';
 				}
 			}
 		}
@@ -240,9 +382,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($evo_decode as $evo1){
 			$evo++;
 			if ($evo_count == $evo) {
-				$evo_final .= '<div class="small-12 columns end">'.$evo1.'</div>';
+				$evo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com">'.$evo1.'</a></div>';
 				} else {
-				$evo_final .= '<div class="small-12 columns">'.$evo1.'</div>';
+				$evo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com">'.$evo1.'</a></div>';
 				}
 			}
 		}
@@ -259,9 +401,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($mega_decode as $mega1){
 			$mega++;
 			if ($mega_count == $mega) {
-				$mega_final .= '<div class="small-12 columns end">'.$mega1.'</div>';
+				$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com">'.$mega1.'</a></div>';
 				} else {
-				$mega_final .= '<div class="small-12 columns">'.$mega1.'</div>';
+				$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com">'.$mega1.'</a></div>';
 				}
 			}
 		}
@@ -349,7 +491,7 @@ function poke_dex($atts, $content=null) {
 	}
 	
 	$image_name = $results['pokedex_id'];
-	
+		
 	echo '<div class="img">
 	<img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/'.$image_name.'.png">
 	</div>';  
@@ -407,7 +549,7 @@ function poke_dex($atts, $content=null) {
 	<div class="small-4 columns">Base Experience</div>
 	<div class="small-8 columns">'.$results['base_experience'].'</div>
 	<div class="small-4 columns">Egg Groups</div>
-	<div class="small-8 columns">'.$results['egg_groups'].'</div>  
+	<div class="small-8 columns">'.$egggroup2.'</div>  
   
 	</div>';
 
