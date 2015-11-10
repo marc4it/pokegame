@@ -92,11 +92,33 @@ function poke_dex($atts, $content=null) {
 	
 	$types = $results['types'];	
 	$types_decode = json_decode($types,true);
-	
-	echo $results['pre-evo'];
-	echo $results['evo'];
-	echo $results['mega'];
-	
+
+//testing function 
+
+	function get_evo($evo_name) {
+    $evo_arr = explode(' (',$evo_name);
+	$nice_name = $evo_arr[0];
+	$nice_name = strtolower($nice_name);
+	$nice_name = str_replace(' ','-',$nice_name);
+	$nice_name = str_replace('[','',$nice_name);
+	$nice_name = str_replace('"','',$nice_name);
+	return $nice_name;
+
+}
+
+	function get_mega($mega_name) {
+    $mega_arr = explode(',',$mega_name);
+	$nice_name = $mega_arr[0];
+	$nice_name = strtolower($nice_name);
+	$nice_name = str_replace(' ','-',$nice_name);
+	$nice_name = str_replace('[','',$nice_name);
+	$nice_name = str_replace('"','',$nice_name);
+	return $nice_name;
+
+}
+
+	echo get_mega($results['mega']);
+
 	$types_arr = array(
 	0 => "Normal",
 	1 => "Fight",
@@ -363,9 +385,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($preevo_decode as $preevo1){
 			$preevo++;
 			if ($preevo_count == $preevo) {
-				$preevo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com">'.$preevo1.'</a></div>';
+				$preevo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['pre-evo']).'">'.$preevo1.'</a></div>';
 				} else {
-				$preevo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com">'.$preevo1.'</a></div>';
+				$preevo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['pre-evo']).'">'.$preevo1.'</a></div>';
 				}
 			}
 		}
@@ -382,9 +404,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($evo_decode as $evo1){
 			$evo++;
 			if ($evo_count == $evo) {
-				$evo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com">'.$evo1.'</a></div>';
+				$evo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['evo']).'">'.$evo1.'</a></div>';
 				} else {
-				$evo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com">'.$evo1.'</a></div>';
+				$evo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['evo']).'">'.$evo1.'</a></div>';
 				}
 			}
 		}
@@ -401,9 +423,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($mega_decode as $mega1){
 			$mega++;
 			if ($mega_count == $mega) {
-				$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com">'.$mega1.'</a></div>';
+				$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['mega']).'">'.$mega1.'</a></div>';
 				} else {
-				$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com">'.$mega1.'</a></div>';
+				$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['mega']).'">'.$mega1.'</a></div>';
 				}
 			}
 		}
