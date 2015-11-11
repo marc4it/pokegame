@@ -4,6 +4,7 @@
 //test 123
 //test 246
 //test 789
+//test push after merge 890
 
 /*
 Plugin Name: Pokemon
@@ -108,16 +109,15 @@ function poke_dex($atts, $content=null) {
 	}
 
 	function get_mega($mega_name) {
-		$mega_arr = explode(',',$mega_name);
-		$nice_name = $mega_arr[0];
+		$mega_arr = explode(' ',$mega_name);
+		$nice_name = $mega_arr[1].'-'.$mega_arr[0].'-'.$mega_arr[2];
 		$nice_name = strtolower($nice_name);
-		$nice_name = str_replace(' ','-',$nice_name);
-		$nice_name = str_replace('[','',$nice_name);
-		$nice_name = str_replace('"','',$nice_name);
+//		$nice_name = str_replace(' ','-',$nice_name);
+//		$nice_name = str_replace('[','',$nice_name);
+//		$nice_name = str_replace(']','',$nice_name);
+//		$nice_name = str_replace('"','',$nice_name);
 		return $nice_name;
 	}
-
-	echo get_mega($results['mega']);
 
 	$types_arr = array(
 	0 => "Normal",
@@ -423,9 +423,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($mega_decode as $mega1){
 			$mega++;
 			if ($mega_count == $mega) {
-				$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['mega']).'">'.$mega1.'</a></div>';
+				$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_mega($mega1).'">'.$mega1.'</a></div>';
 			} else {
-				$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['mega']).'">'.$mega1.'</a></div>';
+				$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_mega($mega1).'">'.$mega1.'</a></div>';
 			}
 		}
 	}
