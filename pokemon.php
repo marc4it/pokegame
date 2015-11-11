@@ -96,19 +96,7 @@ function poke_dex($atts, $content=null) {
 	$types = $results['types'];
 	$types_decode = json_decode($types,true);
 
-//testing function
-
-	function get_evo($evo_name) {
-		$evo_arr = explode(' (',$evo_name);
-		$nice_name = $evo_arr[0];
-		$nice_name = strtolower($nice_name);
-		$nice_name = str_replace(' ','-',$nice_name);
-		$nice_name = str_replace('[','',$nice_name);
-		$nice_name = str_replace('"','',$nice_name);
-		return $nice_name;
-	}
-
-	function get_mega($mega_name) {
+/*	function get_mega($mega_name) {
 		$mega_arr = explode(' ',$mega_name);
 		$nice_name = $mega_arr[1].'-'.$mega_arr[0].'-'.$mega_arr[2];
 		$nice_name = strtolower($nice_name);
@@ -118,6 +106,7 @@ function poke_dex($atts, $content=null) {
 //		$nice_name = str_replace('"','',$nice_name);
 		return $nice_name;
 	}
+*/
 
 	$types_arr = array(
 	0 => "Normal",
@@ -374,6 +363,29 @@ function poke_dex($atts, $content=null) {
 		}
 
 	$eggmoves_final .= '</div>';
+	
+//testing function for evo
+
+	function get_evo($evo_name) {
+		if (strpos($evo_name,'Mega') !== false) {
+			$evo_arr = explode(' ',$evo_name);
+			$tmp1 = $evo_arr[0];
+			$evo_arr[0] = $evo_arr[1];
+			$evo_arr[1] = $tmp1;
+			$evo_imp = implode(' ',$evo_arr);
+			$evo_imp = strtolower($evo_imp);
+			$evo_imp = str_replace(' ','-',$evo_imp);
+			return $evo_imp;
+		} else {
+			$evo_arr = explode(' (',$evo_name);
+			$nice_name = $evo_arr[0];
+			$nice_name = strtolower($nice_name);
+			$nice_name = str_replace(' ','-',$nice_name);
+			$nice_name = str_replace('[','',$nice_name);
+			$nice_name = str_replace('"','',$nice_name);
+			return $nice_name;
+			}
+		}
 
 	$preevo_count = count($preevo_decode);
 	$preevo_final = '<div class="row">';
@@ -423,15 +435,15 @@ function poke_dex($atts, $content=null) {
 		foreach ($mega_decode as $mega1){
 			$mega++;
 			if ($mega_count == $mega) {
-				$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_mega($mega1).'">'.$mega1.'</a></div>';
+				$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($mega1).'">'.$mega1.'</a></div>';
 			} else {
-				$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_mega($mega1).'">'.$mega1.'</a></div>';
+				$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($mega1).'">'.$mega1.'</a></div>';
 			}
 		}
 	}
 
 	$mega_final .= '</div>';
-
+	
 //height and weight here//
 
 	$height_10 = $results['height']/10;
