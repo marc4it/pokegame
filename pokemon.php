@@ -34,6 +34,7 @@ add_shortcode( 'poke', 'poke_dex' );
 
 header('Content-Type: text/html; charset=utf-8');
 
+
 function poke_dex($atts, $content=null) {
 	global $wpdb;
 
@@ -97,26 +98,24 @@ function poke_dex($atts, $content=null) {
 //testing function
 
 	function get_evo($evo_name) {
-    $evo_arr = explode(' (',$evo_name);
-	$nice_name = $evo_arr[0];
-	$nice_name = strtolower($nice_name);
-	$nice_name = str_replace(' ','-',$nice_name);
-	$nice_name = str_replace('[','',$nice_name);
-	$nice_name = str_replace('"','',$nice_name);
-	return $nice_name;
-
-}
+		$evo_arr = explode(' (',$evo_name);
+		$nice_name = $evo_arr[0];
+		$nice_name = strtolower($nice_name);
+		$nice_name = str_replace(' ','-',$nice_name);
+		$nice_name = str_replace('[','',$nice_name);
+		$nice_name = str_replace('"','',$nice_name);
+		return $nice_name;
+	}
 
 	function get_mega($mega_name) {
-    $mega_arr = explode(',',$mega_name);
-	$nice_name = $mega_arr[0];
-	$nice_name = strtolower($nice_name);
-	$nice_name = str_replace(' ','-',$nice_name);
-	$nice_name = str_replace('[','',$nice_name);
-	$nice_name = str_replace('"','',$nice_name);
-	return $nice_name;
-
-}
+		$mega_arr = explode(',',$mega_name);
+		$nice_name = $mega_arr[0];
+		$nice_name = strtolower($nice_name);
+		$nice_name = str_replace(' ','-',$nice_name);
+		$nice_name = str_replace('[','',$nice_name);
+		$nice_name = str_replace('"','',$nice_name);
+		return $nice_name;
+	}
 
 	echo get_mega($results['mega']);
 
@@ -406,11 +405,11 @@ function poke_dex($atts, $content=null) {
 			$evo++;
 			if ($evo_count == $evo) {
 				$evo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['evo']).'">'.$evo1.'</a></div>';
-				} else {
+			} else {
 				$evo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['evo']).'">'.$evo1.'</a></div>';
-				}
 			}
 		}
+	}
 
 	$evo_final .= '</div>';
 
@@ -420,16 +419,16 @@ function poke_dex($atts, $content=null) {
 	$mega2 = '-';
 	if ($mega_count==$mega){
 		$mega_final .= '<div class="small-4 columns">'.$mega2.'</div>';
-		}else{
+		} else {
 		foreach ($mega_decode as $mega1){
 			$mega++;
 			if ($mega_count == $mega) {
 				$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['mega']).'">'.$mega1.'</a></div>';
-				} else {
+			} else {
 				$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($results['mega']).'">'.$mega1.'</a></div>';
-				}
 			}
 		}
+	}
 
 	$mega_final .= '</div>';
 
@@ -443,9 +442,9 @@ function poke_dex($atts, $content=null) {
 	$height2 = '-';
 	if ($height_decode==$height0){
 		$height_final .= '<div class="small-4 columns">'.$height2.'</div>';
-		}else{
+		} else {
 		$height_final .= '<div class="small-4 columns">'.$height_10.'m</div>';
-		}
+	}
 
 	$height_final .= '</div>';
 
@@ -454,9 +453,9 @@ function poke_dex($atts, $content=null) {
 	$weight2 = '-';
 	if ($weight_decode==$weight0){
 		$weight_final .= '<div class="small-4 columns">'.$weight2.'</div>';
-		}else{
+		} else {
 		$weight_final .= '<div class="small-4 columns">'.$weight_10.'kg</div>';
-		}
+	}
 
 	$weight_final .= '</div>';
 
