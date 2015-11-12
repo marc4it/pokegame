@@ -291,9 +291,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($tm_decode as $tm1){
 				$t++;
 				if ($tm_count == $t) {
-					$tm_final .= '<div class="small-6 columns end">'.$tm_array[$tm1].' ('.$tm1.')</div>';
+					$tm_final .= '<div class="small-12 medium-6 columns end">'.$tm_array[$tm1].' ('.$tm1.')</div>';
 				} else {
-					$tm_final .= '<div class="small-6 columns">'.$tm_array[$tm1].' ('.$tm1.')</div>';
+					$tm_final .= '<div class="small-12 medium-6 columns">'.$tm_array[$tm1].' ('.$tm1.')</div>';
 			}
 		}
 	}
@@ -305,14 +305,14 @@ function poke_dex($atts, $content=null) {
 	$hm = '0';
 	$hm2 = '-';
 	if ($hm_count==$hm){
-		$hm_final .= '<div class="small-4 columns">'.$hm2.'</div>';
+		$hm_final .= '<div class="small-4 medium-6 columns">'.$hm2.'</div>';
 		}else{
 		foreach ($hm_decode as $hm1){
 			$hm++;
 			if ($hm_count == $hm) {
-				$hm_final .= '<div class="small-12 columns end">'.$hm_array[$hm1].' ('.$hm1.')</div>';
+				$hm_final .= '<div class="small-12 medium-6 columns end">'.$hm_array[$hm1].' ('.$hm1.')</div>';
 				} else {
-				$hm_final .= '<div class="small-12 columns">'.$hm_array[$hm1].' ('.$hm1.')</div>';
+				$hm_final .= '<div class="small-12 medium-6 columns">'.$hm_array[$hm1].' ('.$hm1.')</div>';
 				}
 			}
 		}
@@ -325,9 +325,9 @@ function poke_dex($atts, $content=null) {
 	foreach ($learnedmove_decode as $lm1){
 		$lm++;
 		if ($learnedmove_count == $lm) {
-			$learnedmove_final .= '<div class="small-6 columns end">'.$lm1.'</div>';
+			$learnedmove_final .= '<div class="small-12 medium-6 columns end">'.$lm1.'</div>';
 		} else {
-			$learnedmove_final .= '<div class="small-6 columns">'.$lm1.'</div>';
+			$learnedmove_final .= '<div class="small-12 medium-6 columns">'.$lm1.'</div>';
 		}
 	}
 	$learnedmove_final .= '</div>';
@@ -338,9 +338,9 @@ function poke_dex($atts, $content=null) {
 	foreach ($abilities_decode as $ab1){
 		$ab++;
 		if ($abilities_count == $ab) {
-			$abilities_final .= '<div class="small-12 columns end">'.$ab1.'</div>';
+			$abilities_final .= '<div class="small-6 medium-6 columns end">'.$ab1.'</div>';
 		} else {
-			$abilities_final .= '<div class="small-12 columns">'.$ab1.'</div>';
+			$abilities_final .= '<div class="small-6 medium-6 columns">'.$ab1.'</div>';
 		}
 	}
 	$abilities_final .= '</div>';
@@ -478,13 +478,13 @@ function poke_dex($atts, $content=null) {
 
 	$stats ='<div class="row">';
 
-	$stats .='<div class="small-6 columns">HP</div>'.'<div class="small-6 columns">'.$basestats_decode[0].'</div>';
-	$stats .='<div class="small-6 columns">Attack</div>'.'<div class="small-6 columns">'.$basestats_decode[1].'</div>';
-	$stats .='<div class="small-6 columns">Defense</div>'.'<div class="small-6 columns">'.$basestats_decode[2].'</div>';
-	$stats .='<div class="small-6 columns">Sp.Attack</div>'.'<div class="small-6 columns">'.$basestats_decode[3].'</div>';
-	$stats .='<div class="small-6 columns">Sp.Def</div>'.'<div class="small-6 columns">'.$basestats_decode[4].'</div>';
-	$stats .='<div class="small-6 columns">Speed</div>'.'<div class="small-6 columns">'.$basestats_decode[5].'</div>';
-	$stats .='<div class="small-6 columns">Total</div>'.'<div class="small-6 columns">'.$stats_total.'</div>';
+	$stats .='<div class="small-6 columns">HP</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[0].'</div>';
+	$stats .='<div class="small-6 columns">Attack</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[1].'</div>';
+	$stats .='<div class="small-6 columns">Defense</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[2].'</div>';
+	$stats .='<div class="small-6 columns">Sp.Attack</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[3].'</div>';
+	$stats .='<div class="small-6 columns">Sp.Def</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[4].'</div>';
+	$stats .='<div class="small-6 columns">Speed</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[5].'</div>';
+	$stats .='<div class="small-6 columns">Total</div>'.'<div class="small-3 medium-2 small-text-right columns end">'.$stats_total.'</div>';
 
 	$stats .= '</div>';
 
@@ -532,58 +532,70 @@ function poke_dex($atts, $content=null) {
 
 	echo '<div class="row">
 
-	<div class="small-4 columns">Pokedex ID</div>
+	<div class="small-4 columns">PokedexID</div>
 	<div class="small-8 columns">'.$results['pokedex_number'].'</div>
 	<div class="small-4 columns">Name</div>
-	<div class="small-8 columns">'.$results['name'].', '.$results['name_de'].'(DE), </br>'.$results['name_fr'].'(FR), '.$results['name_ja'].'(JP)</div>
+	<div class="small-8 columns">'.$results['name'].'</div>
+	<div class="small-4 columns">Name (DE)</div>
+	<div class="small-8 columns">'.$results['name_de'].'</div>
+	<div class="small-4 columns">Name (FR)</div>
+	<div class="small-8 columns">'.$results['name_fr'].'</div>
+	<div class="small-4 columns">Name (JP)</div>
+	<div class="small-8 columns">'.$results['name_ja'].'</div>
 	<div class="small-4 columns">Tier</div>
 	<div class="small-8 columns">'.$results['tier'].'</div>
 	<div class="small-4 columns">Types</div>
 	<div class="small-8 columns">'.$types2.'</div>
 	<div class="small-4 columns">Stats</div>
 	<div class="small-8 columns">'.$stats.'</div>
-	<div class="small-4 columns"></br>Abilities</div>
-	<div class="small-8 columns"></br>'.$abilities_final.'</div>
-	<div class="small-4 columns"></br>Learned Moves (Level)</div>
-	<div class="small-8 columns"></br>'.$learnedmove_final.'</div>
-	<div class="small-4 columns"></br>TM</div>
-	<div class="small-8 columns"></br>'.$tm_final.'</div>
-	<div class="small-4 columns"></br>HM</div>
-	<div class="small-8 columns"></br>'.$hm_final.'</div>
 	<div class="small-4 columns">Pre-EVO</div>
 	<div class="small-8 columns">'.$preevo_final.'</div>
 	<div class="small-4 columns">EVO</div>
 	<div class="small-8 columns">'.$evo_final.'</div>
 	<div class="small-4 columns">Mega-Evo</div>
 	<div class="small-8 columns">'.$mega_final.'</div>
-	<div class="small-4 columns">Egg Moves</div>
-	<div class="small-8 columns">'.$eggmoves_final.'</div>
-	<div class="small-4 columns"></br>Genus</div>
-	<div class="small-8 columns"></br>'.$results['genus'].'</div>
-	<div class="small-4 columns">Color</div>
-	<div class="small-8 columns">'.$results['color'].'</div>
-	<div class="small-4 columns">Gender Rate</div>
-	<div class="small-8 columns">'.$results['gender_rate'].'</div>
-	<div class="small-4 columns">Capture Rate</div>
-	<div class="small-8 columns">'.$results['capture_rate'].'</div>
-	<div class="small-4 columns">Base Happiness</div>
-	<div class="small-8 columns">'.$results['base_happiness'].'</div>
-	<div class="small-4 columns">Baby</div>
-	<div class="small-8 columns">'.$results['is_baby'].'</div>
-	<div class="small-4 columns">Hatch Counter</div>
-	<div class="small-8 columns">'.$results['hatch_counter'].'</div>
-	<div class="small-4 columns">Gender Differences</div>
-	<div class="small-8 columns">'.$results['has_gender_differences'].'</div>
-	<div class="small-4 columns">Growth Rate</div>
-	<div class="small-8 columns">'.$results['growth_rate'].'</div>
-	<div class="small-4 columns">Height</div>
-	<div class="small-8 columns">'.$height_final.'</div>
-	<div class="small-4 columns">Weight</div>
-	<div class="small-8 columns">'.$weight_final.'</div>
-	<div class="small-4 columns">Base Experience</div>
-	<div class="small-8 columns">'.$results['base_experience'].'</div>
-	<div class="small-4 columns">Egg Groups</div>
-	<div class="small-8 columns">'.$egggroup2.'</div>
+	<div class="small-6 medium-4 columns">Genus</div>
+	<div class="small-6 medium-8 columns">'.$results['genus'].'</div>
+	<div class="small-6 medium-4 columns">Color</div>
+	<div class="small-6 medium-8 columns">'.$results['color'].'</div>
+	<div class="small-6 medium-4 columns">Gender Rate</div>
+	<div class="small-6 medium-8 columns">'.$results['gender_rate'].'</div>
+	<div class="small-6 medium-4 columns">Capture Rate</div>
+	<div class="small-6 medium-8 columns">'.$results['capture_rate'].'</div>
+	<div class="small-6 medium-4 columns">Base Happiness</div>
+	<div class="small-6 medium-8 columns">'.$results['base_happiness'].'</div>
+	<div class="small-6 medium-4 columns">Baby</div>
+	<div class="small-6 medium-8 columns">'.$results['is_baby'].'</div>
+	<div class="small-6 medium-4 columns">Hatch Counter</div>
+	<div class="small-6 medium-8 columns">'.$results['hatch_counter'].'</div>
+	<div class="small-7 medium-4 columns">Gender Differences</div>
+	<div class="small-5 medium-8 columns">'.$results['has_gender_differences'].'</div>
+	<div class="small-6 medium-4 columns">Growth Rate</div>
+	<div class="small-6 medium-8 columns">'.$results['growth_rate'].'</div>
+	<div class="small-6 medium-4 columns">Height</div>
+	<div class="small-6 medium-8 columns">'.$height_final.'</div>
+	<div class="small-6 medium-4 columns">Weight</div>
+	<div class="small-6 medium-8 columns">'.$weight_final.'</div>
+	<div class="small-6 medium-4 columns">Base Experience</div>
+	<div class="small-6 medium-8 columns">'.$results['base_experience'].'</div>
+	<div class="show-for-small-only small-12 columns"></br><span class="round alert label">Egg Groups</span></div>
+	<div class="show-for-medium-up small-12 medium-4 columns"></br>Egg Groups</div>
+	<div class="small-12 medium-8 columns"></br>'.$egggroup2.'</div>
+	<div class="show-for-small-only small-12 columns"></br><span class="round alert label">Abilities</span></div>
+	<div class="show-for-medium-up small-12 medium-4 columns"></br>Abilities</div>
+	<div class="small-12 medium-8 columns"></br>'.$abilities_final.'</div>
+	<div class="show-for-small-only small-12 columns"></br><span class="round alert label">Learned Moves (Level)</span></div>
+	<div class="show-for-medium-up small-12 medium-4 columns"></br>Learned Moves (Level)</div>
+	<div class="small-12 medium-8 columns"></br>'.$learnedmove_final.'</div>
+	<div class="show-for-small-only small-12 columns"></br><span class="round alert label">HM</span></div>
+	<div class="show-for-medium-up small-12 medium-4 columns"></br>HM</div>
+	<div class="small-12 medium-8 columns"></br>'.$hm_final.'</div>
+	<div class="show-for-small-only small-12 columns"></br><span class="round alert label">TM</span></div>
+	<div class="show-for-medium-up small-12 medium-4 columns"></br>TM</div>
+	<div class="small-12 medium-8 columns"></br>'.$tm_final.'</div>
+	<div class="show-for-small-only small-12 columns"></br><span class="round alert label">Egg Moves</span></div>
+	<div class="show-for-medium-up small-12 medium-4 columns"></br>Egg Moves</div>
+	<div class="small-12 medium-8 columns"></br>'.$eggmoves_final.'</div>
 
 	</div>';
 
