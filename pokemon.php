@@ -526,6 +526,16 @@ function poke_dex($atts, $content=null) {
 
 	$image_name = $results['pokedex_id'];
 
+//button next/previous here
+	
+	$previous = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".($results['id']-1)."", ARRAY_A);
+	$next = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".($results['id']+1)."", ARRAY_A);
+	
+	echo '
+	<a href="http://pokemon.game-solver.com/pokedex/'.$previous['0']['pokedex_id'].'" class="button tiny round">Previous</br>Pokemon</a>
+	<a href="http://pokemon.game-solver.com/pokedex/'.$next['0']['pokedex_id'].'" class="button tiny round right">Next</br>Pokemon</a>
+	';
+
 	echo '<div class="img">
 	<img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/'.$image_name.'.png">
 	</div>';
@@ -546,16 +556,16 @@ function poke_dex($atts, $content=null) {
 	<div class="small-8 columns">'.$results['tier'].'</div>
 	<div class="small-4 columns">Types</div>
 	<div class="small-8 columns">'.$types2.'</div>
-	<div class="small-4 columns">Stats</div>
-	<div class="small-8 columns">'.$stats.'</div>
 	<div class="small-4 columns">Pre-EVO</div>
 	<div class="small-8 columns">'.$preevo_final.'</div>
 	<div class="small-4 columns">EVO</div>
 	<div class="small-8 columns">'.$evo_final.'</div>
 	<div class="small-4 columns">Mega-Evo</div>
 	<div class="small-8 columns">'.$mega_final.'</div>
-	<div class="small-6 medium-4 columns">Genus</div>
-	<div class="small-6 medium-8 columns">'.$results['genus'].'</div>
+	<div class="small-4 columns">Stats</div>
+	<div class="small-8 columns">'.$stats.'</div>
+	<div class="small-6 medium-4 columns"></br>Genus</div>
+	<div class="small-6 medium-8 columns"></br>'.$results['genus'].'</div>
 	<div class="small-6 medium-4 columns">Color</div>
 	<div class="small-6 medium-8 columns">'.$results['color'].'</div>
 	<div class="small-6 medium-4 columns">Gender Rate</div>
@@ -598,6 +608,11 @@ function poke_dex($atts, $content=null) {
 	<div class="small-12 medium-8 columns"></br>'.$eggmoves_final.'</div>
 
 	</div>';
+	
+	echo '
+	<a href="http://pokemon.game-solver.com/pokedex/'.$previous['0']['pokedex_id'].'" class="button tiny round">Previous</br>Pokemon</a>
+	<a href="http://pokemon.game-solver.com/pokedex/'.$next['0']['pokedex_id'].'" class="button tiny round right">Next</br>Pokemon</a>
+	';
 
 //print_r( $results );
 //print_r($path);
