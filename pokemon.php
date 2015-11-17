@@ -1,11 +1,4 @@
 <?php
-/* Print the contents of $result looping through each row returned in the result */
-
-//test 123
-//test 246
-//test 789
-//test push after merge 890
-
 /*
 Plugin Name: Pokemon
 Plugin URI: http://yourdomain.com/
@@ -15,21 +8,34 @@ Author: Marcus
 Author URI: http://yourdomain.com
 License: GPL
 */
-/* This calls hello_world() function when wordpress initializes.*/
-/* Note that the hello_world doesnt have brackets.*/
+	
+function seo_loader_init() {
+		global $wpdb;
+		$urlArr = parse_url($_SERVER['REQUEST_URI']);
+		$urlStr = (string) $urlArr;
+		$urlPath = explode('/', $urlArr['path']);
+	
+		if (substr($urlPath[1],0,2) != 'wp') {
+			if (($urlPath[2]) && ($urlPath[2] != '')) {
+				$results = $wpdb->get_results( "SELECT * FROM pokedex" );
+				$poke = $urlPath[2];
+				$checkPoke = '';
+				foreach($results as $row) {
+					if ($row->pokedex_id == $poke) {
+						$checkPoke = true;
+					}
+				}
+				if (substr($urlPath[1],2) != 'wp') {
+					if (!$checkPoke) {
+						header('Location: /'.'pokedex'.'/');
+						exit;
+					}
+				}
+			}
+		}
+}
 
-//* http://pokemon.game-solver.com/pokedex/charizard */
-
-
-/* add action for wordpress /*
-//add_action('init','hello_world');
-
-/* create shortcode for wordpress to use in post or page*/
 add_shortcode( 'poke', 'poke_dex' );
-
-//function hello_world() {
-//echo "This is plug in!";
-//}
 
 /* always define global $wpdb before query db */
 
@@ -646,15 +652,51 @@ function poke_dex($atts, $content=null) {
 		<a href="http://pokemon.game-solver.com/pokedex/'.$next['0']['pokedex_id'].'" class="button tiny round right">Next</br>Pokemon</a>
 		';
 
-	}
-	else {
-	header_remove('x-powered-by');
-	header ('Location: http://pokemon.game-solver.com/pokedex/');
-	die();
-		echo 'hello world';
-	}
-}
+	
+		} else {
+			
+			global $wpdb;
+			$sql = "SELECT * FROM `pokedex`";
+			$data = $wpdb->get_results( $sql, ARRAY_A );
+			
+			$name = $data['1']['name'];
+			
+			$stats = $data['1']['base_stats'];
+			$stats_decode = json_decode ($stats,true);
+			
+			$types = $data['1']['types'];
+			
+			$stats_all = array($stats_decode[0], $stats_decode[1], $stats_decode[2], $stats_decode[3], $stats_decode[4],$stats_decode[5]);
+			$stats_total = array_sum($stats_all);
+			$special_total = ($stats_decode[3] + $stats_decode[4]);
+			$stats1 ='<div class="row">';
 
+			$stats1 .='<div class="small-1 text-left columns">'.$stats_decode[0].'</div>';
+			$stats1 .='<div class="small-2 text-left columns">'.$stats_decode[1].'</div>';
+			$stats1 .='<div class="small-2 text-left columns">'.$stats_decode[2].'</div>';
+			$stats1 .='<div class="small-2 text-left columns">'.$stats_decode[3].'</div>';
+			$stats1 .='<div class="small-2 text-left columns">'.$stats_decode[4].'</div>';
+			$stats1 .='<div class="small-1 text-left columns">'.$stats_decode[5].'</div>';
+			$stats1 .='<div class="small-1 text-left columns">'.$stats_total.'</div>';
+
+			$stats1 .= '</div>';
+			
+			echo $special_total;
+			
+			echo '<div class=row>
+			<div class="small-3 columns">Name</div><div class="small-2 columns">Types</div>
+			<div class="small-1 columns text-center">HP</div><div class="small-1 columns text-center">Atk.</div>
+			<div class="small-1 columns text-center">Def.</div><div class="small-1 columns text-center">Spe.</div>
+			<div class="small-1 columns text-center">Spd.</div><div class="small-2 columns text-center">Total</div>
+			
+			<div class="img"><img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/mini/bulbasaur-mini.png"></div><div class="small-2 columns">'.$name.'</div><div class="small-2 columns text-left">'.$types.'</div>
+			<div class="small-1 columns text-center">'.$stats_decode[0].'</div><div class="small-1 columns text-center">'.$stats_decode[1].'</div>
+			<div class="small-1 columns text-center">'.$stats_decode[2].'</div><div class="small-1 columns text-center">'.$special_total.'</div>
+			<div class="small-1 columns text-center">'.$stats_decode[5].'</div><div class="small-2 columns text-center">'.$stats_total.'</div>
+			
+			</div>';
+		}
+	}
 
 
 function ingress_shortcode($atts, $content=null){
@@ -691,5 +733,5 @@ function my_insert_rewrite_rules( $rules ) {
 
 add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
 add_action( 'wp_loaded','my_flush_rules' );
-
+add_action( 'init', 'seo_loader_init', 0 );
 ?>
