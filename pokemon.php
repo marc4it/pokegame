@@ -659,45 +659,72 @@ function poke_dex($atts, $content=null) {
 			$sql = "SELECT * FROM `pokedex`";
 			$data = $wpdb->get_results( $sql, ARRAY_A );
 			
-			$name = $data['1']['name'];
+			echo '<div style="background-color:#CCCCCC"><div class=row>
+			<div class="small-5 columns small-offset-1 text-left"><strong>Pokemon</strong></div>
+			<div class="small-3 columns text-center"><strong>Types</strong></div>
+			<div class="small-3 columns text-center"><strong>Stats Total</strong></div>
+			</div></div>';
 			
-			$stats = $data['1']['base_stats'];
-			$stats_decode = json_decode ($stats,true);
+			for($i=0;$i<794;$i++){
 			
-			$types = $data['1']['types'];
+				$types_arr = array(
+				0 => "Normal",
+				1 => "Fight",
+				2 => "Flying",
+				3 => "Poison",
+				4 => "Ground",
+				5 => "Rock",
+				6 => "Bug",
+				7 => "Ghost",
+				8 => "Steel",
+				9 => "Fire",
+				10 => "Water",
+				11 => "Grass",
+				12 => "Electric",
+				13 => "Psychic",
+				14 => "Ice",
+				15 => "Dragon",
+				16 => "Dark",
+				17 => "Fairy"
+				);
+				
 			
-			$stats_all = array($stats_decode[0], $stats_decode[1], $stats_decode[2], $stats_decode[3], $stats_decode[4],$stats_decode[5]);
-			$stats_total = array_sum($stats_all);
-			$special_total = ($stats_decode[3] + $stats_decode[4]);
-			$stats1 ='<div class="row">';
+				$name = $data[$i]['name'];
+				$stats = $data[$i]['base_stats'];
+				$stats_decode = json_decode ($stats,true);
+				$types = $data[$i]['types'];
+				$types_decode = json_decode ($types,true);
+				$link = $data[$i]['pokedex_id'];
+			
+				$stats_all = array($stats_decode[0], $stats_decode[1], $stats_decode[2], $stats_decode[3], $stats_decode[4],$stats_decode[5]);
+				$stats_total = array_sum($stats_all);
+				
+				$types_count = count($types_decode);
+				$types2 = '<div class="row">';
+				
+				foreach ($types_decode as $types1) {
+					if ($types_count == 2) {
+						$types2 .= '<div class="small-6 columns text-center">'.$types_arr[$types1].'</div>';
+						} else {
+							$types2 .= '<div class="small-12 columns text-center">'.$types_arr[$types1].'</div>';
+						}
+					}
 
-			$stats1 .='<div class="small-1 text-left columns">'.$stats_decode[0].'</div>';
-			$stats1 .='<div class="small-2 text-left columns">'.$stats_decode[1].'</div>';
-			$stats1 .='<div class="small-2 text-left columns">'.$stats_decode[2].'</div>';
-			$stats1 .='<div class="small-2 text-left columns">'.$stats_decode[3].'</div>';
-			$stats1 .='<div class="small-2 text-left columns">'.$stats_decode[4].'</div>';
-			$stats1 .='<div class="small-1 text-left columns">'.$stats_decode[5].'</div>';
-			$stats1 .='<div class="small-1 text-left columns">'.$stats_total.'</div>';
-
-			$stats1 .= '</div>';
+				$types2 .= '</div>';
 			
-			echo $special_total;
+				echo '
+				
+				<div class=row>
+				<div class="small-1 columns"><img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png"></div>
+				<div class="small-5 columns text-left"><a href="http://pokemon.game-solver.com/pokedex/'.$link.'">'.$name.'</a></div>
+				<div class="small-3 columns text-center">'.$types2.'</div>
+				<div class="small-3 columns text-center">'.$stats_total.'</div>
 			
-			echo '<div class=row>
-			<div class="small-3 columns">Name</div><div class="small-2 columns">Types</div>
-			<div class="small-1 columns text-center">HP</div><div class="small-1 columns text-center">Atk.</div>
-			<div class="small-1 columns text-center">Def.</div><div class="small-1 columns text-center">Spe.</div>
-			<div class="small-1 columns text-center">Spd.</div><div class="small-2 columns text-center">Total</div>
+				</div>';
 			
-			<div class="img"><img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/mini/bulbasaur-mini.png"></div><div class="small-2 columns">'.$name.'</div><div class="small-2 columns text-left">'.$types.'</div>
-			<div class="small-1 columns text-center">'.$stats_decode[0].'</div><div class="small-1 columns text-center">'.$stats_decode[1].'</div>
-			<div class="small-1 columns text-center">'.$stats_decode[2].'</div><div class="small-1 columns text-center">'.$special_total.'</div>
-			<div class="small-1 columns text-center">'.$stats_decode[5].'</div><div class="small-2 columns text-center">'.$stats_total.'</div>
-			
-			</div>';
+			}
 		}
 	}
-
 
 function ingress_shortcode($atts, $content=null){
     global $wpdb;
