@@ -660,9 +660,10 @@ function poke_dex($atts, $content=null) {
 			$data = $wpdb->get_results( $sql, ARRAY_A );
 			
 			echo '<div style="background-color:#CCCCCC"><div class=row>
-			<div class="small-5 columns small-offset-1 text-left"><strong>Pokemon</strong></div>
-			<div class="small-3 columns text-center"><strong>Types</strong></div>
-			<div class="small-3 columns text-center"><strong>Stats Total</strong></div>
+			<div class="small-5 columns small-offset-2 medium-offset-1 text-left"><strong>Pokemon</strong></div>
+			<div class="small-3 columns show-for-medium-up text-center"><strong>Types</strong></div>
+			<div class=" medium-3 columns show-for-medium-up text-center"><strong>Stats Total</strong></div>
+			<div class=" small-3 show-for-small columns text-center"><strong>Stats</strong></div>
 			</div></div>';
 			
 			for($i=0;$i<794;$i++){
@@ -715,10 +716,10 @@ function poke_dex($atts, $content=null) {
 				echo '
 				
 				<div class=row>
-				<div class="small-1 columns"><img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png"></div>
-				<div class="small-5 columns text-left"><a href="http://pokemon.game-solver.com/pokedex/'.$link.'">'.$name.'</a></div>
-				<div class="small-3 columns text-center">'.$types2.'</div>
-				<div class="small-3 columns text-center">'.$stats_total.'</div>
+				<div class="small-2 medium-1 columns"><img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png"></div>
+				<div class="small-7 medium-5 columns text-left"><a href="http://pokemon.game-solver.com/pokedex/'.$link.'">'.$name.'</a></div>
+				<div class="medium-3 columns show-for-medium-up text-center">'.$types2.'</div>
+				<div class="small-3 medium-3 columns text-center">'.$stats_total.'</div>
 			
 				</div>';
 			
