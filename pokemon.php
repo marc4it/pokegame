@@ -705,9 +705,9 @@ function poke_dex($atts, $content=null) {
 				
 				foreach ($types_decode as $types1) {
 					if ($types_count == 2) {
-						$types2 .= '<div class="small-6 columns text-center">'.$types_arr[$types1].'</div>';
+						$types2 .= '<div class="small-6 columns text-center '.$types_arr[$types1].'">'.$types_arr[$types1].'</div>';
 						} else {
-							$types2 .= '<div class="small-12 columns text-center">'.$types_arr[$types1].'</div>';
+							$types2 .= '<div class="small-12 columns text-center '.$types_arr[$types1].'">'.$types_arr[$types1].'</div>';
 						}
 					}
 
