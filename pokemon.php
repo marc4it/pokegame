@@ -53,6 +53,8 @@ function poke_dex($atts, $content=null) {
 	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
 	$path = explode('/', $urlArr['path']);
 
+
+
 	$sql = "SELECT * FROM `pokedex` WHERE `pokedex_id` LIKE '".$path[2]."' LIMIT 0, 30";
 	$results = $wpdb->get_row( $sql, ARRAY_A );
 
@@ -96,6 +98,9 @@ function poke_dex($atts, $content=null) {
 
 	$egggroup = $results['egg_groups'];
 	$egggroup_decode = json_decode($egggroup,true);
+	
+	$genderRate = $results['gender_rate'];
+	$genderRate_decode = json_decode($genderRate,true);
 
 //specify pokemon types here//
 
@@ -119,7 +124,7 @@ function poke_dex($atts, $content=null) {
 	
 		$types_arr = array(
 		0 => "Normal",
-		1 => "Fight",
+		1 => "Fighting",
 		2 => "Flying",
 		3 => "Poison",
 		4 => "Ground",
@@ -152,14 +157,36 @@ function poke_dex($atts, $content=null) {
 		'Ditto' => "Ditto",
 		'Dragon' => "Dragon",
 		'Gender unknown' => "Gender Unknown"
-	);
+		);
+		
+		$genderRate_arr = array (
+		null => 'Genderless',
+		-1 => 'Genderless',
+		0 => 'Male only',
+		1 => '1 ♀ : 7 ♂',
+		2 => '1 ♀ : 3 ♂',
+		4 => '1 ♀ : 1 ♂',
+		6 => '3 ♀ : 1 ♂',
+		8 => 'Female only',
+		);
+		
+		$genderRate2 = '<div class="row">';
 
-		$types2 = '<div class="row">';
+		if ($genderRate_decode == '') {
+			$genderRate2 .= '<div class="small-6 columns">Genderless</div>';
+			} else {
+				$genderRate2 .= '<div class="small-6 columns">'.$genderRate_arr[$results['gender_rate']].'</div>';
+			}
+			
+		$genderRate2 .= '</div>';
 
-		foreach ($types_decode as $types1){
-		$types2 .= '<div class="small-6 columns">'.$types_arr[$types1].'</div>';
+		$types2 = '<div class="row collapse">';
+
+		foreach ($types_decode as $types1) {
+		$types2 .= '<div class="small-5 medium-3 columns end '.$types_arr[$types1].' text-center">'.$types_arr[$types1].'</div>';
 		}
 		$types2 .= '</div>';
+		
 
 	//specify egg groups here
 
@@ -607,7 +634,7 @@ function poke_dex($atts, $content=null) {
 		<div class="small-6 medium-4 columns">Color</div>
 		<div class="small-6 medium-8 columns">'.$results['color'].'</div>
 		<div class="small-6 medium-4 columns">Gender Rate</div>
-		<div class="small-6 medium-8 columns">'.$results['gender_rate'].'</div>
+		<div class="small-6 medium-8 columns">'.$genderRate2.'</div>
 		<div class="small-6 medium-4 columns">Capture Rate</div>
 		<div class="small-6 medium-8 columns">'.$results['capture_rate'].'</div>
 		<div class="small-6 medium-4 columns">Base Happiness</div>
@@ -670,7 +697,7 @@ function poke_dex($atts, $content=null) {
 			
 				$types_arr = array(
 				0 => "Normal",
-				1 => "Fight",
+				1 => "Fighting",
 				2 => "Flying",
 				3 => "Poison",
 				4 => "Ground",
@@ -701,7 +728,7 @@ function poke_dex($atts, $content=null) {
 				$stats_total = array_sum($stats_all);
 				
 				$types_count = count($types_decode);
-				$types2 = '<div class="row">';
+				$types2 = '<div class="row medium-uncollapse large-uncollapse">';
 				
 				foreach ($types_decode as $types1) {
 					if ($types_count == 2) {
@@ -716,7 +743,7 @@ function poke_dex($atts, $content=null) {
 				echo '
 				
 				<div class=row>
-				<div class="small-2 medium-1 columns"><img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png"></div>
+				<div class="small-2 medium-1 columns imgMiddle"><img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png"></div>
 				<div class="small-7 medium-5 columns text-left"><a href="http://pokemon.game-solver.com/pokedex/'.$link.'">'.$name.'</a></div>
 				<div class="medium-3 columns show-for-medium-up text-center">'.$types2.'</div>
 				<div class="small-3 medium-3 columns text-center">'.$stats_total.'</div>
