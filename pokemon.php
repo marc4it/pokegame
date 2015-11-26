@@ -10,37 +10,51 @@ License: GPL
 */
 	
 function seo_loader_init() {
-		global $wpdb;
-		$urlArr = parse_url($_SERVER['REQUEST_URI']);
-		$urlStr = (string) $urlArr;
-		$urlPath = explode('/', $urlArr['path']);
-	
-		if (substr($urlPath[1],0,2) != 'wp') {
-			if (($urlPath[2]) && ($urlPath[2] != '')) {
-				$results = $wpdb->get_results( "SELECT * FROM pokedex" );
-				$poke = $urlPath[2];
-				$checkPoke = '';
-				foreach($results as $row) {
-					if ($row->pokedex_id == $poke) {
-						$checkPoke = true;
-					}
-				}
-				if (substr($urlPath[1],2) != 'wp') {
-					if (!$checkPoke) {
-						header('Location: /'.'pokedex'.'/');
-						exit;
-					}
-				}
+	global $wpdb;
+	$urlArr = parse_url($_SERVER['REQUEST_URI']);
+	$urlStr = (string) $urlArr;
+	$urlPath = explode('/', $urlArr['path']);
+
+	if (($urlPath[2]) && ($urlPath[2] == 'pokedex')) {
+		$results = $wpdb->get_results( "SELECT * FROM pokedex;" );
+		$poke = $urlPath[2];
+		$checkPoke = '';
+		foreach($results as $row) {
+			if ($row->pokedex_id == $poke) {
+				$checkPoke = true;
 			}
 		}
+		if (!$checkPoke) {
+			header('Location: /'.'pokedex'.'/');
+			exit;
+		}
+	} elseif (($urlPath[2]) && ($urlPath[2] == 'move')) {
+		$results = $wpdb->get_results( "SELECT * FROM `move`;" );
+		$poke = $urlPath[2];
+/*
+		$checkPoke = '';
+		foreach($results as $row) {
+			if ($row->pokedex_id == $poke) {
+				$checkPoke = true;
+			}
+		}
+		if (!$checkPoke) {
+			header('Location: /'.'move'.'/');
+			exit;
+		}
+*/		
+	}
 }
 
-add_shortcode( 'poke', 'poke_dex' );
+
 
 /* always define global $wpdb before query db */
 
-header('Content-Type: text/html; charset=utf-8');
-
+// header('Content-Type: text/html; charset=utf-8');
+function poke_move($atts, $content=null) {
+	global $wpdb;
+	echo "move!!!";
+}
 
 function poke_dex($atts, $content=null) {
 	global $wpdb;
@@ -55,7 +69,7 @@ function poke_dex($atts, $content=null) {
 
 
 
-	$sql = "SELECT * FROM `pokedex` WHERE `pokedex_id` LIKE '".$path[2]."' LIMIT 0, 30";
+	$sql = "SELECT * FROM `pokedex` WHERE `pokedex_id` LIKE '".$path[2]."' LIMIT 0, 30;";
 	$results = $wpdb->get_row( $sql, ARRAY_A );
 
 	$move = "SELECT * FROM `move`";
@@ -173,9 +187,9 @@ function poke_dex($atts, $content=null) {
 		$genderRate2 = '<div class="row">';
 
 		if ($genderRate_decode == '') {
-			$genderRate2 .= '<div class="small-6 columns">Genderless</div>';
+			$genderRate2 .= '<div class="small-7 columns">Genderless</div>';
 			} else {
-				$genderRate2 .= '<div class="small-6 columns">'.$genderRate_arr[$results['gender_rate']].'</div>';
+				$genderRate2 .= '<div class="small-8 columns">'.$genderRate_arr[$results['gender_rate']].'</div>';
 			}
 			
 		$genderRate2 .= '</div>';
@@ -362,7 +376,7 @@ function poke_dex($atts, $content=null) {
 				$learnedmove_final .= '<div class="small-12 columns">-</div>';
 			} else {
 				foreach ($learnedmove_decode as $lm1) {
-				$learnedmove_final .= '<div class="small-12 medium-6 columns">'.$lm1.'</div>';
+				$learnedmove_final .= '<div class="small-12 medium-6 columns end">'.$lm1.'</div>';
 			}
 		}
 	
@@ -411,37 +425,49 @@ function poke_dex($atts, $content=null) {
 				$new_name = strtolower($new_name);
 				return $new_name;
 			} else {
-			if (strpos($evo_name,'Wormadam') !== false) {
-				$replace = str_replace('(','',$evo_name);
-				$replace = str_replace(')','',$replace);
-				$replace_arr = explode(' ',$replace);
-				$new_name = $replace_arr[0].'-'.$replace_arr[1];
-				$new_name = strtolower($new_name);
-				return $new_name;
-			} else {
-			if (strpos($evo_name,'Mega') !== false) {
-				$evo_arr = explode(' ',$evo_name);
-				$tmp1 = $evo_arr[0];
-				$evo_arr[0] = $evo_arr[1];
-				$evo_arr[1] = $tmp1;
-				$evo_imp = implode(' ',$evo_arr);
-				$evo_imp = strtolower($evo_imp);
-				$evo_imp = str_replace(' ','-',$evo_imp);
-				return $evo_imp;
-			} else {
-				$evo_arr = explode(' (',$evo_name);
-				$nice_name = $evo_arr[0];
-				$nice_name = strtolower($nice_name);
-				$nice_name = str_replace(' ','-',$nice_name);
-				$nice_name = str_replace('[','',$nice_name);
-				$nice_name = str_replace('"','',$nice_name);
-				return $nice_name;
+				if (strpos($evo_name,'♀') !== false) {
+					$evo_arr = explode(' (',$evo_name);
+					$replace = str_replace('♀','-f ',$evo_arr[0]);
+					$new_name = strtolower($replace);
+					return $new_name;
+				} else {
+					if (strpos($evo_name,'♂') !== false) {
+						$evo_arr = explode(' (',$evo_name);
+						$replace = str_replace('♂','-m ',$evo_arr[0]);
+						$new_name = strtolower($replace);
+						return $new_name;
+					} else {
+						if (strpos($evo_name,'Wormadam') !== false) {
+							$replace = str_replace('(','',$evo_name);
+							$replace = str_replace(')','',$replace);
+							$replace_arr = explode(' ',$replace);
+							$new_name = $replace_arr[0].'-'.$replace_arr[1];
+							$new_name = strtolower($new_name);
+							return $new_name;
+						} else {
+							if (strpos($evo_name,'Mega') !== false) {
+								$evo_arr = explode(' ',$evo_name);
+								$tmp1 = $evo_arr[0];
+								$evo_arr[0] = $evo_arr[1];
+								$evo_arr[1] = $tmp1;
+								$evo_imp = implode(' ',$evo_arr);
+								$evo_imp = strtolower($evo_imp);
+								$evo_imp = str_replace(' ','-',$evo_imp);
+								return $evo_imp;
+							} else {
+								$evo_arr = explode(' (',$evo_name);
+								$nice_name = $evo_arr[0];
+								$nice_name = strtolower($nice_name);
+								$nice_name = str_replace(' ','-',$nice_name);
+								$nice_name = str_replace('[','',$nice_name);
+								$nice_name = str_replace('"','',$nice_name);
+								return $nice_name;
+							}
+						}
+					}
 				}
 			}
-		}
-	}
-
-	
+		}	
 
 	/*	echo $results['evo'];
 		echo '</br>';
@@ -541,13 +567,13 @@ function poke_dex($atts, $content=null) {
 
 		$stats ='<div class="row">';
 
-		$stats .='<div class="small-6 columns">HP</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[0].'</div>';
-		$stats .='<div class="small-6 columns">Attack</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[1].'</div>';
-		$stats .='<div class="small-6 columns">Defense</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[2].'</div>';
-		$stats .='<div class="small-6 columns">Sp.Attack</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[3].'</div>';
-		$stats .='<div class="small-6 columns">Sp.Def</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[4].'</div>';
-		$stats .='<div class="small-6 columns">Speed</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[5].'</div>';
-		$stats .='<div class="small-6 columns">Total</div>'.'<div class="small-3 medium-2 small-text-right columns end">'.$stats_total.'</div>';
+		$stats .='<div class="small-6 medium-6 columns">HP</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[0].'</div>';
+		$stats .='<div class="small-6 medium-6 columns">Attack</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[1].'</div>';
+		$stats .='<div class="small-6 medium-6 columns">Defense</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[2].'</div>';
+		$stats .='<div class="small-6 medium-6 columns">Sp.Attack</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[3].'</div>';
+		$stats .='<div class="small-6 medium-6 columns">Sp.Def</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[4].'</div>';
+		$stats .='<div class="small-6 medium-6 columns">Speed</div>'.'<div class="small-3 medium-2 small-text-right columns">'.$basestats_decode[5].'</div>';
+		$stats .='<div class="small-6 medium-6 medium-6 columns">Total</div>'.'<div class="small-3 medium-2 small-text-right columns end">'.$stats_total.'</div>';
 
 		$stats .= '</div>';
 
@@ -643,8 +669,6 @@ function poke_dex($atts, $content=null) {
 		<div class="small-6 medium-8 columns">'.$results['is_baby'].'</div>
 		<div class="small-6 medium-4 columns">Hatch Counter</div>
 		<div class="small-6 medium-8 columns">'.$results['hatch_counter'].'</div>
-		<div class="small-7 medium-4 columns">Gender Differences</div>
-		<div class="small-5 medium-8 columns">'.$results['has_gender_differences'].'</div>
 		<div class="small-6 medium-4 columns">Growth Rate</div>
 		<div class="small-6 medium-8 columns">'.$results['growth_rate'].'</div>
 		<div class="small-6 medium-4 columns">Height</div>
@@ -773,7 +797,7 @@ function ingress_shortcode($atts, $content=null){
 function my_flush_rules(){
     $rules = get_option( 'rewrite_rules' );
 
-	if ( !isset($rules['(pokedex)/(.+)$']) ) {
+	if ( !isset($rules['(pokedex)/(.+)$']) || !isset($rules['(move)/(.+)$']) ) {
 		global $wp_rewrite;
 	   	$wp_rewrite->flush_rules();
 	}
@@ -783,8 +807,14 @@ function my_flush_rules(){
 function my_insert_rewrite_rules( $rules ) {
 	$newrules = array();
 	$newrules['pokedex/(.+)$'] = 'index.php?pagename=pokedex';
+	$newrules['move/(.+)$'] = 'index.php?pagename=move';
+
 	return $newrules + $rules;
 }
+
+
+add_shortcode( 'poke', 'poke_dex' );
+add_shortcode( 'move', 'poke_move' );
 
 add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
 add_action( 'wp_loaded','my_flush_rules' );
