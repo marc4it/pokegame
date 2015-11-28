@@ -50,10 +50,84 @@ function seo_loader_init() {
 
 /* always define global $wpdb before query db */
 
-// header('Content-Type: text/html; charset=utf-8');
+
+// ./move space here!
+
+
+
 function poke_move($atts, $content=null) {
 	global $wpdb;
-	echo "move!!!";
+	
+	$output = '';
+	extract( shortcode_atts( array(
+		'name' => 'None',
+	), $atts ) );
+
+	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
+	$path = explode('/', $urlArr['path']);
+
+
+
+	$sql = "SELECT * FROM `move` WHERE `id_name` LIKE '".$path[2]."' LIMIT 0, 30;";
+	$results = $wpdb->get_row( $sql, ARRAY_A );
+
+	$types_arr = array(
+		0 => "Normal",
+		1 => "Fighting",
+		2 => "Flying",
+		3 => "Poison",
+		4 => "Ground",
+		5 => "Rock",
+		6 => "Bug",
+		7 => "Ghost",
+		8 => "Steel",
+		9 => "Fire",
+		10 => "Water",
+		11 => "Grass",
+		12 => "Electric",
+		13 => "Psychic",
+		14 => "Ice",
+		15 => "Dragon",
+		16 => "Dark",
+		17 => "Fairy"
+		);
+	
+
+	
+		echo '
+		<div class="row collapse">
+		<div class="small-4 medium-5 columns">Name</div>
+		<div class="small-8 medium-7 columns">'.$results['name'].'</div>
+		<div class="small-4 medium-5 columns">Name(DE)</div>
+		<div class="small-8 medium-7 columns">'.$results['name_de'].'</div>
+		<div class="small-4 medium-5 columns">Name(FR)</div>
+		<div class="small-8 medium-7 columns">'.$results['name_fr'].'</div>
+		<div class="small-4 medium-5 columns">Name(JP)</div>
+		<div class="small-8 medium-7 columns">'.$results['name_ja'].'</div>
+		<div class="small-4 medium-5 columns">Type</div>
+		<div class="small-8 medium-7 columns"><div class="small-4 text-center columns '.$types_arr[$results['type']].'">'.$types_arr[$results['type']].'</div></div>
+		<div class="small-4 medium-5 columns">Category</div>
+		<div class="small-8 medium-7 columns">'.$results['category'].'</div>
+		<div class="small-4 medium-5 columns">Power</div>
+		<div class="small-8 medium-7 columns">'.$results['power'].'</div>
+		<div class="small-4 medium-5 columns">Accuracy</div>
+		<div class="small-8 medium-7 columns">'.$results['accuracy'].'</div>
+		<div class="small-4 medium-5 columns">PP</div>
+		<div class="small-8 medium-7 columns">'.$results['pp'].'</div>
+		<div class="small-4 medium-5 columns">TM</div>
+		<div class="small-8 medium-7 columns">'.$results['tm'].'</div>
+		<div class="small-4 medium-5 columns">Probability</div>
+		<div class="small-8 medium-7 columns">'.$results['probability'].'</div>
+		<div class="small-4 medium-5 columns">Description</div>
+		<div class="small-8 medium-7 columns">'.$results['description'].'</div>
+		
+		
+		
+		
+		
+		</div>';
+	
+	
 }
 
 function poke_dex($atts, $content=null) {
