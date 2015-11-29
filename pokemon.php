@@ -28,25 +28,22 @@ function seo_loader_init() {
 			header('Location: /'.'pokedex'.'/');
 			exit;
 		}
-	} elseif (($urlPath[2]) && ($urlPath[2] == 'move')) {
+	} elseif (($urlPath[1]) && ($urlPath[2] == 'move')) {
 		$results = $wpdb->get_results( "SELECT * FROM `move`;" );
-		$poke = $urlPath[2];
-/*
-		$checkPoke = '';
+		$move = $urlPath[2];
+		$checkMove = '';
 		foreach($results as $row) {
-			if ($row->pokedex_id == $poke) {
-				$checkPoke = true;
+			if ($row->id_name == $move) {
+				$checkMove = true;
 			}
 		}
-		if (!$checkPoke) {
+		if (!$checkMove) {
 			header('Location: /'.'move'.'/');
 			exit;
 		}
-*/		
+		
 	}
 }
-
-
 
 /* always define global $wpdb before query db */
 
@@ -62,6 +59,17 @@ function poke_move($atts, $content=null) {
 	extract( shortcode_atts( array(
 		'name' => 'None',
 	), $atts ) );
+	
+	function no_space($space_name) {
+		if (strpos($space_name,' ') !== false) {
+			$new_name = str_replace(' ','-',$space_name);
+			$new_name = strtolower($new_name);
+			return $new_name;
+		} else {
+			$new_name = strtolower($space_name);
+			return $new_name;
+			}
+	}
 
 	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
 	$path = explode('/', $urlArr['path']);
@@ -70,6 +78,8 @@ function poke_move($atts, $content=null) {
 
 	$sql = "SELECT * FROM `move` WHERE `id_name` LIKE '".$path[2]."' LIMIT 0, 30;";
 	$results = $wpdb->get_row( $sql, ARRAY_A );
+
+if ($results) {
 
 	$types_arr = array(
 		0 => "Normal",
@@ -91,9 +101,15 @@ function poke_move($atts, $content=null) {
 		16 => "Dark",
 		17 => "Fairy"
 		);
-	
+		
+	$category_arr = array(
+		Physical => '<div class="small-4 text-center columns text-color-red">Physical</div>',
+		Special => '<div class="small-4 text-center columns><font color="red"><strong>Special</strong></font></div>',
+		Status => '<div class="small-4 text-center columns><strong><font color="red">Status</font></strong></div>',
+		);
 
-	
+
+
 		echo '
 		<div class="row collapse">
 		<div class="small-4 medium-5 columns">Name</div>
@@ -107,7 +123,7 @@ function poke_move($atts, $content=null) {
 		<div class="small-4 medium-5 columns">Type</div>
 		<div class="small-8 medium-7 columns"><div class="small-4 text-center columns '.$types_arr[$results['type']].'">'.$types_arr[$results['type']].'</div></div>
 		<div class="small-4 medium-5 columns">Category</div>
-		<div class="small-8 medium-7 columns">'.$results['category'].'</div>
+		<div class="small-8 medium-7 columns">'.$category_arr[$results['category']].'</div>
 		<div class="small-4 medium-5 columns">Power</div>
 		<div class="small-8 medium-7 columns">'.$results['power'].'</div>
 		<div class="small-4 medium-5 columns">Accuracy</div>
@@ -120,14 +136,17 @@ function poke_move($atts, $content=null) {
 		<div class="small-8 medium-7 columns">'.$results['probability'].'</div>
 		<div class="small-4 medium-5 columns">Description</div>
 		<div class="small-8 medium-7 columns">'.$results['description'].'</div>
-		
-		
-		
-		
-		
+	
+	
+	
+	
+	
 		</div>';
 	
 	
+	} else {
+		echo 'hello world';
+	}
 }
 
 function poke_dex($atts, $content=null) {
@@ -195,20 +214,26 @@ function poke_dex($atts, $content=null) {
 	$types = $results['types'];
 	$types_decode = json_decode($types,true);
 
-/*	function get_mega($mega_name) {
-		$mega_arr = explode(' ',$mega_name);
-		$nice_name = $mega_arr[1].'-'.$mega_arr[0].'-'.$mega_arr[2];
-		$nice_name = strtolower($nice_name);
-//		$nice_name = str_replace(' ','-',$nice_name);
-//		$nice_name = str_replace('[','',$nice_name);
-//		$nice_name = str_replace(']','',$nice_name);
-//		$nice_name = str_replace('"','',$nice_name);
-		return $nice_name;
-	}
-*/
-
 
 	if ($results) {
+	
+		function no_space($space_name) {
+			
+			if (strpos($space_name,' (') !== false) {
+				$new_name = explode(' (',$space_name);
+				$new_name = str_replace(' ','-',$new_name[0]);
+				$new_name = strtolower($new_name);
+				return $new_name;
+			}elseif (strpos($space_name,' ') !== false) {
+				$new_name = str_replace(' ','-',$space_name);
+				$new_name = strtolower($new_name);
+				return $new_name;
+			} else {
+				$new_name = strtolower($space_name);
+				return $new_name;
+				}
+			}
+		
 	
 		$types_arr = array(
 		0 => "Normal",
@@ -415,9 +440,9 @@ function poke_dex($atts, $content=null) {
 				foreach ($tm_decode as $tm1){
 					$t++;
 					if ($tm_count == $t) {
-						$tm_final .= '<div class="small-12 medium-6 columns end">'.$tm_array[$tm1].' ('.$tm1.')</div>';
+						$tm_final .= '<div class="small-12 medium-6 columns end"><a href="http://pokemon.game-solver.com/move/'.no_space($tm_array[$tm1]).'">'.$tm_array[$tm1].' ('.$tm1.')</a></div>';
 					} else {
-						$tm_final .= '<div class="small-12 medium-6 columns">'.$tm_array[$tm1].' ('.$tm1.')</div>';
+						$tm_final .= '<div class="small-12 medium-6 columns"><a href="http://pokemon.game-solver.com/move/'.no_space($tm_array[$tm1]).'">'.$tm_array[$tm1].' ('.$tm1.')</div>';
 				}
 			}
 		}
@@ -450,7 +475,7 @@ function poke_dex($atts, $content=null) {
 				$learnedmove_final .= '<div class="small-12 columns">-</div>';
 			} else {
 				foreach ($learnedmove_decode as $lm1) {
-				$learnedmove_final .= '<div class="small-12 medium-6 columns end">'.$lm1.'</div>';
+				$learnedmove_final .= '<div class="small-12 medium-6 columns end"><a href="http://pokemon.game-solver.com/move/'.no_space($lm1).'">'.$lm1.'</a></div>';
 			}
 		}
 	
@@ -479,9 +504,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($eggmoves_decode as $em1){
 				$em++;
 				if ($eggmoves_count == $em) {
-					$eggmoves_final .= '<div class="small-6 columns end">'.$em1.'</div>';
+					$eggmoves_final .= '<div class="small-6 columns end"><a href="http://pokemon.game-solver.com/move/'.no_space($em1).'">'.$em1.'</div>';
 					} else {
-					$eggmoves_final .= '<div class="small-6 columns">'.$em1.'</div>';
+					$eggmoves_final .= '<div class="small-6 columns"><a href="http://pokemon.game-solver.com/move/'.no_space($em1).'">'.$em1.'</div>';
 					}
 				}
 			}
