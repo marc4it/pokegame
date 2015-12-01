@@ -9,6 +9,8 @@ Author URI: http://yourdomain.com
 License: GPL
 */
 	
+	//test new git
+	
 function seo_loader_init() {
 	global $wpdb;
 	$urlArr = parse_url($_SERVER['REQUEST_URI']);
