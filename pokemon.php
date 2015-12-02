@@ -15,8 +15,9 @@ function seo_loader_init() {
 	global $wpdb;
 	$urlArr = parse_url($_SERVER['REQUEST_URI']);
 	$urlPath = explode('/', $urlArr['path']);
+	
+	if (($urlPath[2]) && ($urlPath[1] == 'pokedex')) {
 
-	if (($urlPath[2]) && ($urlPath[2] == 'pokedex')) {
 		$results = $wpdb->get_results( "SELECT * FROM pokedex;" );
 		$poke = $urlPath[2];
 		$checkPoke = '';
@@ -29,13 +30,14 @@ function seo_loader_init() {
 			header('Location: /'.'pokedex'.'/');
 			exit;
 		}
-	} elseif (($urlPath[1]) && ($urlPath[2] == 'move')) {
+	} elseif (($urlPath[2]) && ($urlPath[1] == 'move')) {
 		$results = $wpdb->get_results( "SELECT * FROM `move`;" );
 		$move = $urlPath[2];
 		$checkMove = '';
 		foreach($results as $row) {
 			if ($row->id_name == $move) {
 				$checkMove = true;
+				break;
 			}
 		}
 		if (!$checkMove) {
@@ -147,7 +149,49 @@ if ($results) {
 	
 	
 	} else {
-		echo 'hello world';
+		
+		$move = "SELECT * FROM `move`";
+		$movedata = $wpdb->get_results($move);
+		
+		$types_arr = array(
+		0 => "Normal",
+		1 => "Fighting",
+		2 => "Flying",
+		3 => "Poison",
+		4 => "Ground",
+		5 => "Rock",
+		6 => "Bug",
+		7 => "Ghost",
+		8 => "Steel",
+		9 => "Fire",
+		10 => "Water",
+		11 => "Grass",
+		12 => "Electric",
+		13 => "Psychic",
+		14 => "Ice",
+		15 => "Dragon",
+		16 => "Dark",
+		17 => "Fairy"
+		);
+		
+		$movename1 = '<div class = row>';
+
+		foreach ($movedata as $movename) {
+			$movename1 .= '<div class="small-4 columns"><div class="small-10 small-offset-2 columns"><a href="/move/'.no_space($movename->name).'/">'.$movename->name.'</a></div></div>';
+			$movename1 .= '<div class="small-4 columns"><div class="small-10 small-offset-2 columns '.$types_arr[$movename->type].' text-center">'.$types_arr[$movename->type].'</div></div>';
+			$movename1 .= '<div class="small-4 columns text-center">'.$movename->power.'</div>';
+			
+		}
+		
+		$movename1 .= '</div>';
+		
+		echo '<div style="background-color:#CCCCCC"><div class = row>
+		<div class="small-4 columns"><div class="small-10 small-offset-2 columns"><strong>Name</strong></div></div>
+		<div class="small-4 columns"><div class="small-10 small-offset-2 columns text-center"><strong>Type</strong></div></div>
+		<div class="small-4 columns text-center"><strong>Power</strong></div></div></div>';
+		
+		echo $movename1;
+		
 	}
 }
 
@@ -321,115 +365,115 @@ function poke_dex($atts, $content=null) {
 	//specify tm/hm name here;
 
 		$tm_array = array (
-			TM1 => "Hone Claws",
-			TM2 => "Dragon Claw",
-			TM3 => "Psyshock",
-			TM4 => "Calm Mind",
-			TM5 => "Roar",
-			TM06 => "Toxic",
-			TM7 => "Hail",
-			TM8 => "Bulk Up",
-			TM09 => "Venoshock",
-			TM10 => "Hidden Power",
-			TM11 => "Sunny Day",
-			TM12 => "Taunt",
-			TM13 => "Ice Beam",
-			TM14 => "Blizzard",
-			TM15 => "Hyper Beam",
-			TM16 => "Light Screen",
-			TM17 => "Protect",
-			TM18 => "Rain Dance",
-			TM19 => "Telekinesis",
-			TM20 => "Safeguard",
-			TM21 => "Frustration",
-			TM22 => "Solar Beam",
-			TM23 => "Smack Down",
-			TM24 => "Thunderbolt",
-			TM25 => "Thunder",
-			TM26 => "Earthquake",
-			TM27 => "Return",
-			TM28 => "Dig",
-			TM29 => "Psychic",
-			TM30 => "Shadow Ball",
-			TM31 => "Brick Break",
-			TM32 => "Double Team",
-			TM33 => "Reflect",
-			TM34 => "Sludge Wave",
-			TM35 => "Flamethrower",
-			TM36 => "Sludge Bomb",
-			TM37 => "Sandstorm",
-			TM38 => "Fire Blast",
-			TM39 => "Rock Tomb",
-			TM40 => "Aerial Ace",
-			TM41 => "Torment",
-			TM42 => "Facade",
-			TM43 => "Flame Charge",
-			TM44 => "Rest",
-			TM45 => "Attract",
-			TM46 => "Thief",
-			TM47 => "Low Sweep",
-			TM48 => "Round",
-			TM49 => "Echoed Voice",
-			TM50 => "Overheat",
-			TM51 => "Ally Switch",
-			TM52 => "Focus Blast",
-			TM53 => "Energy Ball",
-			TM54 => "False Swipe",
-			TM55 => "Scald",
-			TM56 => "Fling",
-			TM57 => "Charge Beam",
-			TM58 => "Sky Drop",
-			TM59 => "Incinerate",
-			TM60 => "Quash",
-			TM61 => "Will-O-Wisp",
-			TM62 => "Acrobatics",
-			TM63 => "Embargo",
-			TM64 => "Explosion",
-			TM65 => "Shadow Claw",
-			TM66 => "Payback",
-			TM67 => "Retaliate",
-			TM68 => "Giga Impact",
-			TM69 => "Rock Polish",
-			TM70 => "Flash",
-			TM71 => "Stone Edge",
-			TM72 => "Volt Switch",
-			TM73 => "Thunder Wave",
-			TM74 => "Gyro Ball",
-			TM75 => "Swords Dance",
-			TM76 => "Struggle Bug",
-			TM77 => "Psych Up",
-			TM78 => "Bulldoze",
-			TM79 => "Frost Breath",
-			TM80 => "Rock Slide",
-			TM81 => "X-Scissor",
-			TM82 => "Dragon Tail",
-			TM83 => "Infestation",
-			TM84 => "Poison Jab",
-			TM85 => "Dream Eater",
-			TM86 => "Grass Knot",
-			TM87 => "Swagger",
-			TM88 => "Sleep Talk",
-			TM89 => "U-turn",
-			TM90 => "Substitute",
-			TM91 => "Flash Cannon",
-			TM92 => "Trick Room",
-			TM93 => "Wild Charge",
-			TM94 => "Rock Smash",
-			TM95 => "Snarl",
-			TM96 => "Nature Power",
-			TM97 => "Dark Pulse",
-			TM98 => "Power-Up Punch",
-			TM99 => "Dazzling Gleam",
-			TM100 => "Confide"
+			'TM1' => "Hone Claws",
+			'TM2' => "Dragon Claw",
+			'TM3' => "Psyshock",
+			'TM4' => "Calm Mind",
+			'TM5' => "Roar",
+			'TM06' => "Toxic",
+			'TM7' => "Hail",
+			'TM8' => "Bulk Up",
+			'TM09' => "Venoshock",
+			'TM10' => "Hidden Power",
+			'TM11' => "Sunny Day",
+			'TM12' => "Taunt",
+			'TM13' => "Ice Beam",
+			'TM14' => "Blizzard",
+			'TM15' => "Hyper Beam",
+			'TM16' => "Light Screen",
+			'TM17' => "Protect",
+			'TM18' => "Rain Dance",
+			'TM19' => "Telekinesis",
+			'TM20' => "Safeguard",
+			'TM21' => "Frustration",
+			'TM22' => "Solar Beam",
+			'TM23' => "Smack Down",
+			'TM24' => "Thunderbolt",
+			'TM25' => "Thunder",
+			'TM26' => "Earthquake",
+			'TM27' => "Return",
+			'TM28' => "Dig",
+			'TM29' => "Psychic",
+			'TM30' => "Shadow Ball",
+			'TM31' => "Brick Break",
+			'TM32' => "Double Team",
+			'TM33' => "Reflect",
+			'TM34' => "Sludge Wave",
+			'TM35' => "Flamethrower",
+			'TM36' => "Sludge Bomb",
+			'TM37' => "Sandstorm",
+			'TM38' => "Fire Blast",
+			'TM39' => "Rock Tomb",
+			'TM40' => "Aerial Ace",
+			'TM41' => "Torment",
+			'TM42' => "Facade",
+			'TM43' => "Flame Charge",
+			'TM44' => "Rest",
+			'TM45' => "Attract",
+			'TM46' => "Thief",
+			'TM47' => "Low Sweep",
+			'TM48' => "Round",
+			'TM49' => "Echoed Voice",
+			'TM50' => "Overheat",
+			'TM51' => "Ally Switch",
+			'TM52' => "Focus Blast",
+			'TM53' => "Energy Ball",
+			'TM54' => "False Swipe",
+			'TM55' => "Scald",
+			'TM56' => "Fling",
+			'TM57' => "Charge Beam",
+			'TM58' => "Sky Drop",
+			'TM59' => "Incinerate",
+			'TM60' => "Quash",
+			'TM61' => "Will-O-Wisp",
+			'TM62' => "Acrobatics",
+			'TM63' => "Embargo",
+			'TM64' => "Explosion",
+			'TM65' => "Shadow Claw",
+			'TM66' => "Payback",
+			'TM67' => "Retaliate",
+			'TM68' => "Giga Impact",
+			'TM69' => "Rock Polish",
+			'TM70' => "Flash",
+			'TM71' => "Stone Edge",
+			'TM72' => "Volt Switch",
+			'TM73' => "Thunder Wave",
+			'TM74' => "Gyro Ball",
+			'TM75' => "Swords Dance",
+			'TM76' => "Struggle Bug",
+			'TM77' => "Psych Up",
+			'TM78' => "Bulldoze",
+			'TM79' => "Frost Breath",
+			'TM80' => "Rock Slide",
+			'TM81' => "X-Scissor",
+			'TM82' => "Dragon Tail",
+			'TM83' => "Infestation",
+			'TM84' => "Poison Jab",
+			'TM85' => "Dream Eater",
+			'TM86' => "Grass Knot",
+			'TM87' => "Swagger",
+			'TM88' => "Sleep Talk",
+			'TM89' => "U-turn",
+			'TM90' => "Substitute",
+			'TM91' => "Flash Cannon",
+			'TM92' => "Trick Room",
+			'TM93' => "Wild Charge",
+			'TM94' => "Rock Smash",
+			'TM95' => "Snarl",
+			'TM96' => "Nature Power",
+			'TM97' => "Dark Pulse",
+			'TM98' => "Power-Up Punch",
+			'TM99' => "Dazzling Gleam",
+			'TM100' => "Confide"
 			);
 
 		$hm_array = array (
-			HM01 => "Cut",
-			HM02 => "Fly",
-			HM04 => "Strength",
-			HM03 => "Surf",
-			HM05 => "Waterfall",
-			HM06 => "Dive"
+			'HM01' => "Cut",
+			'HM02' => "Fly",
+			'HM04' => "Strength",
+			'HM03' => "Surf",
+			'HM05' => "Waterfall",
+			'HM06' => "Dive"
 			);
 
 	//decoded arrange div here
