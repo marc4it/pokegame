@@ -14,7 +14,6 @@ License: GPL
 function seo_loader_init() {
 	global $wpdb;
 	$urlArr = parse_url($_SERVER['REQUEST_URI']);
-	$urlStr = (string) $urlArr;
 	$urlPath = explode('/', $urlArr['path']);
 
 	if (($urlPath[2]) && ($urlPath[2] == 'pokedex')) {
@@ -105,10 +104,11 @@ if ($results) {
 		);
 		
 	$category_arr = array(
-		Physical => '<div class="small-4 text-center columns text-color-red">Physical</div>',
-		Special => '<div class="small-4 text-center columns><font color="red"><strong>Special</strong></font></div>',
-		Status => '<div class="small-4 text-center columns><strong><font color="red">Status</font></strong></div>',
+		'Physical' => '<div class="small-5 text-center movecategories columns">Physical</div>',
+		'Special' => '<div class="small-5 text-center movecategories columns">Special</div>',
+		'Status' => '<div class="small-5 text-center movecategories columns">Status</div>',
 		);
+
 
 
 
@@ -123,7 +123,7 @@ if ($results) {
 		<div class="small-4 medium-5 columns">Name(JP)</div>
 		<div class="small-8 medium-7 columns">'.$results['name_ja'].'</div>
 		<div class="small-4 medium-5 columns">Type</div>
-		<div class="small-8 medium-7 columns"><div class="small-4 text-center columns '.$types_arr[$results['type']].'">'.$types_arr[$results['type']].'</div></div>
+		<div class="small-8 medium-7 columns"><div class="small-5 text-center columns '.$types_arr[$results['type']].'">'.$types_arr[$results['type']].'</div></div>
 		<div class="small-4 medium-5 columns">Category</div>
 		<div class="small-8 medium-7 columns">'.$category_arr[$results['category']].'</div>
 		<div class="small-4 medium-5 columns">Power</div>
@@ -442,9 +442,9 @@ function poke_dex($atts, $content=null) {
 				foreach ($tm_decode as $tm1){
 					$t++;
 					if ($tm_count == $t) {
-						$tm_final .= '<div class="small-12 medium-6 columns end"><a href="http://pokemon.game-solver.com/move/'.no_space($tm_array[$tm1]).'">'.$tm_array[$tm1].' ('.$tm1.')</a></div>';
+						$tm_final .= '<div class="small-12 medium-6 columns end"><a href="/move/'.no_space($tm_array[$tm1]).'/">'.$tm_array[$tm1].' ('.$tm1.')</a></div>';
 					} else {
-						$tm_final .= '<div class="small-12 medium-6 columns"><a href="http://pokemon.game-solver.com/move/'.no_space($tm_array[$tm1]).'">'.$tm_array[$tm1].' ('.$tm1.')</div>';
+						$tm_final .= '<div class="small-12 medium-6 columns"><a href="/move/'.no_space($tm_array[$tm1]).'/">'.$tm_array[$tm1].' ('.$tm1.')</div>';
 				}
 			}
 		}
@@ -477,7 +477,7 @@ function poke_dex($atts, $content=null) {
 				$learnedmove_final .= '<div class="small-12 columns">-</div>';
 			} else {
 				foreach ($learnedmove_decode as $lm1) {
-				$learnedmove_final .= '<div class="small-12 medium-6 columns end"><a href="http://pokemon.game-solver.com/move/'.no_space($lm1).'">'.$lm1.'</a></div>';
+				$learnedmove_final .= '<div class="small-12 medium-6 columns end"><a href="/move/'.no_space($lm1).'/">'.$lm1.'</a></div>';
 			}
 		}
 	
@@ -506,9 +506,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($eggmoves_decode as $em1){
 				$em++;
 				if ($eggmoves_count == $em) {
-					$eggmoves_final .= '<div class="small-6 columns end"><a href="http://pokemon.game-solver.com/move/'.no_space($em1).'">'.$em1.'</div>';
+					$eggmoves_final .= '<div class="small-6 columns end"><a href="/move/'.no_space($em1).'/">'.$em1.'</div>';
 					} else {
-					$eggmoves_final .= '<div class="small-6 columns"><a href="http://pokemon.game-solver.com/move/'.no_space($em1).'">'.$em1.'</div>';
+					$eggmoves_final .= '<div class="small-6 columns"><a href="/move/'.no_space($em1).'/">'.$em1.'</div>';
 					}
 				}
 			}
@@ -587,9 +587,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($preevo_decode as $preevo1){
 				$preevo++;
 				if ($preevo_count == $preevo) {
-					$preevo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($preevo1).'">'.$preevo1.'</a></div>';
+					$preevo_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($preevo1).'/">'.$preevo1.'</a></div>';
 					} else {
-					$preevo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($preevo1).'">'.$preevo1.'</a></div>';
+					$preevo_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($preevo1).'/">'.$preevo1.'</a></div>';
 					}
 				}
 			}
@@ -606,9 +606,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($evo_decode as $evo1){
 				$evo++;
 				if ($evo_count == $evo) {
-					$evo_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($evo1).'">'.$evo1.'</a></div>';
+					$evo_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($evo1).'/">'.$evo1.'</a></div>';
 				} else {
-					$evo_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($evo1).'">'.$evo1.'</a></div>';
+					$evo_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($evo1).'/">'.$evo1.'</a></div>';
 				}
 			}
 		}
@@ -625,9 +625,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($mega_decode as $mega1){
 				$mega++;
 				if ($mega_count == $mega) {
-					$mega_final .= '<div class="small-12 columns end"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($mega1).'">'.$mega1.'</a></div>';
+					$mega_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($mega1).'/">'.$mega1.'</a></div>';
 				} else {
-					$mega_final .= '<div class="small-12 columns"><a href="http://pokemon.game-solver.com/pokedex/'.get_evo($mega1).'">'.$mega1.'</a></div>';
+					$mega_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($mega1).'/">'.$mega1.'</a></div>';
 				}
 			}
 		}
@@ -723,12 +723,12 @@ function poke_dex($atts, $content=null) {
 
 
 		echo '
-		<a href="http://pokemon.game-solver.com/pokedex/'.$previous['0']['pokedex_id'].'" class="button tiny round left">Previous</br>Pokemon</a>
-		<a href="http://pokemon.game-solver.com/pokedex/'.$next['0']['pokedex_id'].'" class="button tiny round right">Next</br>Pokemon</a>
+		<a href="/pokedex/'.$previous['0']['pokedex_id'].'/" class="button tiny round left">Previous</br>Pokemon</a>
+		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" class="button tiny round right">Next</br>Pokemon</a>
 		';
 
 		echo '<div class="img">
-		<img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/'.$image_name.'.png">
+		<img src="/wp-content/uploads/pokemongo/'.$image_name.'.png">
 		<div class="small-12 columns"><br /></div>
 		</div>';
 
@@ -800,8 +800,8 @@ function poke_dex($atts, $content=null) {
 		</div>';
 	
 		echo '
-		</br><a href="http://pokemon.game-solver.com/pokedex/'.$previous['0']['pokedex_id'].'" class="button tiny round left">Previous</br>Pokemon</a>
-		<a href="http://pokemon.game-solver.com/pokedex/'.$next['0']['pokedex_id'].'" class="button tiny round right">Next</br>Pokemon</a>
+		</br><a href="/pokedex/'.$previous['0']['pokedex_id'].'/" class="button tiny round left">Previous</br>Pokemon</a>
+		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" class="button tiny round right">Next</br>Pokemon</a>
 		';
 
 	
@@ -868,8 +868,8 @@ function poke_dex($atts, $content=null) {
 				echo '
 				
 				<div class=row>
-				<div class="small-2 medium-1 columns imgMiddle"><img src="http://pokemon.game-solver.com/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png"></div>
-				<div class="small-7 medium-5 columns text-left"><a href="http://pokemon.game-solver.com/pokedex/'.$link.'">'.$name.'</a></div>
+				<div class="small-2 medium-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png"></div>
+				<div class="small-7 medium-5 columns text-left"><a href="/pokedex/'.$link.'/">'.$name.'</a></div>
 				<div class="medium-3 columns show-for-medium-up text-center">'.$types2.'</div>
 				<div class="small-3 medium-3 columns text-center">'.$stats_total.'</div>
 			
