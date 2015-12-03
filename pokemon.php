@@ -44,8 +44,8 @@ function seo_loader_init() {
 			header('Location: /'.'move'.'/');
 			exit;
 		}
-		
 	}
+
 }
 
 /* always define global $wpdb before query db */
@@ -53,7 +53,31 @@ function seo_loader_init() {
 
 // ./move space here!
 
-
+function poke_type($atts, $content=null) {
+	global $wpdb;
+	
+	$output = '';
+	extract( shortcode_atts( array(
+		'name' => 'None',
+	), $atts ) );
+	
+	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
+	$path = explode('/', $urlArr['path']);
+	
+	if ($path[2] == 'water') {
+		
+		$sql = "SELECT * FROM `pokedex` WHERE `types` LIKE '[9]' LIMIT 0, 30;";
+		$results = $wpdb->get_results( $sql, ARRAY_A );
+	
+		echo 'Water type here!';
+		
+		foreach ($results as $row) {
+			echo '<div class = row>
+			<div class = "small-12 columns">'.$row['name'].'</div>
+			</div>';
+		}
+	}
+}
 
 function poke_move($atts, $content=null) {
 	global $wpdb;
@@ -762,9 +786,52 @@ function poke_dex($atts, $content=null) {
 
 	//button next/previous here
 	
-		$previous = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".($results['id']-1)."", ARRAY_A);
-		$next = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".($results['id']+1)."", ARRAY_A);
+	/*
+			$country = $data[0];
+			$count = $wpdb->num_rows;
+			if ($currentstation == 0) {
+				$prevstation = $count - 1;
+				$nextstation = $currentstation + 1;
+			}
+			elseif ($currentstation == $count - 1) {
+				$prevstation = $currentstation - 1;
+				$nextstation = 0;
+			}
+			else {
+				$prevstation = $currentstation - 1;
+				$nextstation = $currentstation + 1;
+			}
+			$prev = "/".$country.'/'.$stations[$prevstation]->tag.'/';
+			$next = "/".$country.'/'.$stations[$nextstation]->tag.'/';
+			
+			$tag = $result[0]->tag;
+			$name = $result[0]->name;
+			if ($result[0]->image) {
+				$img = "/wp-content/uploads/logo/".$result[0]->image.".jpg";
+			} else {
+				$img = "/wp-content/uploads/logo/radio.jpg";
+			}
+	*/
+		$poke_id = $wpdb->get_results( "SELECT `id` FROM `pokedex` ", ARRAY_A);
+		$count = $wpdb->num_rows;
+		$currentpokeid = $results['id'];
 
+		
+		if ($currentpokeid == 1) {
+				$prevpokeid = 794;
+				$nextpokeid = $currentpokeid + 1;
+			}
+			elseif ($currentpokeid == $count) {
+				$prevpokeid = $currentpokeid - 1;
+				$nextpokeid = 1;
+			}
+			else {
+				$prevpokeid = $currentpokeid - 1;
+				$nextpokeid = $currentpokeid + 1;
+			}
+	
+		$previous = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".$prevpokeid."", ARRAY_A);
+		$next = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".$nextpokeid."", ARRAY_A);
 
 		echo '
 		<a href="/pokedex/'.$previous['0']['pokedex_id'].'/" class="button tiny round left">Previous</br>Pokemon</a>
@@ -942,7 +1009,7 @@ function ingress_shortcode($atts, $content=null){
 function my_flush_rules(){
     $rules = get_option( 'rewrite_rules' );
 
-	if ( !isset($rules['(pokedex)/(.+)$']) || !isset($rules['(move)/(.+)$']) ) {
+	if ( !isset($rules['(pokedex)/(.+)$']) || !isset($rules['(move)/(.+)$']) || !isset($rules['(type)/(.+)$']) ) {
 		global $wp_rewrite;
 	   	$wp_rewrite->flush_rules();
 	}
@@ -953,6 +1020,7 @@ function my_insert_rewrite_rules( $rules ) {
 	$newrules = array();
 	$newrules['pokedex/(.+)$'] = 'index.php?pagename=pokedex';
 	$newrules['move/(.+)$'] = 'index.php?pagename=move';
+	$newrules['type/(.+)$'] = 'index.php?pagename=type';
 
 	return $newrules + $rules;
 }
@@ -960,6 +1028,7 @@ function my_insert_rewrite_rules( $rules ) {
 
 add_shortcode( 'poke', 'poke_dex' );
 add_shortcode( 'move', 'poke_move' );
+add_shortcode( 'type', 'poke_type' );
 
 add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
 add_action( 'wp_loaded','my_flush_rules' );
