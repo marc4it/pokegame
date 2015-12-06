@@ -64,18 +64,69 @@ function poke_type($atts, $content=null) {
 	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
 	$path = explode('/', $urlArr['path']);
 	
+	$types_arr = array(
+	0 => "Normal",
+	1 => "Fighting",
+	2 => "Flying",
+	3 => "Poison",
+	4 => "Ground",
+	5 => "Rock",
+	6 => "Bug",
+	7 => "Ghost",
+	8 => "Steel",
+	9 => "Fire",
+	10 => "Water",
+	11 => "Grass",
+	12 => "Electric",
+	13 => "Psychic",
+	14 => "Ice",
+	15 => "Dragon",
+	16 => "Dark",
+	17 => "Fairy",
+	);
+	
+	function decode_type($poke_types) {
+		
+		$types = $poke_types['types'];
+		$types_decode = json_decode($types,true);
+		foreach ($types_decode as $types_done) {
+			echo $types_arr[$type];
+		}
+	
+	}
+	
 	if ($path[2] == 'water') {
 		
-		$sql = "SELECT * FROM `pokedex` WHERE `types` LIKE '[9]' LIMIT 0, 30;";
-		$results = $wpdb->get_results( $sql, ARRAY_A );
-	
-		echo 'Water type here!';
+		$sql = "SELECT * FROM `type` JOIN `pokedex` ON `pokedex`.id = `type`.id WHERE `types_second` LIKE '%Water%' LIMIT 0, 300;";
+		$results = $wpdb->get_results( $sql );
+		
+//		print_r ($results);
+		
+		$poke_list = '<div class="row">';
+//		echo $results[0]->name;
 		
 		foreach ($results as $row) {
-			echo '<div class = row>
-			<div class = "small-12 columns">'.$row['name'].'</div>
-			</div>';
+			
+//			echo $row->name;
+//			echo $row->pokedex_id;
+//			echo $row->types_second;
+//			echo $row->base_stats;
+			
+			$poke_list .= '<div class="small-1 medium-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row->pokedex_id.'-mini.png" height="42" width="42"></div>';
+			$poke_list .= '<div class="small-4 columns"><a href="/pokedex/'.$row->pokedex_id.'/">'.$row->name.'</a></div>';
+			$poke_list .= '<div class="small-4 columns text-center">'.$row->types_second.'</div>';
+			$poke_list .= '<div class="small-3 columns text-center">100</div>';
+			
 		}
+		 
+		$poke_list .= '</div>';
+		echo '<div style="background-color:#CCCCCC"><div class=row>
+			<div class="small-4 columns small-offset-2 medium-offset-1 text-left"><strong>Pokemon</strong></div>
+			<div class="small-4 columns show-for-medium-up text-center"><strong>Types</strong></div>
+			<div class=" medium-3 columns show-for-medium-up text-center"><strong>Stats Total</strong></div>
+			<div class=" small-3 show-for-small columns text-center"><strong>Stats</strong></div>
+			</div></div>';
+		echo $poke_list;
 	}
 }
 
