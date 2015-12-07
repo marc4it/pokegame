@@ -53,6 +53,17 @@ function seo_loader_init() {
 
 // ./move space here!
 
+function no_space($space_name) {
+	if (strpos($space_name,' ') !== false) {
+		$new_name = str_replace(' ','-',$space_name);
+		$new_name = strtolower($new_name);
+		return $new_name;
+	} else {
+		$new_name = strtolower($space_name);
+		return $new_name;
+		}
+}
+
 function poke_type($atts, $content=null) {
 	global $wpdb;
 	
@@ -95,38 +106,71 @@ function poke_type($atts, $content=null) {
 	
 	}
 	
-	if ($path[2] == 'water') {
+	if ($path[2] == 'Normal' || 'Fighting' || 'Flying' || 'Poison' || 'Ground' || 'Rock' || 'Bug' || 'Ghost' || 'Steel' || 'Fire' || 'Water' || 'Grass' || 'Electric' || 'Psychic' || 'Ice' || 'Dragon' || 'Dark' || 'Fairy') {
 		
-		$sql = "SELECT * FROM `type` JOIN `pokedex` ON `pokedex`.id = `type`.id WHERE `types_second` LIKE '%Water%' LIMIT 0, 300;";
+		$path = ucfirst(strtolower($path[2]));
+		
+		$sql = "SELECT * FROM `type` JOIN `pokedex` ON `pokedex`.id = `type`.id WHERE `types_one` LIKE '".$path."' or `types_two` LIKE '".$path."' LIMIT 0, 300;";
 		$results = $wpdb->get_results( $sql );
 		
 //		print_r ($results);
 		
 		$poke_list = '<div class="row">';
-//		echo $results[0]->name;
 		
 		foreach ($results as $row) {
 			
-//			echo $row->name;
-//			echo $row->pokedex_id;
-//			echo $row->types_second;
-//			echo $row->base_stats;
+			if ($row->types_two == 'NULL') {
+				$row_types = '<div class="small-3 columns text-center"><div class="small-12 columns text-center '.$row->types_one.'">'.$row->types_one.'</div></div>';
+			} else {
+				$row_types = '<div class="small-3 columns text-center"><div class="small-6 columns text-center '.$row->types_one.'">'.$row->types_one.'</div><div class="small-6 columns text-center '.$row->types_two.'">'.$row->types_two.'</div></div>';
+			}		
+			
+			$stats = $row->base_stats;
+			$stats_decode = json_decode($stats,true);
+			$stats_total = $stats_decode[0] + $stats_decode[1] + $stats_decode[2] + $stats_decode[3] + $stats_decode[4];
 			
 			$poke_list .= '<div class="small-1 medium-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row->pokedex_id.'-mini.png" height="42" width="42"></div>';
-			$poke_list .= '<div class="small-4 columns"><a href="/pokedex/'.$row->pokedex_id.'/">'.$row->name.'</a></div>';
-			$poke_list .= '<div class="small-4 columns text-center">'.$row->types_second.'</div>';
-			$poke_list .= '<div class="small-3 columns text-center">100</div>';
+			$poke_list .= '<div class="small-5 columns"><a href="/pokedex/'.$row->pokedex_id.'/">'.$row->name.'</a></div>';
+			$poke_list .= ''.$row_types.'';
+			$poke_list .= '<div class="small-3 columns text-center">'.$stats_total.'</div>';
 			
 		}
 		 
 		$poke_list .= '</div>';
-		echo '<div style="background-color:#CCCCCC"><div class=row>
-			<div class="small-4 columns small-offset-2 medium-offset-1 text-left"><strong>Pokemon</strong></div>
-			<div class="small-4 columns show-for-medium-up text-center"><strong>Types</strong></div>
-			<div class=" medium-3 columns show-for-medium-up text-center"><strong>Stats Total</strong></div>
+		
+		echo '<h2 class="subheader">'.$path.' Type Pokemon</h2>';
+		echo '</br><div style="background-color:#CCCCCC"><div class="row">
+			<div class="small-5 columns small-offset-2 medium-offset-1 text-left"><strong>Pokemon</strong></div>
+			<div class="small-4 columns"><div class="small-10 columns text-center"><strong>Types</strong></div></div>
+			<div class=" medium-2 columns show-for-medium-up text-left"><strong>Stats Total</strong></div>
 			<div class=" small-3 show-for-small columns text-center"><strong>Stats</strong></div>
 			</div></div>';
 		echo $poke_list;
+		
+//Skill here
+		
+		$sql = "SELECT * FROM `move` WHERE `type_spec` LIKE '".$path."' LIMIT 0, 300;";
+		$results = $wpdb->get_results( $sql );
+		
+		$move_list = '<div class="row">';
+		
+		foreach ($results as $row) {
+			
+			$move_list .= '<div class="small-4 columns small-offset-2 medium-offset-1 text-left"><a href="/move/'.no_space($row->name).'/">'.$row->name.'</a></div>';
+			$move_list .= '<div class="small-4 columns"><div class="small-10 columns text-center">'.$row->category.'</div></div>';
+			$move_list .= '<div class="small-3 columns text-center">'.$row->power.'</div>';
+			
+		}
+		
+		$move_list .= '</div>';
+		
+		echo '</br><h2 class="subheader">'.$path.' Type Skill</h2>
+		</br><div style="background-color:#CCCCCC"><div class = row>
+		<div class="small-4 columns small-offset-2 medium-offset-1 text-left"><strong>Name</strong></div>
+		<div class="small-4 columns"><div class="small-10 columns text-center"><strong>Category</strong></div></div>
+		<div class="small-3 columns text-center"><strong>Power</strong></div></div></div>';
+		
+		echo $move_list;
 	}
 }
 
@@ -137,17 +181,6 @@ function poke_move($atts, $content=null) {
 	extract( shortcode_atts( array(
 		'name' => 'None',
 	), $atts ) );
-	
-	function no_space($space_name) {
-		if (strpos($space_name,' ') !== false) {
-			$new_name = str_replace(' ','-',$space_name);
-			$new_name = strtolower($new_name);
-			return $new_name;
-		} else {
-			$new_name = strtolower($space_name);
-			return $new_name;
-			}
-	}
 
 	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
 	$path = explode('/', $urlArr['path']);
