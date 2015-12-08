@@ -15,11 +15,16 @@ function seo_loader_init() {
 	global $wpdb;
 	$urlArr = parse_url($_SERVER['REQUEST_URI']);
 	$urlPath = explode('/', $urlArr['path']);
-	
-	if (($urlPath[2]) && ($urlPath[1] == 'pokedex')) {
 
+	if (isset($urlPath[1])) { $pokeaction1 = $urlPath[1]; }
+	else { $pokeaction1 = ""; }
+	if (isset($urlPath[2])) { $pokeaction2 = $urlPath[2]; }
+	else { $pokeaction2 = ""; }
+	
+	if (($pokeaction2) && ($pokeaction1 == 'pokedex')) {
+		
 		$results = $wpdb->get_results( "SELECT * FROM pokedex;" );
-		$poke = $urlPath[2];
+		$poke = $pokeaction2;
 		$checkPoke = '';
 		foreach($results as $row) {
 			if ($row->pokedex_id == $poke) {
@@ -30,9 +35,9 @@ function seo_loader_init() {
 			header('Location: /'.'pokedex'.'/');
 			exit;
 		}
-	} elseif (($urlPath[2]) && ($urlPath[1] == 'move')) {
+	} elseif (($pokeaction2) && ($pokeaction1 == 'move')) {
 		$results = $wpdb->get_results( "SELECT * FROM `move`;" );
-		$move = $urlPath[2];
+		$move = $pokeaction2;
 		$checkMove = '';
 		foreach($results as $row) {
 			if ($row->id_name == $move) {
@@ -44,8 +49,16 @@ function seo_loader_init() {
 			header('Location: /'.'move'.'/');
 			exit;
 		}
+	} elseif (($pokeaction2) && ($pokeaction1 == 'type')){
+		$checkMove = '';
+		if (($pokeaction2 == 'normal') || ($pokeaction2 == 'fighting') || ($pokeaction2 == 'flying') || ($pokeaction2 == 'poison') || ($pokeaction2 == 'ground') || ($pokeaction2 == 'rock') || ($pokeaction2 == 'bug') || ($pokeaction2 == 'ghost') || ($pokeaction2 == 'steel') || ($pokeaction2 == 'fire') || ($pokeaction2 == 'water') || ($pokeaction2 == 'grass') || ($pokeaction2 == 'electric') || ($pokeaction2 == 'psychic') || ($pokeaction2 == 'ice') || ($pokeaction2 == 'dragon') || ($pokeaction2 == 'dark') || ($pokeaction2 == 'fairy')) {
+			$checkMove = true;
+		}
+		if (!$checkMove) {
+			header('Location: /'.'type'.'/');
+			exit;
+		}
 	}
-
 }
 
 /* always define global $wpdb before query db */
@@ -54,14 +67,19 @@ function seo_loader_init() {
 // ./move space here!
 
 function no_space($space_name) {
-	if (strpos($space_name,' ') !== false) {
+	if (strpos($space_name,'(') !== false) {
+		$new_name = explode(' (',$space_name);
+		$new_name = str_replace(' ','-',$new_name[0]);
+		$new_name = strtolower($new_name);
+		return $new_name;
+	} elseif (strpos($space_name,' ') !== false) {
 		$new_name = str_replace(' ','-',$space_name);
 		$new_name = strtolower($new_name);
 		return $new_name;
 	} else {
 		$new_name = strtolower($space_name);
 		return $new_name;
-		}
+	}
 }
 
 function poke_type($atts, $content=null) {
@@ -75,49 +93,26 @@ function poke_type($atts, $content=null) {
 	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
 	$path = explode('/', $urlArr['path']);
 	
-	$types_arr = array(
-	0 => "Normal",
-	1 => "Fighting",
-	2 => "Flying",
-	3 => "Poison",
-	4 => "Ground",
-	5 => "Rock",
-	6 => "Bug",
-	7 => "Ghost",
-	8 => "Steel",
-	9 => "Fire",
-	10 => "Water",
-	11 => "Grass",
-	12 => "Electric",
-	13 => "Psychic",
-	14 => "Ice",
-	15 => "Dragon",
-	16 => "Dark",
-	17 => "Fairy",
-	);
-	
-	function decode_type($poke_types) {
-		
-		$types = $poke_types['types'];
-		$types_decode = json_decode($types,true);
-		foreach ($types_decode as $types_done) {
-			echo $types_arr[$type];
-		}
-	
-	}
-	
-	if ($path[2] == 'Normal' || 'Fighting' || 'Flying' || 'Poison' || 'Ground' || 'Rock' || 'Bug' || 'Ghost' || 'Steel' || 'Fire' || 'Water' || 'Grass' || 'Electric' || 'Psychic' || 'Ice' || 'Dragon' || 'Dark' || 'Fairy') {
+	if (($path[2] == 'normal') || ($path[2] == 'fighting') || ($path[2] == 'flying') || ($path[2] == 'poison') || ($path[2] == 'ground') || ($path[2] == 'rock') || ($path[2] == 'bug') || ($path[2] == 'ghost') || ($path[2] == 'steel') || ($path[2] == 'fire') || ($path[2] == 'water') || ($path[2] == 'grass') || ($path[2] == 'electric') || ($path[2] == 'psychic') || ($path[2] == 'ice') || ($path[2] == 'dragon') || ($path[2] == 'dark') || ($path[2] == 'fairy')) {
 		
 		$path = ucfirst(strtolower($path[2]));
 		
 		$sql = "SELECT * FROM `type` JOIN `pokedex` ON `pokedex`.id = `type`.id WHERE `types_one` LIKE '".$path."' or `types_two` LIKE '".$path."' LIMIT 0, 300;";
 		$results = $wpdb->get_results( $sql );
 		
-//		print_r ($results);
+		$poke_count = count($results);
+		$poke = 0;
 		
 		$poke_list = '<div class="row">';
 		
 		foreach ($results as $row) {
+			
+			$poke++;
+			if ($poke_count == $poke) {
+				$pokename= '<div class="small-5 columns end"><a href="/pokedex/'.$row->pokedex_id.'/">'.$row->name.'</a></div>';
+				} else {
+				$pokename= '<div class="small-5 columns"><a href="/pokedex/'.$row->pokedex_id.'/">'.$row->name.'</a></div>';
+			}
 			
 			if ($row->types_two == 'NULL') {
 				$row_types = '<div class="small-3 columns text-center"><div class="small-12 columns text-center '.$row->types_one.'">'.$row->types_one.'</div></div>';
@@ -125,27 +120,26 @@ function poke_type($atts, $content=null) {
 				$row_types = '<div class="small-3 columns text-center"><div class="small-6 columns text-center '.$row->types_one.'">'.$row->types_one.'</div><div class="small-6 columns text-center '.$row->types_two.'">'.$row->types_two.'</div></div>';
 			}		
 			
-			$stats = $row->base_stats;
-			$stats_decode = json_decode($stats,true);
-			$stats_total = $stats_decode[0] + $stats_decode[1] + $stats_decode[2] + $stats_decode[3] + $stats_decode[4];
+//			$stats = $row->base_stats;
+//			$stats_decode = json_decode($stats,true);
+//			$stats_total = $stats_decode[0] + $stats_decode[1] + $stats_decode[2] + $stats_decode[3] + $stats_decode[4];
 			
 			$poke_list .= '<div class="small-1 medium-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row->pokedex_id.'-mini.png" height="42" width="42"></div>';
-			$poke_list .= '<div class="small-5 columns"><a href="/pokedex/'.$row->pokedex_id.'/">'.$row->name.'</a></div>';
-			$poke_list .= ''.$row_types.'';
-			$poke_list .= '<div class="small-3 columns text-center">'.$stats_total.'</div>';
+			$poke_list .= ''.$pokename.'';
+//			$poke_list .= '<div class="small-3 columns text-center">'.$stats_total.'</div>';
 			
 		}
 		 
 		$poke_list .= '</div>';
 		
-		echo '<h2 class="subheader">'.$path.' Type Pokemon</h2>';
-		echo '</br><div style="background-color:#CCCCCC"><div class="row">
+		echo '<h3 class="subheader">'.$path.' Type Pokemon</h3>';
+/*		echo '</br><div style="background-color:#CCCCCC"><div class="row">
 			<div class="small-5 columns small-offset-2 medium-offset-1 text-left"><strong>Pokemon</strong></div>
 			<div class="small-4 columns"><div class="small-10 columns text-center"><strong>Types</strong></div></div>
 			<div class=" medium-2 columns show-for-medium-up text-left"><strong>Stats Total</strong></div>
 			<div class=" small-3 show-for-small columns text-center"><strong>Stats</strong></div>
 			</div></div>';
-		echo $poke_list;
+*/		echo $poke_list;
 		
 //Skill here
 		
@@ -154,23 +148,54 @@ function poke_type($atts, $content=null) {
 		
 		$move_list = '<div class="row">';
 		
+		$results_count = count($results);
+		$m = 0;
+		
 		foreach ($results as $row) {
 			
-			$move_list .= '<div class="small-4 columns small-offset-2 medium-offset-1 text-left"><a href="/move/'.no_space($row->name).'/">'.$row->name.'</a></div>';
-			$move_list .= '<div class="small-4 columns"><div class="small-10 columns text-center">'.$row->category.'</div></div>';
-			$move_list .= '<div class="small-3 columns text-center">'.$row->power.'</div>';
-			
+			$m++;
+			if ($results_count = $m++) {
+				$move_list .= '<div class="small-4 columns end"><a href="/move/'.no_space($row->name).'/">'.$row->name.'</a></div>';
+			} else {
+				$move_list .= '<div class="small-4 columns"><a href="/move/'.no_space($row->name).'/">'.$row->name.'</a></div>';
+			}
 		}
 		
 		$move_list .= '</div>';
 		
-		echo '</br><h2 class="subheader">'.$path.' Type Skill</h2>
-		</br><div style="background-color:#CCCCCC"><div class = row>
-		<div class="small-4 columns small-offset-2 medium-offset-1 text-left"><strong>Name</strong></div>
-		<div class="small-4 columns"><div class="small-10 columns text-center"><strong>Category</strong></div></div>
-		<div class="small-3 columns text-center"><strong>Power</strong></div></div></div>';
-		
+		echo '</br><h3 class="subheader">'.$path.' Type Skill</h3>';
 		echo $move_list;
+		
+	} else {
+		echo '<div class="row"><br />
+		<div class="small-4 columns"><div class="small-9 columns text-center Normal"><h4><b><a href="/type/normal/" class="whitetext">Normal</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Fighting"><h4><b><a href="/type/fighting/" class="whitetext">Fighting</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Flying"><h4><b><a href="/type/flying/" class="whitetext">Flying</a></b></h4></div></div></div>
+		
+		<div class="row"><br />
+		<div class="small-4 columns"><div class="small-9 columns text-center Poison"><h4><b><a href="/type/poison/" class="whitetext">Poison</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Ground"><h4><b><a href="/type/ground/" class="whitetext">Ground</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Rock"><h4><b><a href="/type/rock/" class="whitetext">Rock</a></b></h4></div></div></div>
+		
+		<div class="row"><br />
+		<div class="small-4 columns"><div class="small-9 columns text-center Bug"><h4><b><a href="/type/bug/" class="whitetext">Bug</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Ghost"><h4><b><a href="/type/ghost/" class="whitetext">Ghost</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Steel"><h4><b><a href="/type/steel/" class="whitetext">Steel</a></b></h4></div></div></div>
+		
+		<div class="row"><br />
+		<div class="small-4 columns"><div class="small-9 columns text-center Fire"><h4><b><a href="/type/fire/" class="whitetext">Fire</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Water"><h4><b><a href="/type/water/" class="whitetext">Water</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Grass"><h4><b><a href="/type/grass/" class="whitetext">Grass</a></b></h4></div></div></div>
+		
+		<div class="row"><br />
+		<div class="small-4 columns"><div class="small-9 columns text-center Electric"><h4><b><a href="/type/electric/" class="whitetext">Electric</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Psychic"><h4><b><a href="/type/psychic/" class="whitetext">Psychic</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Ice"><h4><b><a href="/type/ice/" class="whitetext">Ice</a></b></h4></div></div></div>
+		
+		<div class="row"><br />
+		<div class="small-4 columns"><div class="small-9 columns text-center Dragon"><h4><b><a href="/type/dragon/" class="whitetext">Dragon</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Dark"><h4><b><a href="/type/dark/" class="whitetext">Dark</a></b></h4></div></div>
+		<div class="small-4 columns"><div class="small-9 columns text-center Fairy"><h4><b><a href="/type/fairy/" class="whitetext">Fairy</a></b></h4></div></div></div>';
 	}
 }
 
@@ -233,7 +258,7 @@ if ($results) {
 		<div class="small-4 medium-5 columns">Name(JP)</div>
 		<div class="small-8 medium-7 columns">'.$results['name_ja'].'</div>
 		<div class="small-4 medium-5 columns">Type</div>
-		<div class="small-8 medium-7 columns"><div class="small-5 text-center columns '.$types_arr[$results['type']].'">'.$types_arr[$results['type']].'</div></div>
+		<div class="small-8 medium-7 columns"><div class="small-5 text-center columns '.$types_arr[$results['type']].'"><a href="/type/'.strtolower($types_arr[$results['type']]).'/" class="'.$types_arr[$results['type']].'">'.$types_arr[$results['type']].'</a></div></div>
 		<div class="small-4 medium-5 columns">Category</div>
 		<div class="small-8 medium-7 columns">'.$category_arr[$results['category']].'</div>
 		<div class="small-4 medium-5 columns">Power</div>
@@ -286,7 +311,7 @@ if ($results) {
 
 		foreach ($movedata as $movename) {
 			$movename1 .= '<div class="small-4 columns"><div class="small-10 small-offset-2 columns"><a href="/move/'.no_space($movename->name).'/">'.$movename->name.'</a></div></div>';
-			$movename1 .= '<div class="small-4 columns"><div class="small-10 small-offset-2 columns '.$types_arr[$movename->type].' text-center">'.$types_arr[$movename->type].'</div></div>';
+			$movename1 .= '<div class="small-4 columns"><div class="small-10 small-offset-2 columns '.$types_arr[$movename->type].' text-center"><a href="/type/'.strtolower($types_arr[$movename->type]).'/" class="whitetext13">'.$types_arr[$movename->type].'</a></div></div>';
 			$movename1 .= '<div class="small-4 columns text-center">'.$movename->power.'</div>';
 			
 		}
@@ -371,24 +396,6 @@ function poke_dex($atts, $content=null) {
 
 	if ($results) {
 	
-		function no_space($space_name) {
-			
-			if (strpos($space_name,' (') !== false) {
-				$new_name = explode(' (',$space_name);
-				$new_name = str_replace(' ','-',$new_name[0]);
-				$new_name = strtolower($new_name);
-				return $new_name;
-			}elseif (strpos($space_name,' ') !== false) {
-				$new_name = str_replace(' ','-',$space_name);
-				$new_name = strtolower($new_name);
-				return $new_name;
-			} else {
-				$new_name = strtolower($space_name);
-				return $new_name;
-				}
-			}
-		
-	
 		$types_arr = array(
 		0 => "Normal",
 		1 => "Fighting",
@@ -408,22 +415,22 @@ function poke_dex($atts, $content=null) {
 		15 => "Dragon",
 		16 => "Dark",
 		17 => "Fairy",
-		'Monster' => "Monster",
-		'Water 1' => "Water 1",
-		'Bug'=> "Bug",
-		'Flying'=> "Flying",
-		'Field' => "Field",
-		'Fairy' => "Fairy",
-		'Grass' => "Grass",
-		'Undiscovered' => "Undiscovered",
-		'Human-like' => "Human-Like",
-		'Water 3' => "Water 3",
-		'Mineral' => "Mineral",
-		'Amorphous' => "Amorphous",
-		'Water 2' => "Water 2",
-		'Ditto' => "Ditto",
-		'Dragon' => "Dragon",
-		'Gender unknown' => "Gender Unknown"
+		"Monster" => "Monster",
+		"Water 1" => "Water 1",
+		"Bug"=> "Bug",
+		"Flying"=> "Flying",
+		"Field" => "Field",
+		"Fairy" => "Fairy",
+		"Grass" => "Grass",
+		"Undiscovered" => "Undiscovered",
+		"Human-Like" => "Human-Like",
+		"Water 3" => "Water 3",
+		"Mineral" => "Mineral",
+		"Amorphous" => "Amorphous",
+		"Water 2" => "Water 2",
+		"Ditto" => "Ditto",
+		"Dragon" => "Dragon",
+		"Gender unknown" => "Gender Unknown"
 		);
 		
 		$genderRate_arr = array (
@@ -450,20 +457,22 @@ function poke_dex($atts, $content=null) {
 		$types2 = '<div class="row collapse">';
 
 		foreach ($types_decode as $types1) {
-		$types2 .= '<div class="small-5 medium-3 columns end '.$types_arr[$types1].' text-center">'.$types_arr[$types1].'</div>';
+		$types2 .= '<div class="small-5 medium-3 columns end '.$types_arr[$types1].' text-center"><a href="/type/'.strtolower($types_arr[$types1]).'/" class="whitetext13">'.$types_arr[$types1].'</a></div>';
 		}
 		$types2 .= '</div>';
 		
 
 	//specify egg groups here
+//		print_r ($egggroup_decode);
 
+		
 		$egggroup2 = '<div class="row">';
 
 		if ($egggroup_decode == '') {
 			$egggroup2 .= '<div class="small-6 columns">-</div>';
 			} else {
 				foreach ($egggroup_decode as $egggroup1){
-					$egggroup2 .= '<div class="small-6 columns">'.$types_arr[$egggroup1].'</div>';
+					$egggroup2 .= '<div class="small-6 columns">'.$types_arr[''.$egggroup1.''].'</div>';
 					}
 				}
 
@@ -1052,9 +1061,9 @@ function poke_dex($atts, $content=null) {
 				
 				foreach ($types_decode as $types1) {
 					if ($types_count == 2) {
-						$types2 .= '<div class="small-6 columns text-center '.$types_arr[$types1].'">'.$types_arr[$types1].'</div>';
+						$types2 .= '<div class="small-6 columns text-center '.$types_arr[$types1].'"><a href="/type/'.strtolower($types_arr[$types1]).'/" class="whitetext13">'.$types_arr[$types1].'</a></div>';
 						} else {
-							$types2 .= '<div class="small-12 columns text-center '.$types_arr[$types1].'">'.$types_arr[$types1].'</div>';
+							$types2 .= '<div class="small-12 columns text-center '.$types_arr[$types1].'"><a href="/type/'.strtolower($types_arr[$types1]).'/" class="whitetext13">'.$types_arr[$types1].'</a></div>';
 						}
 					}
 
