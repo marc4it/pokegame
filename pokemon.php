@@ -82,6 +82,131 @@ function no_space($space_name) {
 	}
 }
 
+function return_space($space_name) {
+	if (strpos($space_name,'-') !== false) {
+		$new_name = explode('-',$space_name);
+		$new_name[0] = ucfirst(strtolower($new_name[0]));
+		$new_name[1] = ucfirst(strtolower($new_name[1]));
+		$new_name = implode(' ',$new_name);
+		return $new_name;
+	} else {
+		$new_name = ucfirst(strtolower($space_name));
+		return $new_name;
+	}
+}
+//abilities here
+
+function poke_hm($atts, $content=null) {
+	global $wpdb;
+	
+	$output = '';
+	extract( shortcode_atts( array(
+		'name' => 'None',
+	), $atts ) );
+	
+	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
+	$path = explode('/', $urlArr['path']);
+
+	$path2 = ucfirst(strtolower($path[2]));
+	
+	$sql = "SELECT * FROM `hm` WHERE `name` LIKE '".$path2."' LIMIT 0, 10;";
+	$results = $wpdb->get_row( $sql, ARRAY_A );
+	
+	
+}
+
+function poke_abilities($atts, $content=null) {
+	global $wpdb;
+	
+	$output = '';
+	extract( shortcode_atts( array(
+		'name' => 'None',
+	), $atts ) );
+	
+	$urlArr = parse_url(filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRIPPED));
+	$path = explode('/', $urlArr['path']);
+	
+	$path2 = $path[2];
+	$path3 = return_space($path2);
+	
+	$sql = "SELECT * FROM `abilities` WHERE `name` LIKE '".$path3."' LIMIT 0, 300;";
+	$results = $wpdb->get_row( $sql, ARRAY_A );
+
+	if ($results) {
+		
+		$abi1 = '"'.$path3.'"';
+		
+		$sql2 = "SELECT * FROM `pokedex` WHERE `abilities` LIKE '%".$abi1."%' LIMIT 0, 300;";
+		$results2 = $wpdb->get_results( $sql2, ARRAY_A );
+		
+		$resultscount = count ($results2);
+		$i=0;
+		$pokemon_list = '<br/><div class="row">';
+		
+		foreach ($results2 as $row) {
+			$i++;
+			if ($i == $resultscount) {
+				$pokemon_list .= '<div class="small-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
+				$pokemon_list .= '<div class="small-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+			} else {
+				$pokemon_list .= '<div class="small-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
+				$pokemon_list .= '<div class="small-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+			}
+		}
+		
+		$pokemon_list .= '</div>';
+		
+		echo '<div class="row">
+		<div class="small-4 columns">Name</div>
+		<div class="small-8 columns">'.$results['name'].'</div>
+		<div class="small-4 columns">Name(DE)</div>
+		<div class="small-8 columns">'.$results['name_de'].'</div>
+		<div class="small-4 columns">Name(FR)</div>
+		<div class="small-8 columns">'.$results['name_fr'].'</div>
+		<div class="small-4 columns">Name(JA)</div>
+		<div class="small-8 columns">'.$results['name_ja'].'</div>
+		<div class="small-4 columns">Description</div>
+		<div class="small-8 columns">'.$results['description'].'</div>
+		</div>';
+		
+		echo '<br/><div class="row">
+		<div class="small-12 columns"><h3>Pokemon with '.$path3.'</h3></div>
+		</div>';
+		
+		echo $pokemon_list;
+		
+	} else {
+		
+		$sql = "SELECT * FROM `abilities` LIMIT 0, 300;";
+		$results = $wpdb->get_results( $sql, ARRAY_A );
+		
+		$abi_list = '<div class="row">';
+		
+		foreach ($results as $row) {
+			
+			$abi2 = '"'.$row['name'].'"';
+			$sql2 = "SELECT * FROM `pokedex` WHERE `abilities` LIKE '%".$abi2."%' LIMIT 0, 300;";
+			$results2 = $wpdb->get_results( $sql2, ARRAY_A );
+			$resultscount = count ($results2);
+		
+			$abi_list .= '<div class="small-4 columns"><a href="/abilities/'.no_space($row['name']).'/">'.$row['name'].'</a></div>';
+			$abi_list .= '<div class="small-2 columns"><div class="small-8 columns text-right">'.$resultscount.'</div></div>';
+//			$abi_list .= '<div class="small-9 columns">'.$row['description'].'</div>';
+		}
+		
+		$abi_list .= '</div>';
+
+		echo '<div style="background-color:#CCCCCC"><div class=row>
+			<div class="small-4 columns"><strong>Name</strong></div>
+			<div class="small-2 columns"><strong>Pokemon</strong></div>
+			<div class="small-4 columns"><strong>Name</strong></div>
+			<div class="small-2 columns"><strong>Pokemon</strong></div></div></div>
+			';
+		echo $abi_list;
+	}	
+}
+
+
 function poke_type($atts, $content=null) {
 	global $wpdb;
 	
@@ -163,7 +288,7 @@ function poke_type($atts, $content=null) {
 		
 		$move_list .= '</div>';
 		
-		echo '</br><h3 class="subheader">'.$path.' Type Skill</h3>';
+		echo '</br><h3 class="subheader">'.$path.' Type Moves</h3>';
 		echo $move_list;
 		
 	} else {
@@ -215,9 +340,35 @@ function poke_move($atts, $content=null) {
 	$sql = "SELECT * FROM `move` WHERE `id_name` LIKE '".$path[2]."' LIMIT 0, 30;";
 	$results = $wpdb->get_row( $sql, ARRAY_A );
 
-if ($results) {
+	if ($results) {
+		
+		$path3 = $path[2];
+		$abi3 = '"'.return_space($path3).' (';
+		
+		$tm3 = '"'.$results['tm'].'"';
+		
+		$sql2 = "SELECT * FROM `pokedex` WHERE `learned_moves` LIKE '%".$abi3."%' or `tm` LIKE '%".$tm3."%' LIMIT 0, 300;";
+		$results2 = $wpdb->get_results( $sql2, ARRAY_A );
+		
+		$resultscount = count ($results2);
+		$i=0;
+		$pokemon_list = '<br/><div class="row">';
+		
+		foreach ($results2 as $row) {
+			$i++;
+			if ($i == $resultscount) {
+				$pokemon_list .= '<div class="small-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
+				$pokemon_list .= '<div class="small-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+			} else {
+				$pokemon_list .= '<div class="small-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
+				$pokemon_list .= '<div class="small-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+			}
+		}
+		
+		$pokemon_list .= '</div>';
+	
 
-	$types_arr = array(
+		$types_arr = array(
 		0 => "Normal",
 		1 => "Fighting",
 		2 => "Flying",
@@ -238,10 +389,10 @@ if ($results) {
 		17 => "Fairy"
 		);
 		
-	$category_arr = array(
-		'Physical' => '<div class="small-5 text-center movecategories columns">Physical</div>',
-		'Special' => '<div class="small-5 text-center movecategories columns">Special</div>',
-		'Status' => '<div class="small-5 text-center movecategories columns">Status</div>',
+		$category_arr = array(
+			'Physical' => '<div class="small-5 text-center movecategories columns">Physical</div>',
+			'Special' => '<div class="small-5 text-center movecategories columns">Special</div>',
+			'Status' => '<div class="small-5 text-center movecategories columns">Status</div>',
 		);
 
 
@@ -274,11 +425,12 @@ if ($results) {
 		<div class="small-4 medium-5 columns">Description</div>
 		<div class="small-8 medium-7 columns">'.$results['description'].'</div>
 	
-	
-	
-	
-	
 		</div>';
+		
+		echo '<br/><div class="row">
+		<div class="small-12 columns"><h3>Pokemon with '.return_space($path3).'</h3></div>
+		</div>';
+		echo $pokemon_list;
 	
 	
 	} else {
@@ -587,8 +739,8 @@ function poke_dex($atts, $content=null) {
 		$hm_array = array (
 			'HM01' => "Cut",
 			'HM02' => "Fly",
-			'HM04' => "Strength",
 			'HM03' => "Surf",
+			'HM04' => "Strength",
 			'HM05' => "Waterfall",
 			'HM06' => "Dive"
 			);
@@ -650,9 +802,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($abilities_decode as $ab1){
 			$ab++;
 			if ($abilities_count == $ab) {
-				$abilities_final .= '<div class="small-6 medium-6 columns end">'.$ab1.'</div>';
+				$abilities_final .= '<div class="small-6 medium-6 columns end"><a href="/abilities/'.no_space($ab1).'/">'.$ab1.'</a></div>';
 			} else {
-				$abilities_final .= '<div class="small-6 medium-6 columns">'.$ab1.'</div>';
+				$abilities_final .= '<div class="small-6 medium-6 columns"><a href="/abilities/'.no_space($ab1).'/">'.$ab1.'</a></div>';
 			}
 		}
 		$abilities_final .= '</div>';
@@ -1102,7 +1254,7 @@ function ingress_shortcode($atts, $content=null){
 function my_flush_rules(){
     $rules = get_option( 'rewrite_rules' );
 
-	if ( !isset($rules['(pokedex)/(.+)$']) || !isset($rules['(move)/(.+)$']) || !isset($rules['(type)/(.+)$']) ) {
+	if ( !isset($rules['(pokedex)/(.+)$']) || !isset($rules['(move)/(.+)$']) || !isset($rules['(type)/(.+)$']) || !isset($rules['(abilities)/(.+)$']) || !isset($rules['(hm-moves)/(.+)$']) ) {
 		global $wp_rewrite;
 	   	$wp_rewrite->flush_rules();
 	}
@@ -1114,6 +1266,8 @@ function my_insert_rewrite_rules( $rules ) {
 	$newrules['pokedex/(.+)$'] = 'index.php?pagename=pokedex';
 	$newrules['move/(.+)$'] = 'index.php?pagename=move';
 	$newrules['type/(.+)$'] = 'index.php?pagename=type';
+	$newrules['abilities/(.+)$'] = 'index.php?pagename=abilities';
+	$newrules['hm-moves/(.+)$'] = 'index.php?pagename=hm-moves';
 
 	return $newrules + $rules;
 }
@@ -1122,6 +1276,8 @@ function my_insert_rewrite_rules( $rules ) {
 add_shortcode( 'poke', 'poke_dex' );
 add_shortcode( 'move', 'poke_move' );
 add_shortcode( 'type', 'poke_type' );
+add_shortcode( 'abilities', 'poke_abilities' );
+add_shortcode( 'hm', 'poke_hm' );
 
 add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
 add_action( 'wp_loaded','my_flush_rules' );
