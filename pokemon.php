@@ -8,8 +8,59 @@ Author: Marcus
 Author URI: http://yourdomain.com
 License: GPL
 */
-	
-	//test new git
+
+// function here!
+
+function no_space($space_name) {
+	if (strpos($space_name,'(') !== false) {
+		$new_name = explode(' (',$space_name);
+		$new_name = str_replace(' ','-',$new_name[0]);
+		$new_name = strtolower($new_name);
+		return $new_name;
+	} elseif (strpos($space_name,' ') !== false) {
+		$new_name = str_replace(' ','-',$space_name);
+		$new_name = strtolower($new_name);
+		return $new_name;
+	} else {
+		$new_name = strtolower($space_name);
+		return $new_name;
+	}
+}
+
+function return_space($space_name) {
+	if (strpos($space_name,'-') !== false) {
+		$new_name = explode('-',$space_name);
+		$new_name[0] = ucfirst(strtolower($new_name[0]));
+		$new_name[1] = ucfirst(strtolower($new_name[1]));
+		$new_name = implode(' ',$new_name);
+		return $new_name;
+	} else {
+		$new_name = ucfirst(strtolower($space_name));
+		return $new_name;
+	}
+}
+
+function to_hm($move) {
+	if (strpos($move,'cut') !== false) {
+	$move = 'HM01';
+	return $move;
+	} elseif (strpos($move,'fly') !== false) {
+	$move = 'HM02';
+	return $move;
+	} elseif (strpos($move,'surf') !== false) {
+	$move = 'HM03';
+	return $move;
+	} elseif (strpos($move,'strength') !== false) {
+	$move = 'HM04';
+	return $move;
+	} elseif (strpos($move,'waterfall') !== false) {
+	$move = 'HM05';
+	return $move;
+	} elseif (strpos($move,'dive') !== false) {
+	$move = 'HM06';
+	return $move;
+	}
+}
 	
 function seo_loader_init() {
 	global $wpdb;
@@ -58,42 +109,41 @@ function seo_loader_init() {
 			header('Location: /'.'type'.'/');
 			exit;
 		}
+	} elseif (($pokeaction2) && ($pokeaction1 == 'abilities')) {
+		$results = $wpdb->get_results( "SELECT * FROM `abilities`;" );
+		$move = $pokeaction2;
+		$checkMove = '';
+		foreach($results as $row) {
+			$name= $row->name;
+			if (no_space($name) == $move) {
+				$checkMove = true;
+				break;
+			}
+		}
+		if (!$checkMove) {
+			header('Location: /'.'abilities'.'/');
+			exit;
+		}
+	} elseif (($pokeaction2) && ($pokeaction1 == 'hm-moves')) {
+		$results = $wpdb->get_results( "SELECT * FROM `hm`;" );
+		$move = $pokeaction2;
+		$checkMove = '';
+		foreach($results as $row) {
+			$name= $row->name;
+			if (strtolower($name) == $move) {
+				$checkMove = true;
+				break;
+			}
+		}
+		if (!$checkMove) {
+			header('Location: /'.'hm-moves'.'/');
+			exit;
+		}
 	}
 }
 
 /* always define global $wpdb before query db */
 
-
-// ./move space here!
-
-function no_space($space_name) {
-	if (strpos($space_name,'(') !== false) {
-		$new_name = explode(' (',$space_name);
-		$new_name = str_replace(' ','-',$new_name[0]);
-		$new_name = strtolower($new_name);
-		return $new_name;
-	} elseif (strpos($space_name,' ') !== false) {
-		$new_name = str_replace(' ','-',$space_name);
-		$new_name = strtolower($new_name);
-		return $new_name;
-	} else {
-		$new_name = strtolower($space_name);
-		return $new_name;
-	}
-}
-
-function return_space($space_name) {
-	if (strpos($space_name,'-') !== false) {
-		$new_name = explode('-',$space_name);
-		$new_name[0] = ucfirst(strtolower($new_name[0]));
-		$new_name[1] = ucfirst(strtolower($new_name[1]));
-		$new_name = implode(' ',$new_name);
-		return $new_name;
-	} else {
-		$new_name = ucfirst(strtolower($space_name));
-		return $new_name;
-	}
-}
 //abilities here
 
 function poke_hm($atts, $content=null) {
@@ -112,7 +162,88 @@ function poke_hm($atts, $content=null) {
 	$sql = "SELECT * FROM `hm` WHERE `name` LIKE '".$path2."' LIMIT 0, 10;";
 	$results = $wpdb->get_row( $sql, ARRAY_A );
 	
+	if ($results) {
+		
+		$newhm = '"'.to_hm($path[2]).'"';
+		$sql2 = "SELECT * FROM `pokedex` WHERE `hm` LIKE '%".$newhm."%' LIMIT 0, 300;";
+		$results2 = $wpdb->get_results( $sql2, ARRAY_A );
+		
+		$resultscount = count ($results2);
+		$i=0;
+		$pokemon_list = '<br/><div class="row">';
+		
+		foreach ($results2 as $row) {
+			$i++;
+			if ($i == $resultscount) {
+				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
+				$pokemon_list .= '<div class="small-10 medium-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+			} else {
+				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
+				$pokemon_list .= '<div class="small-10 medium-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+			}
+		}
+		
+		$pokemon_list .= '</div>';
+		
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li><a href="/hm-moves/">HM Moves</a></li>
+			<li class="current"><a href="/hm-moves/'.strtolower($path2).'">'.to_hm($path[2]).' '.$path2.'</a></li>
+		</ul>';
+		
+		echo '<div class="row">
+		<div class="small-4 columns">HM</div>
+		<div class="small-8 columns">'.$results['hm'].'</div>
+		<div class="small-4 columns">Name</div>
+		<div class="small-8 columns">'.$results['name'].'</div>
+		<div class="small-4 columns">Description</div>
+		<div class="small-8 columns">'.$results['description'].'</div>
+		</div>';
+		echo '<br/><div class="row">
+		<div class="small-12 columns"><h3>Pokemon with '.to_hm($path[2]).' '.$path2.'</h3></div>
+		</div>';
+		echo $pokemon_list;
+	} else {
+		
+		$sql = "SELECT * FROM `hm` ;";
+		$results = $wpdb->get_results( $sql, ARRAY_A );
+		
+		$list = '<div class="row">';
+		
+		foreach ($results as $rows) {
+		
+			$hmrow = '"'.$rows['hm'].'"';
+			$sqlrow = "SELECT * FROM `pokedex` WHERE `hm` LIKE '%".$hmrow."%' LIMIT 0, 300;";
+			$resultsrow = $wpdb->get_results( $sqlrow, ARRAY_A );
+			$resultscount = count ($resultsrow);
 	
+			$list .= '
+				<div class="small-2 small-offset-1 columns"><a href="/hm-moves/'.strtolower($rows['name']).'/">'.$rows['hm'].'</a></div>
+				<div class="small-2 small-offset-1 columns"><a href="/hm-moves/'.strtolower($rows['name']).'/">'.$rows['name'].'</a></div>
+				<div class="small-6 columns"><div class="small-8 columns text-right">'.$resultscount.'</div></div>
+			';
+		}
+		
+		$list .='</div>';
+		
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li class="current"><a href="/hm-moves/">HM Moves</a></li>
+		</ul>';
+		
+		echo '
+			<div style="background-color:#CCCCCC">
+				<div class=row>
+					<div class="small-2 small-offset-1 columns">HM</div>
+					<div class="small-2 small-offset-1 columns">Name</div>
+					<div class="small-6 columns">
+						<div class="small-9 columns text-right">Pokemon</div>
+					</div>
+				</div>
+			</div>
+		';
+		echo $list;
+	}
 }
 
 function poke_abilities($atts, $content=null) {
@@ -146,15 +277,21 @@ function poke_abilities($atts, $content=null) {
 		foreach ($results2 as $row) {
 			$i++;
 			if ($i == $resultscount) {
-				$pokemon_list .= '<div class="small-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
-				$pokemon_list .= '<div class="small-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+				$pokemon_list .= '<div class="small-2 medium-1 large-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
+				$pokemon_list .= '<div class="small-10 medium-11  large-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
 			} else {
-				$pokemon_list .= '<div class="small-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
-				$pokemon_list .= '<div class="small-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+				$pokemon_list .= '<div class="small-2 medium-1 large-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="42" width="42"></div>';
+				$pokemon_list .= '<div class="small-10 medium-11 large-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
 			}
 		}
 		
 		$pokemon_list .= '</div>';
+		
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li><a href="/abilities/">Abilities</a></li>
+			<li class="current"><a href="/abilities/'.no_space($results['name']).'">'.$results['name'].'</a></li>
+		</ul>';
 		
 		echo '<div class="row">
 		<div class="small-4 columns">Name</div>
@@ -189,18 +326,26 @@ function poke_abilities($atts, $content=null) {
 			$results2 = $wpdb->get_results( $sql2, ARRAY_A );
 			$resultscount = count ($results2);
 		
-			$abi_list .= '<div class="small-4 columns"><a href="/abilities/'.no_space($row['name']).'/">'.$row['name'].'</a></div>';
-			$abi_list .= '<div class="small-2 columns"><div class="small-8 columns text-right">'.$resultscount.'</div></div>';
+			$abi_list .= '<div class="small-7 medium-4 columns"><a href="/abilities/'.no_space($row['name']).'/">'.$row['name'].'</a></div>';
+			$abi_list .= '<div class="small-5 medium-2 columns"><div class="small-8 columns text-right">'.$resultscount.'</div></div>';
 //			$abi_list .= '<div class="small-9 columns">'.$row['description'].'</div>';
 		}
 		
 		$abi_list .= '</div>';
 
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li class="current"><a href="/abilities/">Abilities</a></li>
+		</ul>';
+
 		echo '<div style="background-color:#CCCCCC"><div class=row>
-			<div class="small-4 columns"><strong>Name</strong></div>
-			<div class="small-2 columns"><strong>Pokemon</strong></div>
-			<div class="small-4 columns"><strong>Name</strong></div>
-			<div class="small-2 columns"><strong>Pokemon</strong></div></div></div>
+			<div class="medium-4 show-for-medium-up columns"><strong>Name</strong></div>
+			<div class="medium-2 show-for-medium-up columns"><strong>Pokemon</strong></div>
+			<div class="medium-4 show-for-medium-up columns"><strong>Name</strong></div>
+			<div class="medium-2 show-for-medium-up columns"><strong>Pokemon</strong></div>
+			<div class="small-7 show-for-small-only columns"><strong>Name</strong></div>
+			<div class="small-5 show-for-small-only columns"><strong>Pokemon</strong></div>
+			</div></div>
 			';
 		echo $abi_list;
 	}	
@@ -257,14 +402,14 @@ function poke_type($atts, $content=null) {
 		 
 		$poke_list .= '</div>';
 		
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li><a href="/type/">type</a></li>
+			<li class="current"><a href="/type/'.strtolower($path).'">'.$path.'</a></li>
+		</ul>';
+		
 		echo '<h3 class="subheader">'.$path.' Type Pokemon</h3>';
-/*		echo '</br><div style="background-color:#CCCCCC"><div class="row">
-			<div class="small-5 columns small-offset-2 medium-offset-1 text-left"><strong>Pokemon</strong></div>
-			<div class="small-4 columns"><div class="small-10 columns text-center"><strong>Types</strong></div></div>
-			<div class=" medium-2 columns show-for-medium-up text-left"><strong>Stats Total</strong></div>
-			<div class=" small-3 show-for-small columns text-center"><strong>Stats</strong></div>
-			</div></div>';
-*/		echo $poke_list;
+		echo $poke_list;
 		
 //Skill here
 		
@@ -292,6 +437,12 @@ function poke_type($atts, $content=null) {
 		echo $move_list;
 		
 	} else {
+		
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li class="current"><a href="/type/">type</a></li>
+		</ul>';
+		
 		echo '<div class="row"><br />
 		<div class="small-4 columns"><div class="small-9 columns text-center Normal"><h4><b><a href="/type/normal/" class="whitetext">Normal</a></b></h4></div></div>
 		<div class="small-4 columns"><div class="small-9 columns text-center Fighting"><h4><b><a href="/type/fighting/" class="whitetext">Fighting</a></b></h4></div></div>
@@ -395,8 +546,11 @@ function poke_move($atts, $content=null) {
 			'Status' => '<div class="small-5 text-center movecategories columns">Status</div>',
 		);
 
-
-
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li><a href="/move/">move</a></li>
+			<li class="current"><a href="/move/'.no_space($results['name']).'">'.$results['name'].'</a></li>
+		</ul>';
 
 		echo '
 		<div class="row collapse">
@@ -469,6 +623,11 @@ function poke_move($atts, $content=null) {
 		}
 		
 		$movename1 .= '</div>';
+		
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li class="current"><a href="/move/">move</a></li>
+		</ul>';
 		
 		echo '<div style="background-color:#CCCCCC"><div class = row>
 		<div class="small-4 columns"><div class="small-10 small-offset-2 columns"><strong>Name</strong></div></div>
@@ -774,9 +933,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($hm_decode as $hm1){
 				$hm++;
 				if ($hm_count == $hm) {
-					$hm_final .= '<div class="small-12 medium-6 columns end">'.$hm_array[$hm1].' ('.$hm1.')</div>';
+					$hm_final .= '<div class="small-12 medium-6 columns end"><a href="/hm-moves/'.strtolower($hm_array[$hm1]).'/">'.$hm_array[$hm1].' ('.$hm1.')</a></div>';
 					} else {
-					$hm_final .= '<div class="small-12 medium-6 columns">'.$hm_array[$hm1].' ('.$hm1.')</div>';
+					$hm_final .= '<div class="small-12 medium-6 columns"><a href="/hm-moves/'.strtolower($hm_array[$hm1]).'/">'.$hm_array[$hm1].' ('.$hm1.')</a></div>';
 					}
 				}
 			}
@@ -1077,6 +1236,12 @@ function poke_dex($atts, $content=null) {
 	
 		$previous = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".$prevpokeid."", ARRAY_A);
 		$next = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".$nextpokeid."", ARRAY_A);
+		
+		echo '<ul class="breadcrumbs">
+			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+			<li><a href="/pokedex/">pokedex</a></li>
+			<li class="current"><a href="/pokedex/'.$results['pokedex_id'].'">'.$results['name'].'</a></li>
+		</ul>';
 
 		echo '
 		<a href="/pokedex/'.$previous['0']['pokedex_id'].'/" class="button tiny round left">Previous</br>Pokemon</a>
@@ -1166,6 +1331,11 @@ function poke_dex($atts, $content=null) {
 			global $wpdb;
 			$sql = "SELECT * FROM `pokedex`";
 			$data = $wpdb->get_results( $sql, ARRAY_A );
+			
+			echo '<ul class="breadcrumbs">
+				<li><a href="https://pokemon.game-solver.com/">Home</a></li>
+				<li class="current"><a href="/pokedex/">pokedex</a></li>
+			</ul>';
 			
 			echo '<div style="background-color:#CCCCCC"><div class=row>
 			<div class="small-5 columns small-offset-2 medium-offset-1 text-left"><strong>Pokemon</strong></div>
