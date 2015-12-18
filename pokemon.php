@@ -185,12 +185,6 @@ function poke_hm($atts, $content=null) {
 		
 		$pokemon_list .= '</div>';
 		
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li><a href="/hm-moves/">HM Moves</a></li>
-			<li class="current"><a href="/hm-moves/'.strtolower($path2).'">'.to_hm($path[2]).' '.$path2.'</a></li>
-		</ul>';
-		
 		echo '<div class="row">
 		<div class="small-4 columns">HM</div>
 		<div class="small-8 columns">'.$results['hm'].'</div>
@@ -225,12 +219,7 @@ function poke_hm($atts, $content=null) {
 		}
 		
 		$list .='</div>';
-		
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li class="current"><a href="/hm-moves/">HM Moves</a></li>
-		</ul>';
-		
+
 		echo '
 			<div style="background-color:#CCCCCC">
 				<div class=row>
@@ -286,13 +275,7 @@ function poke_abilities($atts, $content=null) {
 		}
 		
 		$pokemon_list .= '</div>';
-		
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li><a href="/abilities/">Abilities</a></li>
-			<li class="current"><a href="/abilities/'.no_space($results['name']).'">'.$results['name'].'</a></li>
-		</ul>';
-		
+
 		echo '<div class="row">
 		<div class="small-4 columns">Name</div>
 		<div class="small-8 columns">'.$results['name'].'</div>
@@ -332,11 +315,6 @@ function poke_abilities($atts, $content=null) {
 		}
 		
 		$abi_list .= '</div>';
-
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li class="current"><a href="/abilities/">Abilities</a></li>
-		</ul>';
 
 		echo '<div style="background-color:#CCCCCC"><div class=row>
 			<div class="medium-4 show-for-medium-up columns"><strong>Name</strong></div>
@@ -401,13 +379,7 @@ function poke_type($atts, $content=null) {
 		}
 		 
 		$poke_list .= '</div>';
-		
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li><a href="/type/">type</a></li>
-			<li class="current"><a href="/type/'.strtolower($path).'">'.$path.'</a></li>
-		</ul>';
-		
+
 		echo '<h3 class="subheader">'.$path.' Type Pokemon</h3>';
 		echo $poke_list;
 		
@@ -437,11 +409,6 @@ function poke_type($atts, $content=null) {
 		echo $move_list;
 		
 	} else {
-		
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li class="current"><a href="/type/">type</a></li>
-		</ul>';
 		
 		echo '<div class="row"><br />
 		<div class="small-4 columns"><div class="small-9 columns text-center Normal"><h4><b><a href="/type/normal/" class="whitetext">Normal</a></b></h4></div></div>
@@ -546,12 +513,6 @@ function poke_move($atts, $content=null) {
 			'Status' => '<div class="small-5 text-center movecategories columns">Status</div>',
 		);
 
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li><a href="/move/">move</a></li>
-			<li class="current"><a href="/move/'.no_space($results['name']).'">'.$results['name'].'</a></li>
-		</ul>';
-
 		echo '
 		<div class="row collapse">
 		<div class="small-4 medium-5 columns">Name</div>
@@ -623,11 +584,7 @@ function poke_move($atts, $content=null) {
 		}
 		
 		$movename1 .= '</div>';
-		
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li class="current"><a href="/move/">move</a></li>
-		</ul>';
+
 		
 		echo '<div style="background-color:#CCCCCC"><div class = row>
 		<div class="small-4 columns"><div class="small-10 small-offset-2 columns"><strong>Name</strong></div></div>
@@ -990,51 +947,56 @@ function poke_dex($atts, $content=null) {
 	//testing function for evo
 
 		function get_evo($evo_name) {
-			if (strpos($evo_name,'Burmy ') !== false) {
-				$replace = str_replace('(','',$evo_name);
-				$replace = str_replace(')','',$replace);
-				$replace_arr = explode(' ',$replace);
-				$new_name = $replace_arr[0].'-'.$replace_arr[1];
-				$new_name = strtolower($new_name);
+			if (strpos($evo_name,'Plant Cloak') !== false) {
+				$new_name = 'burmy';
 				return $new_name;
 			} else {
-				if (strpos($evo_name,'♀') !== false) {
-					$evo_arr = explode(' (',$evo_name);
-					$replace = str_replace('♀','-f ',$evo_arr[0]);
-					$new_name = strtolower($replace);
+				if (strpos($evo_name,'Burmy ') !== false) {
+					$replace = str_replace('(','',$evo_name);
+					$replace = str_replace(')','',$replace);
+					$replace_arr = explode(' ',$replace);
+					$new_name = $replace_arr[0].'-'.$replace_arr[1];
+					$new_name = strtolower($new_name);
 					return $new_name;
 				} else {
-					if (strpos($evo_name,'♂') !== false) {
+					if (strpos($evo_name,'♀') !== false) {
 						$evo_arr = explode(' (',$evo_name);
-						$replace = str_replace('♂','-m ',$evo_arr[0]);
+						$replace = str_replace('♀','-f ',$evo_arr[0]);
 						$new_name = strtolower($replace);
 						return $new_name;
 					} else {
-						if (strpos($evo_name,'Wormadam') !== false) {
-							$replace = str_replace('(','',$evo_name);
-							$replace = str_replace(')','',$replace);
-							$replace_arr = explode(' ',$replace);
-							$new_name = $replace_arr[0].'-'.$replace_arr[1];
-							$new_name = strtolower($new_name);
+						if (strpos($evo_name,'♂') !== false) {
+							$evo_arr = explode(' (',$evo_name);
+							$replace = str_replace('♂','-m ',$evo_arr[0]);
+							$new_name = strtolower($replace);
 							return $new_name;
 						} else {
-							if (strpos($evo_name,'Mega') !== false) {
-								$evo_arr = explode(' ',$evo_name);
-								$tmp1 = $evo_arr[0];
-								$evo_arr[0] = $evo_arr[1];
-								$evo_arr[1] = $tmp1;
-								$evo_imp = implode(' ',$evo_arr);
-								$evo_imp = strtolower($evo_imp);
-								$evo_imp = str_replace(' ','-',$evo_imp);
-								return $evo_imp;
+							if (strpos($evo_name,'Wormadam') !== false) {
+								$replace = str_replace('(','',$evo_name);
+								$replace = str_replace(')','',$replace);
+								$replace_arr = explode(' ',$replace);
+								$new_name = $replace_arr[0].'-'.$replace_arr[1];
+								$new_name = strtolower($new_name);
+								return $new_name;
 							} else {
-								$evo_arr = explode(' (',$evo_name);
-								$nice_name = $evo_arr[0];
-								$nice_name = strtolower($nice_name);
-								$nice_name = str_replace(' ','-',$nice_name);
-								$nice_name = str_replace('[','',$nice_name);
-								$nice_name = str_replace('"','',$nice_name);
-								return $nice_name;
+								if (strpos($evo_name,'Mega') !== false) {
+									$evo_arr = explode(' ',$evo_name);
+									$tmp1 = $evo_arr[0];
+									$evo_arr[0] = $evo_arr[1];
+									$evo_arr[1] = $tmp1;
+									$evo_imp = implode(' ',$evo_arr);
+									$evo_imp = strtolower($evo_imp);
+									$evo_imp = str_replace(' ','-',$evo_imp);
+									return $evo_imp;
+								} else {
+									$evo_arr = explode(' (',$evo_name);
+									$nice_name = $evo_arr[0];
+									$nice_name = strtolower($nice_name);
+									$nice_name = str_replace(' ','-',$nice_name);
+									$nice_name = str_replace('[','',$nice_name);
+									$nice_name = str_replace('"','',$nice_name);
+									return $nice_name;
+								}
 							}
 						}
 					}
@@ -1236,12 +1198,6 @@ function poke_dex($atts, $content=null) {
 	
 		$previous = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".$prevpokeid."", ARRAY_A);
 		$next = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".$nextpokeid."", ARRAY_A);
-		
-		echo '<ul class="breadcrumbs">
-			<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-			<li><a href="/pokedex/">pokedex</a></li>
-			<li class="current"><a href="/pokedex/'.$results['pokedex_id'].'">'.$results['name'].'</a></li>
-		</ul>';
 
 		echo '
 		<a href="/pokedex/'.$previous['0']['pokedex_id'].'/" class="button tiny round left">Previous</br>Pokemon</a>
@@ -1331,12 +1287,7 @@ function poke_dex($atts, $content=null) {
 			global $wpdb;
 			$sql = "SELECT * FROM `pokedex`";
 			$data = $wpdb->get_results( $sql, ARRAY_A );
-			
-			echo '<ul class="breadcrumbs">
-				<li><a href="https://pokemon.game-solver.com/">Home</a></li>
-				<li class="current"><a href="/pokedex/">pokedex</a></li>
-			</ul>';
-			
+
 			echo '<div style="background-color:#CCCCCC"><div class=row>
 			<div class="small-5 columns small-offset-2 medium-offset-1 text-left"><strong>Pokemon</strong></div>
 			<div class="small-3 columns show-for-medium-up text-center"><strong>Types</strong></div>
