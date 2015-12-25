@@ -176,11 +176,11 @@ function poke_hm($atts, $content=null) {
 		foreach ($results2 as $row) {
 			$i++;
 			if ($i == $resultscount) {
-				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="25" width="25"></div>';
-				$pokemon_list .= '<div class="small-10 medium-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" alt="'.$row['name'].'" height="25" width="25"></div>';
+				$pokemon_list .= '<div class="small-10 medium-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/" title="'.$row['name'].'">'.$row['name'].'</a></div>';
 			} else {
-				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="25" width="25"></div>';
-				$pokemon_list .= '<div class="small-10 medium-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" alt="'.$row['name'].'" height="25" width="25"></div>';
+				$pokemon_list .= '<div class="small-10 medium-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/" title="'.$row['name'].'">'.$row['name'].'</a></div>';
 			}
 		}
 		
@@ -213,8 +213,8 @@ function poke_hm($atts, $content=null) {
 			$resultscount = count ($resultsrow);
 	
 			$list .= '
-				<div class="small-2 small-offset-1 columns"><a href="/hm-moves/'.strtolower($rows['name']).'/">'.$rows['hm'].'</a></div>
-				<div class="small-2 small-offset-1 columns"><a href="/hm-moves/'.strtolower($rows['name']).'/">'.$rows['name'].'</a></div>
+				<div class="small-2 small-offset-1 columns"><a href="/hm-moves/'.strtolower($rows['name']).'/" title="'.$rows['hm'].'">'.$rows['hm'].'</a></div>
+				<div class="small-2 small-offset-1 columns"><a href="/hm-moves/'.strtolower($rows['name']).'/" title="'.$rows['name'].'">'.$rows['name'].'</a></div>
 				<div class="small-6 columns"><div class="small-8 columns text-right">'.$resultscount.'</div></div>
 			';
 		}
@@ -267,11 +267,11 @@ function poke_abilities($atts, $content=null) {
 		foreach ($results2 as $row) {
 			$i++;
 			if ($i == $resultscount) {
-				$pokemon_list .= '<div class="small-2 medium-1 large-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" width="25" height="25"></div>';
-				$pokemon_list .= '<div class="small-10 medium-5  large-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+				$pokemon_list .= '<div class="small-2 medium-1 large-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" alt="'.$row['name'].'" width="25" height="25"></div>';
+				$pokemon_list .= '<div class="small-10 medium-5  large-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/" title="'.$row['name'].'">'.$row['name'].'</a></div>';
 			} else {
-				$pokemon_list .= '<div class="small-2 medium-1 large-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" width="25" height="25"></div>';
-				$pokemon_list .= '<div class="small-10 medium-5 large-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+				$pokemon_list .= '<div class="small-2 medium-1 large-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" alt="'.$row['name'].'" width="25" height="25"></div>';
+				$pokemon_list .= '<div class="small-10 medium-5 large-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/" title="'.$row['name'].'">'.$row['name'].'</a></div>';
 			}
 		}
 		
@@ -310,7 +310,7 @@ function poke_abilities($atts, $content=null) {
 			$results2 = $wpdb->get_results( $sql2, ARRAY_A );
 			$resultscount = count ($results2);
 		
-			$abi_list .= '<div class="small-7 medium-4 columns"><a href="/abilities/'.no_space($row['name']).'/">'.$row['name'].'</a></div>';
+			$abi_list .= '<div class="small-7 medium-4 columns"><a href="/abilities/'.no_space($row['name']).'/" title="'.$row['name'].'">'.$row['name'].'</a></div>';
 			$abi_list .= '<div class="small-5 medium-2 columns"><div class="small-8 columns text-right">'.$resultscount.'</div></div>';
 //			$abi_list .= '<div class="small-9 columns">'.$row['description'].'</div>';
 		}
@@ -358,9 +358,9 @@ function poke_type($atts, $content=null) {
 			
 			$poke++;
 			if ($poke_count == $poke) {
-				$pokename= '<div class="small-10 medium-5 columns end"><a href="/pokedex/'.$row->pokedex_id.'/">'.$row->name.'</a></div>';
+				$pokename= '<div class="small-10 medium-5 columns end"><a href="/pokedex/'.$row->pokedex_id.'/" title="'.$row->name.'">'.$row->name.'</a></div>';
 				} else {
-				$pokename= '<div class="small-10 medium-5 columns"><a href="/pokedex/'.$row->pokedex_id.'/">'.$row->name.'</a></div>';
+				$pokename= '<div class="small-10 medium-5 columns"><a href="/pokedex/'.$row->pokedex_id.'/" title="'.$row->name.'">'.$row->name.'</a></div>';
 			}
 			
 			if ($row->types_two == 'NULL') {
@@ -373,7 +373,7 @@ function poke_type($atts, $content=null) {
 //			$stats_decode = json_decode($stats,true);
 //			$stats_total = $stats_decode[0] + $stats_decode[1] + $stats_decode[2] + $stats_decode[3] + $stats_decode[4];
 			
-			$poke_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row->pokedex_id.'-mini.png" height="25" width="25"></div>';
+			$poke_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row->pokedex_id.'-mini.png" alt="'.$row->name.'" height="25" width="25"></div>';
 			$poke_list .= ''.$pokename.'';
 //			$poke_list .= '<div class="small-3 columns text-center">'.$stats_total.'</div>';
 			
@@ -398,9 +398,9 @@ function poke_type($atts, $content=null) {
 			
 			$m++;
 			if ($results_count = $m++) {
-				$move_list .= '<div class="small-6  medium-4 columns end"><a href="/move/'.no_space($row->name).'/">'.$row->name.'</a></div>';
+				$move_list .= '<div class="small-6  medium-4 columns end"><a href="/move/'.no_space($row->name).'/" title="'.$row->name.'">'.$row->name.'</a></div>';
 			} else {
-				$move_list .= '<div class="small-6 medium-4 columns"><a href="/move/'.no_space($row->name).'/">'.$row->name.'</a></div>';
+				$move_list .= '<div class="small-6 medium-4 columns"><a href="/move/'.no_space($row->name).'/" title="'.$row->name.'">'.$row->name.'</a></div>';
 			}
 		}
 		
@@ -412,54 +412,54 @@ function poke_type($atts, $content=null) {
 	} else {
 		
 		echo '<div class="row show-for-medium-up"><br />
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Normal"><h4><b><a href="/type/normal/" class="whitetext">Normal</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Fighting"><h4><b><a href="/type/fighting/" class="whitetext">Fighting</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Flying"><h4><b><a href="/type/flying/" class="whitetext">Flying</a></b></h4></div></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Normal"><h4><b><a href="/type/normal/" title="Normal" class="whitetext">Normal</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Fighting"><h4><b><a href="/type/fighting/" title="Fighting" class="whitetext">Fighting</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Flying"><h4><b><a href="/type/flying/" title="Flying" class="whitetext">Flying</a></b></h4></div></div></div>
 		
 		<div class="row show-for-medium-up"><br />
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Poison"><h4><b><a href="/type/poison/" class="whitetext">Poison</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Ground"><h4><b><a href="/type/ground/" class="whitetext">Ground</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Rock"><h4><b><a href="/type/rock/" class="whitetext">Rock</a></b></h4></div></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Poison"><h4><b><a href="/type/poison/" title="Poison" class="whitetext">Poison</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Ground"><h4><b><a href="/type/ground/" title="Ground" class="whitetext">Ground</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Rock"><h4><b><a href="/type/rock/" title="Rock" class="whitetext">Rock</a></b></h4></div></div></div>
 		
 		<div class="row show-for-medium-up"><br />
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Bug"><h4><b><a href="/type/bug/" class="whitetext">Bug</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Ghost"><h4><b><a href="/type/ghost/" class="whitetext">Ghost</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Steel"><h4><b><a href="/type/steel/" class="whitetext">Steel</a></b></h4></div></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Bug"><h4><b><a href="/type/bug/" title="Bug" class="whitetext">Bug</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Ghost"><h4><b><a href="/type/ghost/" title="Ghost" class="whitetext">Ghost</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Steel"><h4><b><a href="/type/steel/" title="Steel" class="whitetext">Steel</a></b></h4></div></div></div>
 		
 		<div class="row show-for-medium-up"><br />
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Fire"><h4><b><a href="/type/fire/" class="whitetext">Fire</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Water"><h4><b><a href="/type/water/" class="whitetext">Water</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Grass"><h4><b><a href="/type/grass/" class="whitetext">Grass</a></b></h4></div></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Fire"><h4><b><a href="/type/fire/" title="Fire" class="whitetext">Fire</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Water"><h4><b><a href="/type/water/" title="Water" class="whitetext">Water</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Grass"><h4><b><a href="/type/grass/" title="Grass" class="whitetext">Grass</a></b></h4></div></div></div>
 		
 		<div class="row show-for-medium-up"><br />
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Electric"><h4><b><a href="/type/electric/" class="whitetext">Electric</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Psychic"><h4><b><a href="/type/psychic/" class="whitetext">Psychic</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Ice"><h4><b><a href="/type/ice/" class="whitetext">Ice</a></b></h4></div></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Electric"><h4><b><a href="/type/electric/" title="Electric" class="whitetext">Electric</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Psychic"><h4><b><a href="/type/psychic/" title="Psychic" class="whitetext">Psychic</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Ice"><h4><b><a href="/type/ice/" title="Ice" class="whitetext">Ice</a></b></h4></div></div></div>
 		
 		<div class="row show-for-medium-up"><br />
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Dragon"><h4><b><a href="/type/dragon/" class="whitetext">Dragon</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Dark"><h4><b><a href="/type/dark/" class="whitetext">Dark</a></b></h4></div></div>
-		<div class="medium-4 columns"><div class="medium-9 columns text-center Fairy"><h4><b><a href="/type/fairy/" class="whitetext">Fairy</a></b></h4></div></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Dragon"><h4><b><a href="/type/dragon/" title="Dragon" class="whitetext">Dragon</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Dark"><h4><b><a href="/type/dark/" title="Dark" class="whitetext">Dark</a></b></h4></div></div>
+		<div class="medium-4 columns"><div class="medium-9 columns text-center Fairy"><h4><b><a href="/type/fairy/" title="Fairy" class="whitetext">Fairy</a></b></h4></div></div></div>
 		
 		<div class="row show-for-small-only"><br />
-		<div class="small-6 columns"><div class="medium-9 columns text-center Normal"><h4><b><a href="/type/normal/" class="whitetext">Normal</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Fighting"><h4><b><a href="/type/fighting/" class="whitetext">Fighting</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Flying"><h4><b><a href="/type/flying/" class="whitetext">Flying</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Poison"><h4><b><a href="/type/poison/" class="whitetext">Poison</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Ground"><h4><b><a href="/type/ground/" class="whitetext">Ground</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Rock"><h4><b><a href="/type/rock/" class="whitetext">Rock</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Bug"><h4><b><a href="/type/bug/" class="whitetext">Bug</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Ghost"><h4><b><a href="/type/ghost/" class="whitetext">Ghost</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Steel"><h4><b><a href="/type/steel/" class="whitetext">Steel</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Fire"><h4><b><a href="/type/fire/" class="whitetext">Fire</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Water"><h4><b><a href="/type/water/" class="whitetext">Water</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Grass"><h4><b><a href="/type/grass/" class="whitetext">Grass</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Electric"><h4><b><a href="/type/electric/" class="whitetext">Electric</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Psychic"><h4><b><a href="/type/psychic/" class="whitetext">Psychic</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Ice"><h4><b><a href="/type/ice/" class="whitetext">Ice</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Dragon"><h4><b><a href="/type/dragon/" class="whitetext">Dragon</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Dark"><h4><b><a href="/type/dark/" class="whitetext">Dark</a></b></h4></div></div>
-		<div class="small-6 columns"><div class="medium-9 columns text-center Fairy"><h4><b><a href="/type/fairy/" class="whitetext">Fairy</a></b></h4></div></div></div>';
+		<div class="small-6 columns"><div class="medium-9 columns text-center Normal"><h4><b><a href="/type/normal/" title="Normal" class="whitetext">Normal</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Fighting"><h4><b><a href="/type/fighting/" title="Fighting" class="whitetext">Fighting</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Flying"><h4><b><a href="/type/flying/" title="Flying" class="whitetext">Flying</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Poison"><h4><b><a href="/type/poison/" title="Poison" class="whitetext">Poison</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Ground"><h4><b><a href="/type/ground/" title="Ground" class="whitetext">Ground</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Rock"><h4><b><a href="/type/rock/" title="Rock" class="whitetext">Rock</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Bug"><h4><b><a href="/type/bug/" title="Bug" class="whitetext">Bug</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Ghost"><h4><b><a href="/type/ghost/" title="Ghost" class="whitetext">Ghost</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Steel"><h4><b><a href="/type/steel/" title="Steel" class="whitetext">Steel</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Fire"><h4><b><a href="/type/fire/" title="Fire" class="whitetext">Fire</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Water"><h4><b><a href="/type/water/" title="Water" class="whitetext">Water</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Grass"><h4><b><a href="/type/grass/" title="Grass" class="whitetext">Grass</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Electric"><h4><b><a href="/type/electric/" title="Electric" class="whitetext">Electric</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Psychic"><h4><b><a href="/type/psychic/" title="Psychic" class="whitetext">Psychic</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Ice"><h4><b><a href="/type/ice/" title="Ice" class="whitetext">Ice</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Dragon"><h4><b><a href="/type/dragon/" title="Dragon" class="whitetext">Dragon</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Dark"><h4><b><a href="/type/dark/" title="Dark" class="whitetext">Dark</a></b></h4></div></div>
+		<div class="small-6 columns"><div class="medium-9 columns text-center Fairy"><h4><b><a href="/type/fairy/" title="Fairy" class="whitetext">Fairy</a></b></h4></div></div></div>';
 	}
 }
 
@@ -496,11 +496,11 @@ function poke_move($atts, $content=null) {
 		foreach ($results2 as $row) {
 			$i++;
 			if ($i == $resultscount) {
-				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="25" width="25"></div>';
-				$pokemon_list .= '<div class="small-10 medium-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" alt="'.$row['name'].'" height="25" width="25"></div>';
+				$pokemon_list .= '<div class="small-10 medium-5 columns end"><a href="/pokedex/'.$row['pokedex_id'].'/" title="'.$row['name'].'" >'.$row['name'].'</a></div>';
 			} else {
-				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" height="25" width="25"></div>';
-				$pokemon_list .= '<div class="small-10 medium-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/">'.$row['name'].'</a></div>';
+				$pokemon_list .= '<div class="small-2 medium-1 columns imgMiddle4"><img src="/wp-content/uploads/pokemongo/mini/'.$row['pokedex_id'].'-mini.png" alt="'.$row['name'].'" height="25" width="25"></div>';
+				$pokemon_list .= '<div class="small-10 medium-5 columns"><a href="/pokedex/'.$row['pokedex_id'].'/" title="'.$row['name'].'">'.$row['name'].'</a></div>';
 			}
 		}
 		
@@ -545,7 +545,7 @@ function poke_move($atts, $content=null) {
 		<div class="small-4 medium-5 columns">Name(JP)</div>
 		<div class="small-8 medium-7 columns">'.$results['name_ja'].'</div>
 		<div class="small-4 medium-5 columns">Type</div>
-		<div class="small-8 medium-7 columns"><div class="small-5 text-center columns '.$types_arr[$results['type']].'"><a href="/type/'.strtolower($types_arr[$results['type']]).'/" class="'.$types_arr[$results['type']].'">'.$types_arr[$results['type']].'</a></div></div>
+		<div class="small-8 medium-7 columns"><div class="small-5 text-center columns '.$types_arr[$results['type']].'"><a href="/type/'.strtolower($types_arr[$results['type']]).'/" title="'.$types_arr[$results['type']].'" class="'.$types_arr[$results['type']].'">'.$types_arr[$results['type']].'</a></div></div>
 		<div class="small-4 medium-5 columns">Category</div>
 		<div class="small-8 medium-7 columns">'.$category_arr[$results['category']].'</div>
 		<div class="small-4 medium-5 columns">Power</div>
@@ -598,8 +598,8 @@ function poke_move($atts, $content=null) {
 		$movename1 = '<div class = row>';
 
 		foreach ($movedata as $movename) {
-			$movename1 .= '<div class="small-7 medium-5 large-5 columns"><div class="small-12 medium-8 medium-offset-1 columns"><a href="/move/'.no_space($movename->name).'/">'.$movename->name.'</a></div></div>';
-			$movename1 .= '<div class="small-5 medium-4 large-4 columns"><div class="small-12 medium-8 medium-offset-1 columns '.$types_arr[$movename->type].' text-center"><a href="/type/'.strtolower($types_arr[$movename->type]).'/" class="whitetext13">'.$types_arr[$movename->type].'</a></div></div>';
+			$movename1 .= '<div class="small-7 medium-5 large-5 columns"><div class="small-12 medium-8 medium-offset-1 columns"><a href="/move/'.no_space($movename->name).'/" title="'.$movename->name.'">'.$movename->name.'</a></div></div>';
+			$movename1 .= '<div class="small-5 medium-4 large-4 columns"><div class="small-12 medium-8 medium-offset-1 columns '.$types_arr[$movename->type].' text-center"><a href="/type/'.strtolower($types_arr[$movename->type]).'/" title="'.$types_arr[$movename->type].'" class="whitetext13">'.$types_arr[$movename->type].'</a></div></div>';
 			$movename1 .= '<div class="medium-3 large-3 show-for-medium-up columns text-center">'.$movename->power.'</div>';
 			
 		}
@@ -746,7 +746,7 @@ function poke_dex($atts, $content=null) {
 		$types2 = '<div class="row collapse">';
 
 		foreach ($types_decode as $types1) {
-		$types2 .= '<div class="small-5 medium-3 columns end '.$types_arr[$types1].' text-center"><a href="/type/'.strtolower($types_arr[$types1]).'/" class="whitetext13">'.$types_arr[$types1].'</a></div>';
+		$types2 .= '<div class="small-5 medium-3 columns end '.$types_arr[$types1].' text-center"><a href="/type/'.strtolower($types_arr[$types1]).'/" title="'.$types_arr[$types1].'" class="whitetext13">'.$types_arr[$types1].'</a></div>';
 		}
 		$types2 .= '</div>';
 		
@@ -892,9 +892,9 @@ function poke_dex($atts, $content=null) {
 				foreach ($tm_decode as $tm1){
 					$t++;
 					if ($tm_count == $t) {
-						$tm_final .= '<div class="small-12 medium-6 columns end"><a href="/move/'.no_space($tm_array[$tm1]).'/">'.$tm_array[$tm1].' ('.$tm1.')</a></div>';
+						$tm_final .= '<div class="small-12 medium-6 columns end"><a href="/move/'.no_space($tm_array[$tm1]).'/" title="'.$tm_array[$tm1].' ('.$tm1.')">'.$tm_array[$tm1].' ('.$tm1.')</a></div>';
 					} else {
-						$tm_final .= '<div class="small-12 medium-6 columns"><a href="/move/'.no_space($tm_array[$tm1]).'/">'.$tm_array[$tm1].' ('.$tm1.')</div>';
+						$tm_final .= '<div class="small-12 medium-6 columns"><a href="/move/'.no_space($tm_array[$tm1]).'/" title="'.$tm_array[$tm1].' ('.$tm1.')">'.$tm_array[$tm1].' ('.$tm1.')</div>';
 				}
 			}
 		}
@@ -911,9 +911,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($hm_decode as $hm1){
 				$hm++;
 				if ($hm_count == $hm) {
-					$hm_final .= '<div class="small-12 medium-6 columns end"><a href="/hm-moves/'.strtolower($hm_array[$hm1]).'/">'.$hm_array[$hm1].' ('.$hm1.')</a></div>';
+					$hm_final .= '<div class="small-12 medium-6 columns end"><a href="/hm-moves/'.strtolower($hm_array[$hm1]).'/" title="'.$hm_array[$hm1].' ('.$hm1.')">'.$hm_array[$hm1].' ('.$hm1.')</a></div>';
 					} else {
-					$hm_final .= '<div class="small-12 medium-6 columns"><a href="/hm-moves/'.strtolower($hm_array[$hm1]).'/">'.$hm_array[$hm1].' ('.$hm1.')</a></div>';
+					$hm_final .= '<div class="small-12 medium-6 columns"><a href="/hm-moves/'.strtolower($hm_array[$hm1]).'/" title="'.$hm_array[$hm1].' ('.$hm1.')">'.$hm_array[$hm1].' ('.$hm1.')</a></div>';
 					}
 				}
 			}
@@ -927,7 +927,7 @@ function poke_dex($atts, $content=null) {
 				$learnedmove_final .= '<div class="small-12 columns">-</div>';
 			} else {
 				foreach ($learnedmove_decode as $lm1) {
-				$learnedmove_final .= '<div class="small-12 medium-6 columns end"><a href="/move/'.no_space($lm1).'/">'.$lm1.'</a></div>';
+				$learnedmove_final .= '<div class="small-12 medium-6 columns end"><a href="/move/'.no_space($lm1).'/" title="'.$lm1.'">'.$lm1.'</a></div>';
 			}
 		}
 	
@@ -939,9 +939,9 @@ function poke_dex($atts, $content=null) {
 		foreach ($abilities_decode as $ab1){
 			$ab++;
 			if ($abilities_count == $ab) {
-				$abilities_final .= '<div class="small-6 medium-6 columns end"><a href="/abilities/'.no_space($ab1).'/">'.$ab1.'</a></div>';
+				$abilities_final .= '<div class="small-6 medium-6 columns end"><a href="/abilities/'.no_space($ab1).'/" title="'.$ab1.'">'.$ab1.'</a></div>';
 			} else {
-				$abilities_final .= '<div class="small-6 medium-6 columns"><a href="/abilities/'.no_space($ab1).'/">'.$ab1.'</a></div>';
+				$abilities_final .= '<div class="small-6 medium-6 columns"><a href="/abilities/'.no_space($ab1).'/" title="'.$ab1.'">'.$ab1.'</a></div>';
 			}
 		}
 		$abilities_final .= '</div>';
@@ -956,9 +956,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($eggmoves_decode as $em1){
 				$em++;
 				if ($eggmoves_count == $em) {
-					$eggmoves_final .= '<div class="small-6 columns end"><a href="/move/'.no_space($em1).'/">'.$em1.'</div>';
+					$eggmoves_final .= '<div class="small-6 columns end"><a href="/move/'.no_space($em1).'/" title="'.$em1.'">'.$em1.'</div>';
 					} else {
-					$eggmoves_final .= '<div class="small-6 columns"><a href="/move/'.no_space($em1).'/">'.$em1.'</div>';
+					$eggmoves_final .= '<div class="small-6 columns"><a href="/move/'.no_space($em1).'/" title="'.$em1.'">'.$em1.'</div>';
 					}
 				}
 			}
@@ -1042,9 +1042,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($preevo_decode as $preevo1){
 				$preevo++;
 				if ($preevo_count == $preevo) {
-					$preevo_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($preevo1).'/">'.$preevo1.'</a></div>';
+					$preevo_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($preevo1).'/" title="'.$preevo1.'">'.$preevo1.'</a></div>';
 					} else {
-					$preevo_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($preevo1).'/">'.$preevo1.'</a></div>';
+					$preevo_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($preevo1).'/" title="'.$preevo1.'">'.$preevo1.'</a></div>';
 					}
 				}
 			}
@@ -1061,9 +1061,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($evo_decode as $evo1){
 				$evo++;
 				if ($evo_count == $evo) {
-					$evo_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($evo1).'/">'.$evo1.'</a></div>';
+					$evo_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($evo1).'/" title="'.$evo1.'">'.$evo1.'</a></div>';
 				} else {
-					$evo_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($evo1).'/">'.$evo1.'</a></div>';
+					$evo_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($evo1).'/" title="'.$evo1.'">'.$evo1.'</a></div>';
 				}
 			}
 		}
@@ -1080,9 +1080,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($mega_decode as $mega1){
 				$mega++;
 				if ($mega_count == $mega) {
-					$mega_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($mega1).'/">'.$mega1.'</a></div>';
+					$mega_final .= '<div class="small-12 columns end"><a href="/pokedex/'.get_evo($mega1).'/" title="'.$mega1.'">'.$mega1.'</a></div>';
 				} else {
-					$mega_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($mega1).'/">'.$mega1.'</a></div>';
+					$mega_final .= '<div class="small-12 columns"><a href="/pokedex/'.get_evo($mega1).'/" title="'.$mega1.'">'.$mega1.'</a></div>';
 				}
 			}
 		}
@@ -1221,12 +1221,12 @@ function poke_dex($atts, $content=null) {
 		$next = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".$nextpokeid."", ARRAY_A);
 
 		echo '
-		<a href="/pokedex/'.$previous['0']['pokedex_id'].'/" class="button tiny round left">Previous</br>Pokemon</a>
-		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" class="button tiny round right">Next</br>Pokemon</a>
+		<a href="/pokedex/'.$previous['0']['pokedex_id'].'/" title="Previous Pokemon" class="button tiny round left">Previous</br>Pokemon</a>
+		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" title="Next Pokemon" class="button tiny round right">Next</br>Pokemon</a>
 		';
 
 		echo '<div class="img">
-		<img src="/wp-content/uploads/pokemongo/'.$image_name.'.png">
+		<img src="/wp-content/uploads/pokemongo/'.$image_name.'.png" alt="'.$results['name'].'">
 		<div class="small-12 columns"><br /></div>
 		</div>';
 
@@ -1298,8 +1298,8 @@ function poke_dex($atts, $content=null) {
 		</div>';
 	
 		echo '
-		</br><a href="/pokedex/'.$previous['0']['pokedex_id'].'/" class="button tiny round left">Previous</br>Pokemon</a>
-		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" class="button tiny round right">Next</br>Pokemon</a>
+		</br><a href="/pokedex/'.$previous['0']['pokedex_id'].'/" title="Previous Pokemon" class="button tiny round left">Previous</br>Pokemon</a>
+		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" title="Next Pokemon" class="button tiny round right">Next</br>Pokemon</a>
 		';
 
 	
@@ -1354,9 +1354,9 @@ function poke_dex($atts, $content=null) {
 				
 				foreach ($types_decode as $types1) {
 					if ($types_count == 2) {
-						$types2 .= '<div class="small-6 columns text-center '.$types_arr[$types1].'"><a href="/type/'.strtolower($types_arr[$types1]).'/" class="whitetext13">'.$types_arr[$types1].'</a></div>';
+						$types2 .= '<div class="small-6 columns text-center '.$types_arr[$types1].'"><a href="/type/'.strtolower($types_arr[$types1]).'/" title="'.$types_arr[$types1].'" class="whitetext13">'.$types_arr[$types1].'</a></div>';
 						} else {
-							$types2 .= '<div class="small-12 columns text-center '.$types_arr[$types1].'"><a href="/type/'.strtolower($types_arr[$types1]).'/" class="whitetext13">'.$types_arr[$types1].'</a></div>';
+							$types2 .= '<div class="small-12 columns text-center '.$types_arr[$types1].'"><a href="/type/'.strtolower($types_arr[$types1]).'/" class="whitetext13" title="'.$types_arr[$types1].'" >'.$types_arr[$types1].'</a></div>';
 						}
 					}
 
@@ -1365,8 +1365,8 @@ function poke_dex($atts, $content=null) {
 				echo '
 				
 				<div class=row>
-				<div class="small-2 medium-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png" width="30" height="30"></div>
-				<div class="small-10 medium-5 columns text-left"><a href="/pokedex/'.$link.'/">'.$name.'</a></div>
+				<div class="small-2 medium-1 columns imgMiddle"><img src="/wp-content/uploads/pokemongo/mini/'.$link.'-mini.png" alt="'.$name.'" width="30" height="30"></div>
+				<div class="small-10 medium-5 columns text-left"><a href="/pokedex/'.$link.'/" title="'.$name.'">'.$name.'</a></div>
 				<div class="medium-3 columns show-for-medium-up text-center">'.$types2.'</div>
 				<div class="medium-3 show-for-medium-up columns text-center">'.$stats_total.'</div>
 			
