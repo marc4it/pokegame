@@ -9,8 +9,132 @@ Author URI: http://yourdomain.com
 License: GPL
 */
 
+// class
+
+/*Class Pokemon {
+	public $seo_title;
+	public $seo_description;
+	public $seo_keywords;
+	
+	
+	public function display_title() {
+		echo $this->seo_title;
+	}
+
+	public function return_title() {
+		return $this->seo_title;
+	}
+}
+*/
+
+
+
+
 
 // function here!
+
+function return_space($space_name) {
+	if (strpos($space_name,'-') !== false) {
+		$new_name = explode('-',$space_name);
+		$new_name[0] = ucfirst(strtolower($new_name[0]));
+		$new_name[1] = ucfirst(strtolower($new_name[1]));
+		$new_name = implode(' ',$new_name);
+		return $new_name;
+	} else {
+		$new_name = ucfirst(strtolower($space_name));
+		return $new_name;
+	}
+}
+
+function poke_seo_meta() {
+	global $wpdb,$wp_query;
+	$urlArr = parse_url($_SERVER['REQUEST_URI']);
+	$urlPath = explode('/', $urlArr['path']);
+	
+	if (($urlPath[1] == 'pokedex') && ($urlPath[2])) {
+		$path1 = $urlPath[1];
+		$path2 = $urlPath[2];
+		$sql = "SELECT * FROM `".$path1."` WHERE `pokedex_id` LIKE '".$path2."';";
+		$results = $wpdb->get_row( $sql, ARRAY_A);
+		$title = $results['name'];
+		$wp_query->queried_object->post_title = ''.$title.' Pokedex | Stats, Moves &amp; Evolutions' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = ''.$title.' Pokedex | Stats, Moves &amp; Evolutions';
+		$seo_desc = ''.$title.' Pokedex included all informations, locations, hints and tips for catching or fighting '.$title.' in Pokemon Games and Pokemon Go.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = ''.$title.' Pokedex, '.$title.' stats, '.$title.' evolution, '.$title.' moves, '.$title.' skills, '.$title.' locations, ';
+
+//		echo 'hello8 ';asasddasdsadasdas
+	}
+	if (($urlPath[1] == 'abilities') && ($urlPath[2]) ) {
+		$path1 = $urlPath[1];
+		$path2 = $urlPath[2];
+		$sql = "SELECT * FROM `".$path1."` WHERE `name` LIKE '".return_space($path2)."';";
+		$results = $wpdb->get_row( $sql, ARRAY_A);
+		$title = $results['name'];
+		$wp_query->queried_object->post_title = ' Pokemon with '.$title.' | Abilities Description' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon with '.$title.' | Abilities Description';
+		$seo_desc = 'Showing the Pokemons with '.$title.' abilities, also bring you the informations, hints and tips for '.$title.' in Pokemon Games and Pokemon Go.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = ''.$title.' Pokemon, '.$title.' Power, '.$title.' Abilities, '.$title.' hints, '.$title.' tips, '.$title.' locations, ';
+
+	}
+	
+	if (($urlPath[1] == 'pokedex') && ($urlPath[2]) ) {
+		$meta_img = '<meta property="og:image" content="https://pokemon.game-solver.com/wp-content/uploads/pokemongo/'.$urlPath[2].'.png" />';
+	} else {
+		$meta_img = '<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />';
+	}
+	
+
+	$seo_keywords .= 'Pokemon, Pokemon Go';
+	$poke_seo = '
+<!-- poke SEO -->
+	<link rel="canonical" href="https://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"].'" />
+	<meta name="title" content="'.$seo_title.'" />
+	<meta name="entry-title" content="'.$seo_title.'" />
+	<meta name="description" content="'.$seo_desc.'" />
+	<meta name="keywords" content="'.$seo_keywords.'" />
+	<meta name="url" content="https://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"].'" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="'.$seo_title.'" />
+	<meta property="og:description" content="'.$seo_desc.'" />
+	<meta property="og:url" content="https://'.$_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"].'" />
+	';
+	$poke_seo .= ''.$meta_img.'';
+	$poke_seo .= '
+	<meta property="article:published_time" content="'.get_the_date('c').'" />
+	<meta property="article:modified_time" content="'.get_the_modified_date('c').'" />
+	<meta property="og:site_name" content="Pokemon Go" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="fb:app_id" content="531406790246098"/>
+	<meta name="twitter:card" content="summary"/>
+	<meta name="twitter:description" content="'.$seo_desc.'" />
+	<meta name="yandex-verification" content="60dc371905b6f83a" />
+	';
+/*
+<!-- Jetpack Open Graph Tags -->
+	<meta name="twitter:site" content="@rumorscity"/>
+*/
+	$poke_seo .= '
+<!-- poke SEO -->
+			';
+	echo $poke_seo;
+}
+
+
+function poke_title($title) {
+	global $wpdb;
+	if (in_the_loop() && is_page()) {
+		$urlArr = parse_url($_SERVER['REQUEST_URI']);
+		$urlPath = explode('/', $urlArr['path']);
+		$path1 = $urlPath[1];
+		$results = $wpdb->get_results( "SELECT * FROM `".$path1."`;" );
+		$title = $results['name'];
+	}	
+	return $title;
+}
 
 function no_space($space_name) {
 	if (strpos($space_name,'(') !== false) {
@@ -24,19 +148,6 @@ function no_space($space_name) {
 		return $new_name;
 	} else {
 		$new_name = strtolower($space_name);
-		return $new_name;
-	}
-}
-
-function return_space($space_name) {
-	if (strpos($space_name,'-') !== false) {
-		$new_name = explode('-',$space_name);
-		$new_name[0] = ucfirst(strtolower($new_name[0]));
-		$new_name[1] = ucfirst(strtolower($new_name[1]));
-		$new_name = implode(' ',$new_name);
-		return $new_name;
-	} else {
-		$new_name = ucfirst(strtolower($space_name));
 		return $new_name;
 	}
 }
@@ -87,6 +198,8 @@ function seo_loader_init() {
 			header('Location: /'.'pokedex'.'/');
 			exit;
 		}
+
+		
 	} elseif (($pokeaction2) && ($pokeaction1 == 'move')) {
 		$results = $wpdb->get_results( "SELECT * FROM `move`;" );
 		$move = $pokeaction2;
@@ -141,6 +254,14 @@ function seo_loader_init() {
 			exit;
 		}
 	}
+	if (isset($GLOBALS['seo_ultimate'])) {
+		remove_action('wp_head', array( $GLOBALS['seo_ultimate'], 'template_head' ), 1 );
+	}
+
+	add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+	add_filter( 'the_title', 'poke_title',9999);
+	add_filter( 'wp_title', 'poke_title', 10, 2);
+	add_action( 'wp_head', 'poke_seo_meta', 1);	
 }
 
 /* always define global $wpdb before query db */
@@ -1413,6 +1534,15 @@ function my_insert_rewrite_rules( $rules ) {
 	return $newrules + $rules;
 }
 
+/*$pokemon = new Pokemon();
+$pokemon->seo_title = 'juzhax...';
+$pokemon->display_title();
+echo $pokemon->return_title();
+*/
+
+
+add_action( 'init', 'seo_loader_init', 0 );
+
 
 add_shortcode( 'poke', 'poke_dex' );
 add_shortcode( 'move', 'poke_move' );
@@ -1422,5 +1552,4 @@ add_shortcode( 'hm', 'poke_hm' );
 
 add_filter( 'rewrite_rules_array','my_insert_rewrite_rules' );
 add_action( 'wp_loaded','my_flush_rules' );
-add_action( 'init', 'seo_loader_init', 0 );
 ?>
