@@ -50,7 +50,28 @@ function poke_seo_meta() {
 	global $wpdb,$wp_query;
 	$urlArr = parse_url($_SERVER['REQUEST_URI']);
 	$urlPath = explode('/', $urlArr['path']);
+
+// main page
+	if (($urlPath[1] == '') && ($urlPath[2] == '') ) {
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon Go Informations| News &amp; Update | Cheats &amp; Hints';
+		$seo_desc = 'We bring you all the Informations, Pokedex, news &amp; update, cheats &amp; hints for Pokemon Games and Pokemon Go.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokemon Go News Update, Pokedex Pokemon Go, Pokemon Go Pokemon Location, Pokemon Go Cheats &amp; Hints, Pokemon Go Pokemon Database, Pokemon Go Items Information, ';
+	}
 	
+// pokedex main
+	if (($urlPath[1] == 'pokedex') && ($urlPath[2] =='')) {
+		$title = 'Pokedex';
+		$wp_query->queried_object->post_title = 'Pokedex | Stats, Moves &amp; Evolutions' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokedex | Stats, Moves &amp; Evolutions | Pokemon Go &amp; Pokemon Games' ;
+		$seo_desc = 'Pokedex data and informations for all Pokemon in Pokemon Go and Pokemon Games.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokedex Pokemon Go, Pokedex Power Pokemon Go, Pokedex Abilities Pokemon Go, Pokedex hints, Pokedex tips, Pokedex locations, ';
+	}
+	
+// pokedex for pokemon
 	if (($urlPath[1] == 'pokedex') && ($urlPath[2])) {
 		$path1 = $urlPath[1];
 		$path2 = $urlPath[2];
@@ -59,34 +80,108 @@ function poke_seo_meta() {
 		$title = $results['name'];
 		$wp_query->queried_object->post_title = ''.$title.' Pokedex | Stats, Moves &amp; Evolutions' ;
 		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
-		$seo_title = ''.$title.' Pokedex | Stats, Moves &amp; Evolutions';
+		$seo_title = 'Pokemon Go '.$title.' Pokedex | Stats, Moves &amp; Evolutions | Pokemon Games';
 		$seo_desc = ''.$title.' Pokedex included all informations, locations, hints and tips for catching or fighting '.$title.' in Pokemon Games and Pokemon Go.';
 		$keywords = $ss->seo_keywords;
 		$seo_keywords = ''.$title.' Pokedex, '.$title.' stats, '.$title.' evolution, '.$title.' moves, '.$title.' skills, '.$title.' locations, ';
+	} 
 
-//		echo 'hello8 ';asasddasdsadasdas
-	}
-	if (($urlPath[1] == 'abilities') && ($urlPath[2]) ) {
-		$path1 = $urlPath[1];
-		$path2 = $urlPath[2];
-		$sql = "SELECT * FROM `".$path1."` WHERE `name` LIKE '".return_space($path2)."';";
-		$results = $wpdb->get_row( $sql, ARRAY_A);
-		$title = $results['name'];
-		$wp_query->queried_object->post_title = ' Pokemon with '.$title.' | Abilities Description' ;
+// type main
+	if (($urlPath[1] == 'type') && ($urlPath[2] =='')) {
+		$wp_query->queried_object->post_title = 'Pokemon Type | Move Type' ;
 		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
-		$seo_title = 'Pokemon with '.$title.' | Abilities Description';
-		$seo_desc = 'Showing the Pokemons with '.$title.' abilities, also bring you the informations, hints and tips for '.$title.' in Pokemon Games and Pokemon Go.';
+		$seo_title = 'Pokemon Go Pokemon Type | Move Type | Pokemon Games' ;
+		$seo_desc = "Bring you all the informations for pokemon type and pokemon's move type in Pokemon Go and Pokemon Games.";
 		$keywords = $ss->seo_keywords;
-		$seo_keywords = ''.$title.' Pokemon, '.$title.' Power, '.$title.' Abilities, '.$title.' hints, '.$title.' tips, '.$title.' locations, ';
-
+		$seo_keywords = 'All Pokemon Type, All Pokemon Move Type, Pokemon Type Informations, Pokemon Move Type Informations, ';
 	}
 	
+// type 
+	if (($urlPath[1] == 'type') && ($urlPath[2]) ) {
+		$title = ucfirst($urlPath[2]);
+		$wp_query->queried_object->post_title = ''.$title.' Type Pokemon | '.$title.' Type Pokemon Moves' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon Go '.$title.' Type Pokemon &amp; Moves | List &amp; informations | Pokemon Games';
+		$seo_desc = 'Bring you the list of '.$title.' Pokemons and '.$title.' Pokemons Moves in Pokemon Go and Pokemon Games.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = ''.$title.' Type Pokemon, '.$title.' Type Moves, '.$title.' Type Abilities, '.$title.' Type Pokemon Hints, '.$title.' Type Pokemon Tips, '.$title.' Type Pokemon Locations, ';
+	}
+
+// moves main
+	if (($urlPath[1] == 'move') && ($urlPath[2] =='')) {
+		$wp_query->queried_object->post_title = 'Pokemon Moves | List &amp; Informations' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon Go Moves List| Type &amp; Informations | Pokemon Games' ;
+		$seo_desc = "Bring you all the informations about type, category, power, accuracy, pp, tm and description for all the pokemon moves in Pokemon Go and Pokemon Games.";
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokemon Move List, Pokemon Move Type, Pokemon Move Category, Pokemon Move Power, Pokemon Move Accuracy, Pokemon Move PP, Pokemon Move TM, Pokemon Move Informations, ';
+	}
+
+// moves 
+	if (($urlPath[1] == 'move') && ($urlPath[2]) ) {
+		$title = return_space($urlPath[2]);
+		$wp_query->queried_object->post_title = ''.$title.' Informations | Pokemon With '.$title.'' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon Go Move '.$title.' Informations | Pokemon With '.$title.' | Pokemon Games';
+		$seo_desc = 'Showing you all the Pokemons with '.$title.' move, and we also bring you all the informations about type, category, power, accuracy, pp, tm, hints, trick and description for '.$title.' in Pokemon Go and Pokemon Games.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokemon With '.$title.' , '.$title.' Type, '.$title.' Category, '.$title.' Power, '.$title.' Accuracy, '.$title.' PP, '.$title.' TM, '.$title.' Hints, '.$title.' Tricks, ';
+	}
+	
+// abilities main
+	if (($urlPath[1] == 'abilities') && ($urlPath[2] =='')) {
+		$wp_query->queried_object->post_title = 'Pokemon Abilities | List &amp; Informations' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon Go Abilities List | Type &amp; Informations | Pokemon Games' ;
+		$seo_desc = "Bring you all the informations and description for all the pokemon abilities in Pokemon Go and Pokemon Games.";
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokemon Abilities List, Pokemon Abilities Power, Pokemon Abilities Informations, Pokemon Abilities Description, ';
+	}
+
+// abilities 
+	if (($urlPath[1] == 'abilities') && ($urlPath[2]) ) {
+//		$path1 = $urlPath[1];
+		$path2 = $urlPath[2];
+//		$sql = "SELECT * FROM `".$path1."` WHERE `name` LIKE '".return_space($path2)."';";
+//		$results = $wpdb->get_row( $sql, ARRAY_A);
+		$title = return_space($urlPath[2]);
+		$wp_query->queried_object->post_title = 'Abilities '.$title.' Informations | Pokemon with '.$title.'' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon Go Ability '.$title.' Informations | Pokemon with '.$title.' | Pokemon Games';
+		$seo_desc = 'Showing all the Pokemons with '.$title.' abilities, and we also bring you the informations, descriptions, hints and tricks for '.$title.' in Pokemon Go and Pokemon Games.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokemon With '.$title.' Ability, '.$title.' Description, '.$title.' Power, '.$title.' Ability, '.$title.' hints, '.$title.' tricks, '.$title.' locations, ';
+	}
+	
+// HM main
+	if (($urlPath[1] == 'hm-moves') && ($urlPath[2] =='')) {
+		$wp_query->queried_object->post_title = 'Pokemon HM | List &amp; Informations' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon Go HM Move List &amp; Informations | Pokemon Games' ;
+		$seo_desc = "Bring you all the informations, description, hints, and tricks for all the pokemon HM moves in Pokemon Go and Pokemon Games.";
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokemon HM List, Pokemon HM Power, Pokemon HM Informations, Pokemon HM Description, Pokemon HM Tricks, Pokemon HM Hints, ';
+	}
+	
+// HM 
+	if (($urlPath[1] == 'hm-moves') && ($urlPath[2]) ) {
+		$path2 = $urlPath[2];
+		$title = ucfirst($urlPath[2]);
+		$wp_query->queried_object->post_title = 'HM Moves '.$title.' Informations | Pokemon with '.$title.'' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'Pokemon Go HM Move '.$title.' Informations | Pokemon with '.$title.' | Pokemon Games';
+		$seo_desc = 'Showing all the Pokemons with '.$title.' HM Move, and we also bring you the informations, descriptions, hints and tricks for '.$title.' in Pokemon Go and Pokemon Games.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokemon With '.$title.' HM Move, '.$title.' Description, '.$title.' Power, '.$title.' Abilities, '.$title.' hints, '.$title.' tricks, '.$title.' locations, ';
+	}
+	
+//pokemons seo image
 	if (($urlPath[1] == 'pokedex') && ($urlPath[2]) ) {
 		$meta_img = '<meta property="og:image" content="https://pokemon.game-solver.com/wp-content/uploads/pokemongo/'.$urlPath[2].'.png" />';
 	} else {
 		$meta_img = '<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />';
 	}
-	
+
 
 	$seo_keywords .= 'Pokemon, Pokemon Go';
 	$poke_seo = '
