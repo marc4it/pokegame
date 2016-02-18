@@ -174,6 +174,18 @@ function poke_seo_meta() {
 		$keywords = $ss->seo_keywords;
 		$seo_keywords = 'Pokemon With '.$title.' HM Move, '.$title.' Description, '.$title.' Power, '.$title.' Abilities, '.$title.' hints, '.$title.' tricks, '.$title.' locations, ';
 	}
+
+// About us
+	if (($urlPath[1] == 'about-us') && ($urlPath[2] =='') ) {
+		$path2 = $urlPath[2];
+		$title = ucfirst($urlPath[2]);
+		$wp_query->queried_object->post_title = 'About Us | Game-Solver' ;
+		add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
+		$seo_title = 'About Us | Pokemon Go | Game-Solver';
+		$seo_desc = 'Simple description about Pokemon Go & Game-solver.';
+		$keywords = $ss->seo_keywords;
+		$seo_keywords = 'Pokemon Go Game-solver, About Us Pokemon Go Game-solver, ';
+	}
 	
 //pokemons seo image
 	if (($urlPath[1] == 'pokedex') && ($urlPath[2]) ) {
