@@ -634,42 +634,42 @@ function poke_type($atts, $content=null) {
 		
 		$move_list .= '</div>';
 		
-		echo '</br><h3 class="subheader">'.$path.' Type Moves</h3>';
+		echo '<br><h3 class="subheader">'.$path.' Type Moves</h3>';
 		echo $move_list;
 		
 	} else {
 		
-		echo '<div class="row show-for-medium-up"><br />
+		echo '<div class="row show-for-medium-up"><br>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Normal"><h4><b><a href="/type/normal/" title="Normal" class="whitetext">Normal</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Fighting"><h4><b><a href="/type/fighting/" title="Fighting" class="whitetext">Fighting</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Flying"><h4><b><a href="/type/flying/" title="Flying" class="whitetext">Flying</a></b></h4></div></div></div>
 		
-		<div class="row show-for-medium-up"><br />
+		<div class="row show-for-medium-up"><br>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Poison"><h4><b><a href="/type/poison/" title="Poison" class="whitetext">Poison</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Ground"><h4><b><a href="/type/ground/" title="Ground" class="whitetext">Ground</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Rock"><h4><b><a href="/type/rock/" title="Rock" class="whitetext">Rock</a></b></h4></div></div></div>
 		
-		<div class="row show-for-medium-up"><br />
+		<div class="row show-for-medium-up"><br>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Bug"><h4><b><a href="/type/bug/" title="Bug" class="whitetext">Bug</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Ghost"><h4><b><a href="/type/ghost/" title="Ghost" class="whitetext">Ghost</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Steel"><h4><b><a href="/type/steel/" title="Steel" class="whitetext">Steel</a></b></h4></div></div></div>
 		
-		<div class="row show-for-medium-up"><br />
+		<div class="row show-for-medium-up"><br>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Fire"><h4><b><a href="/type/fire/" title="Fire" class="whitetext">Fire</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Water"><h4><b><a href="/type/water/" title="Water" class="whitetext">Water</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Grass"><h4><b><a href="/type/grass/" title="Grass" class="whitetext">Grass</a></b></h4></div></div></div>
 		
-		<div class="row show-for-medium-up"><br />
+		<div class="row show-for-medium-up"><br>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Electric"><h4><b><a href="/type/electric/" title="Electric" class="whitetext">Electric</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Psychic"><h4><b><a href="/type/psychic/" title="Psychic" class="whitetext">Psychic</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Ice"><h4><b><a href="/type/ice/" title="Ice" class="whitetext">Ice</a></b></h4></div></div></div>
 		
-		<div class="row show-for-medium-up"><br />
+		<div class="row show-for-medium-up"><br>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Dragon"><h4><b><a href="/type/dragon/" title="Dragon" class="whitetext">Dragon</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Dark"><h4><b><a href="/type/dark/" title="Dark" class="whitetext">Dark</a></b></h4></div></div>
 		<div class="medium-4 columns"><div class="medium-9 columns text-center Fairy"><h4><b><a href="/type/fairy/" title="Fairy" class="whitetext">Fairy</a></b></h4></div></div></div>
 		
-		<div class="row show-for-small-only"><br />
+		<div class="row show-for-small-only"><br>
 		<div class="small-6 columns"><div class="medium-9 columns text-center Normal"><h4><b><a href="/type/normal/" title="Normal" class="whitetext">Normal</a></b></h4></div></div>
 		<div class="small-6 columns"><div class="medium-9 columns text-center Fighting"><h4><b><a href="/type/fighting/" title="Fighting" class="whitetext">Fighting</a></b></h4></div></div>
 		<div class="small-6 columns"><div class="medium-9 columns text-center Flying"><h4><b><a href="/type/flying/" title="Flying" class="whitetext">Flying</a></b></h4></div></div>
@@ -1122,7 +1122,7 @@ function poke_dex($atts, $content=null) {
 					if ($tm_count == $t) {
 						$tm_final .= '<div class="small-12 medium-6 columns end"><a href="/move/'.no_space($tm_array[$tm1]).'/" title="'.$tm_array[$tm1].' ('.$tm1.')">'.$tm_array[$tm1].' ('.$tm1.')</a></div>';
 					} else {
-						$tm_final .= '<div class="small-12 medium-6 columns"><a href="/move/'.no_space($tm_array[$tm1]).'/" title="'.$tm_array[$tm1].' ('.$tm1.')">'.$tm_array[$tm1].' ('.$tm1.')</div>';
+						$tm_final .= '<div class="small-12 medium-6 columns"><a href="/move/'.no_space($tm_array[$tm1]).'/" title="'.$tm_array[$tm1].' ('.$tm1.')">'.$tm_array[$tm1].' ('.$tm1.')</a></div>';
 				}
 			}
 		}
@@ -1184,9 +1184,9 @@ function poke_dex($atts, $content=null) {
 			foreach ($eggmoves_decode as $em1){
 				$em++;
 				if ($eggmoves_count == $em) {
-					$eggmoves_final .= '<div class="small-6 columns end"><a href="/move/'.no_space($em1).'/" title="'.$em1.'">'.$em1.'</div>';
+					$eggmoves_final .= '<div class="small-6 columns end"><a href="/move/'.no_space($em1).'/" title="'.$em1.'">'.$em1.'</a></div>';
 					} else {
-					$eggmoves_final .= '<div class="small-6 columns"><a href="/move/'.no_space($em1).'/" title="'.$em1.'">'.$em1.'</div>';
+					$eggmoves_final .= '<div class="small-6 columns"><a href="/move/'.no_space($em1).'/" title="'.$em1.'">'.$em1.'</a></div>';
 					}
 				}
 			}
@@ -1254,9 +1254,9 @@ function poke_dex($atts, $content=null) {
 		}	
 
 	/*	echo $results['evo'];
-		echo '</br>';
+		echo '<br>';
 		print_r ($evo_decode);
-		echo '</br>';
+		echo '<br>';
 		echo $evo_decode;
 	*/
 
@@ -1449,13 +1449,13 @@ function poke_dex($atts, $content=null) {
 		$next = $wpdb->get_results( "SELECT `pokedex_id` FROM `pokedex` WHERE `id` = ".$nextpokeid."", ARRAY_A);
 
 		echo '
-		<a href="/pokedex/'.$previous['0']['pokedex_id'].'/" title="Previous Pokemon" class="button tiny round left">Previous</br>Pokemon</a>
-		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" title="Next Pokemon" class="button tiny round right">Next</br>Pokemon</a>
+		<a href="/pokedex/'.$previous['0']['pokedex_id'].'/" title="Previous Pokemon" class="button tiny round left">Previous<br>Pokemon</a>
+		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" title="Next Pokemon" class="button tiny round right">Next<br>Pokemon</a>
 		';
 
 		echo '<div class="img">
 		<img src="/wp-content/uploads/pokemongo/'.$image_name.'.png" alt="'.$results['name'].'">
-		<div class="small-12 columns"><br /></div>
+		<div class="small-12 columns"><br></div>
 		</div>';
 
 		echo '<div class="row">
@@ -1482,8 +1482,8 @@ function poke_dex($atts, $content=null) {
 		<div class="small-8 columns">'.$mega_final.'</div>
 		<div class="small-4 columns">Stats</div>
 		<div class="small-8 columns">'.$stats.'</div>
-		<div class="small-6 medium-4 columns"></br>Genus</div>
-		<div class="small-6 medium-8 columns"></br>'.$results['genus'].'</div>
+		<div class="small-6 medium-4 columns"><br>Genus</div>
+		<div class="small-6 medium-8 columns"><br>'.$results['genus'].'</div>
 		<div class="small-6 medium-4 columns">Color</div>
 		<div class="small-6 medium-8 columns">'.$results['color'].'</div>
 		<div class="small-6 medium-4 columns">Gender Rate</div>
@@ -1504,30 +1504,30 @@ function poke_dex($atts, $content=null) {
 		<div class="small-6 medium-8 columns">'.$weight_final.'</div>
 		<div class="small-6 medium-4 columns">Base Experience</div>
 		<div class="small-6 medium-8 columns">'.$results['base_experience'].'</div>
-		<div class="show-for-small-only small-12 columns"></br><span class="round alert label">Egg Groups</span></div>
-		<div class="show-for-medium-up small-12 medium-4 columns"></br>Egg Groups</div>
-		<div class="small-12 medium-8 columns"></br>'.$egggroup2.'</div>
-		<div class="show-for-small-only small-12 columns"></br><span class="round alert label">Abilities</span></div>
-		<div class="show-for-medium-up small-12 medium-4 columns"></br>Abilities</div>
-		<div class="small-12 medium-8 columns"></br>'.$abilities_final.'</div>
-		<div class="show-for-small-only small-12 columns"></br><span class="round alert label">Learned Moves (Level)</span></div>
-		<div class="show-for-medium-up small-12 medium-4 columns"></br>Learned Moves (Level)</div>
-		<div class="small-12 medium-8 columns"></br>'.$learnedmove_final.'</div>
-		<div class="show-for-small-only small-12 columns"></br><span class="round alert label">HM</span></div>
-		<div class="show-for-medium-up small-12 medium-4 columns"></br>HM</div>
-		<div class="small-12 medium-8 columns"></br>'.$hm_final.'</div>
-		<div class="show-for-small-only small-12 columns"></br><span class="round alert label">TM</span></div>
-		<div class="show-for-medium-up small-12 medium-4 columns"></br>TM</div>
-		<div class="small-12 medium-8 columns"></br>'.$tm_final.'</div>
-		<div class="show-for-small-only small-12 columns"></br><span class="round alert label">Egg Moves</span></div>
-		<div class="show-for-medium-up small-12 medium-4 columns"></br>Egg Moves</div>
-		<div class="small-12 medium-8 columns"></br>'.$eggmoves_final.'</div>
+		<div class="show-for-small-only small-12 columns"><br><span class="round alert label">Egg Groups</span></div>
+		<div class="show-for-medium-up small-12 medium-4 columns"><br>Egg Groups</div>
+		<div class="small-12 medium-8 columns"><br>'.$egggroup2.'</div>
+		<div class="show-for-small-only small-12 columns"><br><span class="round alert label">Abilities</span></div>
+		<div class="show-for-medium-up small-12 medium-4 columns"><br>Abilities</div>
+		<div class="small-12 medium-8 columns"><br>'.$abilities_final.'</div>
+		<div class="show-for-small-only small-12 columns"><br><span class="round alert label">Learned Moves (Level)</span></div>
+		<div class="show-for-medium-up small-12 medium-4 columns"><br>Learned Moves (Level)</div>
+		<div class="small-12 medium-8 columns"><br>'.$learnedmove_final.'</div>
+		<div class="show-for-small-only small-12 columns"><br><span class="round alert label">HM</span></div>
+		<div class="show-for-medium-up small-12 medium-4 columns"><br>HM</div>
+		<div class="small-12 medium-8 columns"><br>'.$hm_final.'</div>
+		<div class="show-for-small-only small-12 columns"><br><span class="round alert label">TM</span></div>
+		<div class="show-for-medium-up small-12 medium-4 columns"><br>TM</div>
+		<div class="small-12 medium-8 columns"><br>'.$tm_final.'</div>
+		<div class="show-for-small-only small-12 columns"><br><span class="round alert label">Egg Moves</span></div>
+		<div class="show-for-medium-up small-12 medium-4 columns"><br>Egg Moves</div>
+		<div class="small-12 medium-8 columns"><br>'.$eggmoves_final.'</div>
 
 		</div>';
 	
 		echo '
-		</br><a href="/pokedex/'.$previous['0']['pokedex_id'].'/" title="Previous Pokemon" class="button tiny round left">Previous</br>Pokemon</a>
-		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" title="Next Pokemon" class="button tiny round right">Next</br>Pokemon</a>
+		<br><a href="/pokedex/'.$previous['0']['pokedex_id'].'/" title="Previous Pokemon" class="button tiny round left">Previous<br>Pokemon</a>
+		<a href="/pokedex/'.$next['0']['pokedex_id'].'/" title="Next Pokemon" class="button tiny round right">Next<br>Pokemon</a>
 		';
 
 	
